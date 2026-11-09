@@ -36,11 +36,18 @@ class KonfirmasiController extends Controller {
             // Gunakan nama kuliner ramah pengguna, bukan istilah mentah tabel database
             $namaTampil = !empty($b['nama']) ? $b['nama'] : ($fact['nama'] ?? 'Bahan');
 
+            $kelengkapan = $fact['tingkat_kelengkapan'] ?? ($adaGizi ? 'data_lengkap' : 'perlu_verifikasi');
+            $kelengkapanLabel = ($kelengkapan === 'data_lengkap') ? 'Data Lengkap' : (($kelengkapan === 'data_sebagian') ? 'Data Sebagian' : 'Perlu Verifikasi');
+
             $bahanDivalidasi[] = [
                 'nama' => $namaTampil,
                 'berat_g' => $berat,
                 'keterangan' => $ket,
                 'ada_data_gizi' => $adaGizi,
+                'sumber_data' => $fact['sumber_data'] ?? ($adaGizi ? 'TKPI 2017' : 'Data belum tersedia'),
+                'kelengkapan' => $kelengkapan,
+                'kelengkapan_label' => $kelengkapanLabel,
+                'kalori_estimasi' => $adaGizi ? round(($fact['energi_kkal'] / 100) * $berat) : null,
                 'gizi' => $fact
             ];
         }

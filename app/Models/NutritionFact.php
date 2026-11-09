@@ -6,11 +6,12 @@ use Core\Database;
 
 class NutritionFact {
     private static ?array $csvCache = null;
+    private static ?array $aliasCache = null;
 
     /**
      * Normalisasi teks agar input " Telur ", "TELUR" dan "telur" setara.
      */
-    private static function normalize(string $name): string {
+    public static function normalize(string $name): string {
         $name = mb_strtolower(trim($name), 'UTF-8');
         $name = preg_replace('/[^\p{L}\p{N}\s]+/u', ' ', $name);
         $name = preg_replace('/\s+/u', ' ', $name);
@@ -18,16 +19,24 @@ class NutritionFact {
     }
 
     /**
-     * Cari alias hanya dengan kecocokan utuh. Tidak ada lagi fallback substring
-     * yang bisa membuat "telur" salah mengambil "ikan telur asin mentah".
+     * Resolusi nama bahan ke nama kanonis di database.
+     * Menggunakan multi-tier matching:
+     * 1. Exact alias match dari ingredient_aliases.csv
+     * 2. Exact item nama_kunci atau nama dari nutrition_bersih.csv
+     * 3. Cooking modifier stripping (goreng, bakar, rebus, dsb.)
+     * 4. Substring token containment
      */
-    private static function resolveAlias(string $name, array $items): string {
+    public static function resolveAlias(string $name, ?array $items = null): string {
         $needle = self::normalize($name);
         if ($needle === '') return '';
 
-        // Alias generik didahulukan untuk istilah yang memang ambigu di dataset,
-        // misalnya "kecap" -> kecap manis dan "nasi" -> nasi matang.
-        foreach (self::getAliases() as $aliasRow) {
+        if ($items === null) {
+            $items = self::getAllFromCsv();
+        }
+        $aliases = self::getAliases();
+
+        // 1. Exact alias
+        foreach ($aliases as $aliasRow) {
             foreach (explode('|', (string)($aliasRow['alias'] ?? '')) as $alias) {
                 if ($needle === self::normalize($alias)) {
                     return self::normalize((string)$aliasRow['nama_kunci']);
@@ -35,11 +44,51 @@ class NutritionFact {
             }
         }
 
+        // 2. Exact item
         foreach ($items as $item) {
             $canonical = self::normalize((string)($item['nama_kunci'] ?? $item['nama'] ?? ''));
             $nama = self::normalize((string)($item['nama'] ?? ''));
             if ($needle === $canonical || $needle === $nama) {
                 return $canonical;
+            }
+        }
+
+        // 3. Modifiers / Cooking method stripping
+        $modifiers = [
+            'goreng', 'bakar', 'panggang', 'rebus', 'kukus', 'tumis', 'mentah',
+            'segar', 'matang', 'suwir', 'lalap', 'lalapan', 'tepung', 'kuah',
+            'iris', 'cincang', 'ulek', 'pedas', 'kering', 'renyah', 'kremes', 'geprek'
+        ];
+        $words = explode(' ', $needle);
+        $strippedWords = array_diff($words, $modifiers);
+        $stripped = implode(' ', $strippedWords);
+
+        if (!empty($stripped) && $stripped !== $needle) {
+            // Cek alias dengan stripped
+            foreach ($aliases as $aliasRow) {
+                foreach (explode('|', (string)($aliasRow['alias'] ?? '')) as $alias) {
+                    if ($stripped === self::normalize($alias)) {
+                        return self::normalize((string)$aliasRow['nama_kunci']);
+                    }
+                }
+            }
+            // Cek item dengan stripped
+            foreach ($items as $item) {
+                $canonical = self::normalize((string)($item['nama_kunci'] ?? $item['nama'] ?? ''));
+                $nama = self::normalize((string)($item['nama'] ?? ''));
+                if ($stripped === $canonical || $stripped === $nama) {
+                    return $canonical;
+                }
+            }
+        }
+
+        // 4. Substring token containment
+        foreach ($aliases as $aliasRow) {
+            foreach (explode('|', (string)($aliasRow['alias'] ?? '')) as $alias) {
+                $normAlias = self::normalize($alias);
+                if (mb_strlen($normAlias) >= 4 && (strpos($needle, $normAlias) !== false || strpos($normAlias, $needle) !== false)) {
+                    return self::normalize((string)$aliasRow['nama_kunci']);
+                }
             }
         }
 
@@ -58,15 +107,14 @@ class NutritionFact {
     }
 
     /**
-     * Pencarian data gizi berdasarkan nama/alias yang cocok persis.
+     * Pencarian data gizi berdasarkan nama/alias.
      */
     public static function findByName(string $name): ?array {
         $items = self::getAllFromCsv();
         $canonicalKey = self::resolveAlias($name, $items);
         if ($canonicalKey === '') return null;
 
-        // Database tetap menjadi sumber utama, tetapi hanya setelah alias
-        // dipetakan ke nama_kunci kanonis.
+        // Cek Database MySQL jika aktif
         $pdo = Database::getConnection();
         if ($pdo) {
             try {
@@ -77,10 +125,11 @@ class NutritionFact {
                 $result = $stmt->fetch();
                 if ($result) return self::formatFact($result);
             } catch (\Throwable $e) {
-                // Gunakan CSV jika tabel belum diimpor atau query gagal.
+                // Fallback ke CSV jika tabel belum dimigrasi
             }
         }
 
+        // Pencarian di dataset CSV
         foreach ($items as $item) {
             if (self::normalize((string)($item['nama_kunci'] ?? '')) === $canonicalKey) {
                 return self::formatFact($item);
@@ -91,8 +140,7 @@ class NutritionFact {
     }
 
     /**
-     * Autocomplete: exact/prefix match lebih dulu, lalu kecocokan kata.
-     * Hasil tidak mengambil item acak hanya karena mengandung substring.
+     * Autocomplete pencarian bahan
      */
     public static function search(string $keyword, int $limit = 10): array {
         $needle = self::normalize($keyword);
@@ -140,19 +188,22 @@ class NutritionFact {
         $results = [];
         foreach (array_slice($ranked, 0, max(1, $limit)) as $entry) {
             $item = $entry['item'];
+            $fact = self::formatFact($item);
             $results[] = [
-                'id' => $item['id'] ?? null,
-                'nama' => $item['nama'] ?? '',
-                'energi_kkal' => (float)($item['energi_kkal'] ?? 0),
-                'protein_g' => (float)($item['protein_g'] ?? 0),
-                'karbohidrat_g' => (float)($item['karbohidrat_g'] ?? 0),
-                'lemak_g' => (float)($item['lemak_g'] ?? 0),
+                'id' => $fact['id'],
+                'nama' => $fact['nama'],
+                'energi_kkal' => $fact['energi_kkal'] ?? 0,
+                'protein_g' => $fact['protein_g'] ?? 0,
+                'karbohidrat_g' => $fact['karbohidrat_g'] ?? 0,
+                'lemak_g' => $fact['lemak_g'] ?? 0,
+                'sumber_data' => $fact['sumber_data'],
+                'tingkat_kelengkapan' => $fact['tingkat_kelengkapan']
             ];
         }
         return $results;
     }
 
-    private static function getAllFromCsv(): array {
+    public static function getAllFromCsv(): array {
         if (self::$csvCache !== null) return self::$csvCache;
 
         $csvPath = __DIR__ . '/../../data/nutrition_bersih.csv';
@@ -173,9 +224,7 @@ class NutritionFact {
         return self::$csvCache;
     }
 
-    private static ?array $aliasCache = null;
-
-    private static function getAliases(): array {
+    public static function getAliases(): array {
         if (self::$aliasCache !== null) return self::$aliasCache;
         $path = __DIR__ . '/../../data/ingredient_aliases.csv';
         if (!file_exists($path)) return self::$aliasCache = [];
@@ -193,23 +242,76 @@ class NutritionFact {
         return self::$aliasCache;
     }
 
-    private static function formatFact(array $row): array {
+    public static function formatFact(array $row): array {
+        $num = function($val) {
+            return (isset($val) && is_numeric(trim((string)$val))) ? (float)$val : null;
+        };
+
+        $sumber = trim($row['sumber_data'] ?? '');
+        if (empty($sumber)) {
+            if (!empty($row['kode_tkpi'])) {
+                $sumber = 'TKPI 2017 (' . $row['kode_tkpi'] . ')';
+            } elseif (!empty($row['kode_usda'])) {
+                $sumber = 'USDA FoodData Central';
+            } else {
+                $sumber = 'TKPI 2017 Kemenkes RI';
+            }
+        }
+
+        $kelengkapan = trim($row['tingkat_kelengkapan'] ?? '');
+        if (empty($kelengkapan)) {
+            $hasMacro = $num($row['energi_kkal'] ?? null) !== null && $num($row['protein_g'] ?? null) !== null;
+            $hasMicros = $num($row['natrium_mg'] ?? null) !== null && $num($row['serat_g'] ?? null) !== null;
+            if ($hasMacro && $hasMicros) {
+                $kelengkapan = 'data_lengkap';
+            } elseif ($hasMacro) {
+                $kelengkapan = 'data_sebagian';
+            } else {
+                $kelengkapan = 'perlu_verifikasi';
+            }
+        }
+
         return [
             'id' => $row['id'] ?? null,
             'nama' => $row['nama'] ?? '',
             'nama_kunci' => $row['nama_kunci'] ?? '',
-            'energi_kkal' => is_numeric($row['energi_kkal'] ?? null) ? (float)$row['energi_kkal'] : null,
-            'protein_g' => is_numeric($row['protein_g'] ?? null) ? (float)$row['protein_g'] : null,
-            'lemak_g' => is_numeric($row['lemak_g'] ?? null) ? (float)$row['lemak_g'] : null,
-            'karbohidrat_g' => is_numeric($row['karbohidrat_g'] ?? null) ? (float)$row['karbohidrat_g'] : null,
-            'serat_g' => is_numeric($row['serat_g'] ?? null) ? (float)$row['serat_g'] : null,
-            'gula_g' => is_numeric($row['gula_g'] ?? null) ? (float)$row['gula_g'] : null,
-            'lemak_jenuh_g' => is_numeric($row['lemak_jenuh_g'] ?? null) ? (float)$row['lemak_jenuh_g'] : null,
-            'kolesterol_mg' => is_numeric($row['kolesterol_mg'] ?? null) ? (float)$row['kolesterol_mg'] : null,
-            'natrium_mg' => is_numeric($row['natrium_mg'] ?? null) ? (float)$row['natrium_mg'] : null,
-            'purin_mg' => is_numeric($row['purin_mg'] ?? null) ? (float)$row['purin_mg'] : null,
+            // Makronutrisi
+            'energi_kkal' => $num($row['energi_kkal'] ?? null),
+            'protein_g' => $num($row['protein_g'] ?? null),
+            'lemak_g' => $num($row['lemak_g'] ?? null),
+            'karbohidrat_g' => $num($row['karbohidrat_g'] ?? null),
+            'serat_g' => $num($row['serat_g'] ?? null),
+            'gula_g' => $num($row['gula_g'] ?? null),
+            'lemak_jenuh_g' => $num($row['lemak_jenuh_g'] ?? null),
+            'lemak_tak_jenuh_g' => $num($row['lemak_tak_jenuh_g'] ?? null),
+            'kolesterol_mg' => $num($row['kolesterol_mg'] ?? null),
+            'natrium_mg' => $num($row['natrium_mg'] ?? null),
+            // Mineral
+            'kalium_mg' => $num($row['kalium_mg'] ?? null),
+            'kalsium_mg' => $num($row['kalsium_mg'] ?? null),
+            'fosfor_mg' => $num($row['fosfor_mg'] ?? null),
+            'zat_besi_mg' => $num($row['zat_besi_mg'] ?? null),
+            'magnesium_mg' => $num($row['magnesium_mg'] ?? null),
+            'seng_mg' => $num($row['seng_mg'] ?? null),
+            // Vitamin
+            'vit_a_mcg' => $num($row['vit_a_mcg'] ?? null),
+            'vit_b1_mg' => $num($row['vit_b1_mg'] ?? null),
+            'vit_b2_mg' => $num($row['vit_b2_mg'] ?? null),
+            'vit_b3_mg' => $num($row['vit_b3_mg'] ?? null),
+            'vit_b6_mg' => $num($row['vit_b6_mg'] ?? null),
+            'vit_b12_mcg' => $num($row['vit_b12_mcg'] ?? null),
+            'vit_c_mg' => $num($row['vit_c_mg'] ?? null),
+            'vit_d_mcg' => $num($row['vit_d_mcg'] ?? null),
+            'vit_e_mg' => $num($row['vit_e_mg'] ?? null),
+            // Purin & metadata
+            'purin_mg' => $num($row['purin_mg'] ?? null),
             'purin_kategori' => $row['purin_kategori'] ?? null,
+            'purin_dasar' => $row['purin_dasar'] ?? null,
+            'kode_tkpi' => $row['kode_tkpi'] ?? null,
+            'kode_usda' => $row['kode_usda'] ?? null,
             'sumber_natrium' => $row['sumber_natrium'] ?? '',
+            'sumber_data' => $sumber,
+            'tingkat_kelengkapan' => $kelengkapan
         ];
     }
 }

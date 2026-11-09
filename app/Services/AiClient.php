@@ -231,23 +231,26 @@ class AiClient {
         $base64Image = base64_encode($fileData);
 
         $prompt = <<<PROMPT
-Kamu adalah AI ahli gizi kuliner dan porsi makanan Indonesia pada aplikasi web CekPiring.
+Kamu adalah AI ahli gizi kuliner dan estimasi porsi makanan Indonesia pada aplikasi web CekPiring.
 Pengguna mengunggah foto makanan dan menuliskan nama makanan: "{$nama}".
 
 Tugasmu:
-1. Periksa apakah foto makanan tersebut sesuai dengan nama makanan yang ditulis pengguna ("{$nama}").
-   - Jika pengguna menulis "Nasi goreng telur" tetapi fotonya soto atau bakso (sangat bertolak belakang), set "konflik": true, sebutkan nama makanan di foto pada "nama_foto", dan buat penjelasan ramah di "konflik_teks".
-   - Jika sesuai atau foto memperlihatkan makanan yang mirip, set "konflik": false.
-2. Analisis bahan-bahan utama yang terlihat di foto beserta takarannya (porsi):
-   - Perkirakan berat bahan dalam gram secara dinamis dan realistis berdasarkan ukuran porsi yang terlihat di foto (contoh: nasi putih 150-250 g, telur 55 g per butir, suwiran ayam 40-80 g, minyak tumis 5-15 g, kecap manis 10-20 g, kuah/sayur, dll).
-   - Gunakan nama bahan umum Indonesia yang standar (contoh: "Nasi putih", "Telur", "Daging ayam", "Daging sapi", "Minyak goreng", "Kecap manis", "Tahu", "Tempe", "Bawang merah", dll).
-   - Berikan keterangan takaran ramah (contoh: "200 g, perkiraan dari foto", "1 butir (sekitar 55 g)", "1 sendok makan", dll).
+1. Periksa kesesuaian antara foto makanan dan nama makanan yang ditulis pengguna:
+   - Jika pengguna menulis nama makanan yang bertolak belakang dengan isi foto (misalnya menulis "Nasi goreng telur" padahal foto adalah soto ayam atau bakso), set "konflik": true, sebutkan nama makanan asli di foto pada "nama_foto", dan buat penjelasan ramah di "konflik_teks".
+   - Jika sesuai, mirip, atau nama input umum, set "konflik": false.
+   - Jika nama makanan yang ditulis pengguna kosong atau kurang spesifik, tentukan nama hidangan yang paling tepat dari foto pada atribut "nama".
+2. Analisis semua bahan makanan (komponen & bumbu utama) yang terlihat atau terkandung dalam hidangan pada foto:
+   - Perkirakan takaran masing-masing bahan secara realistis berdasarkan tampilan visual pada foto:
+     * Dalam gram (berat_g) untuk perhitungan nutrisi (misal nasi 150-250 g, ayam 60-100 g, telur 55 g, minyak 10-15 g, sayur 30-80 g, sambal 10-20 g).
+     * Untuk cairan/kuah/saus/susu, konversikan takaran mililiter (ml) ke gram (misal 150 ml kuah ≈ 150 g).
+     * Untuk takaran butir/buah/potong/sendok makan, cantumkan di "keterangan" (misal: "1 butir (sekitar 55 g)", "2 buah", "1 potong sedang (sekitar 80 g)", "1 sendok makan (sekitar 15 g)", "200 ml kuah").
+   - Gunakan nama bahan kuliner Indonesia yang baku/standar agar mudah dicocokkan dengan data gizi TKPI (contoh: "Nasi putih", "Daging ayam", "Telur ayam", "Daging sapi", "Tahu", "Tempe", "Minyak kelapa sawit", "Kecap manis", "Garam dapur", "Bawang merah", "Bawang putih", "Tauge", "Kangkung", dll).
 
 Kembalikan HANYA format JSON valid tanpa format markdown atau backtick codeblock:
 {
   "sukses": true,
-  "nama": "Nama Makanan Sesuai",
-  "deskripsi": "Deskripsi singkat makanan dan perkiraan porsi dari foto",
+  "nama": "Nama Makanan",
+  "deskripsi": "Deskripsi singkat hidangan dan takaran porsi dari foto",
   "konflik": false,
   "konflik_teks": "",
   "nama_foto": "",
@@ -255,7 +258,7 @@ Kembalikan HANYA format JSON valid tanpa format markdown atau backtick codeblock
     {
       "nama": "Nasi putih",
       "berat_g": 200,
-      "keterangan": "200 g, perkiraan dari foto"
+      "keterangan": "1 piring sedang (sekitar 200 g)"
     }
   ]
 }
@@ -283,30 +286,36 @@ PROMPT;
             ]
         ];
 
-        $models = ['gemini-3-flash-preview', 'gemini-3.8-flash'];
+        $primaryModel = getenv('GEMINI_MODEL') ?: ($_ENV['GEMINI_MODEL'] ?? 'gemini-3.1-flash-lite');
+        $modelsToTry = array_unique([$primaryModel, 'gemini-3-flash-preview', 'gemini-3.5-flash-lite', 'gemini-3.8-flash']);
+
         $response = null;
         $httpCode = 0;
+        $curlErr = '';
 
-        foreach ($models as $modelName) {
-            $url = "https://generativelanguage.googleapis.com/v1beta/models/{$modelName}:generateContent?key=" . urlencode($apiKey);
+        foreach ($modelsToTry as $currentModel) {
+            $url = "https://generativelanguage.googleapis.com/v1beta/models/{$currentModel}:generateContent?key=" . urlencode($apiKey);
 
             $ch = curl_init($url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                'Content-Type: application/json',
+                'x-goog-api-key: ' . $apiKey
+            ]);
             curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($requestBody));
-            curl_setopt($ch, CURLOPT_TIMEOUT, 15);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 25);
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 
-            $res = curl_exec($ch);
-            $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            $response = curl_exec($ch);
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             $curlErr = curl_error($ch);
             curl_close($ch);
 
-            if (!$curlErr && $code === 200 && !empty($res)) {
-                $response = $res;
-                $httpCode = $code;
+            if ($httpCode === 200 && !empty($response)) {
                 break;
+            } else {
+                error_log("CekPiring - Gemini Vision [{$currentModel}] HTTP {$httpCode}: " . ($curlErr ?: substr($response, 0, 200)));
             }
         }
 

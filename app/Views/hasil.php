@@ -190,6 +190,168 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Modul Spektrum Nutrisi Lengkap (Vitamin, Mineral & Mikronutrisi) -->
+                <div class="card card-spektrum-nutrisi">
+                    <div class="card-header-clean">
+                        <div class="analisis-header-row">
+                            <div class="analisis-header-text">
+                                <h3 class="card-title">Spektrum Nutrisi & Mikronutrisi Lengkap</h3>
+                                <p class="card-desc">Berdasarkan data Tabel Komposisi Pangan Indonesia (TKPI 2017) dan USDA SR Legacy.</p>
+                            </div>
+                            <span class="badge-source-tag">🔬 Data Terverifikasi</span>
+                        </div>
+                    </div>
+
+                    <!-- 1. Profil Lemak & Kolesterol Tambahan -->
+                    <div class="spektrum-subgroup">
+                        <h4 class="spektrum-subgroup-title">Profil Lemak & Kolesterol</h4>
+                        <div class="spektrum-grid">
+                            <div class="spektrum-item">
+                                <div class="spektrum-item-header">
+                                    <span class="spektrum-name">Lemak Tak Jenuh</span>
+                                    <span class="badge-status-nutrisi badge-<?= $total_gizi['status_nutrisi']['lemak_tak_jenuh_g']['status'] ?? 'lengkap' ?>">
+                                        <?= ($total_gizi['status_nutrisi']['lemak_tak_jenuh_g']['status'] ?? '') === 'lengkap' ? '✓ Lengkap' : 'ℹ️ Sebagian' ?>
+                                    </span>
+                                </div>
+                                <p class="spektrum-val"><?= $total_gizi['lemak_tak_jenuh_g'] ?? 0 ?> g</p>
+                                <p class="spektrum-desc">Lemak baik (omega 3/6/9) untuk kesehatan pembuluh darah</p>
+                            </div>
+                            <div class="spektrum-item">
+                                <div class="spektrum-item-header">
+                                    <span class="spektrum-name">Kolesterol</span>
+                                    <span class="badge-status-nutrisi badge-<?= $total_gizi['status_nutrisi']['kolesterol_mg']['status'] ?? 'lengkap' ?>">
+                                        <?= ($total_gizi['status_nutrisi']['kolesterol_mg']['status'] ?? '') === 'lengkap' ? '✓ Lengkap' : 'ℹ️ Sebagian' ?>
+                                    </span>
+                                </div>
+                                <p class="spektrum-val"><?= $total_gizi['kolesterol_mg'] ?? 0 ?> mg</p>
+                                <p class="spektrum-desc">Batas anjuran harian: < 300 mg (Profil Seimbang)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. Mineral & Elektrolit -->
+                    <div class="spektrum-subgroup">
+                        <h4 class="spektrum-subgroup-title">Mineral & Elektrolit</h4>
+                        <div class="spektrum-grid">
+                            <?php 
+                            $mineralList = [
+                                'Kalsium (Ca)' => ['kalsium_mg', 'mg', 'Kesehatan tulang & gigi'],
+                                'Fosfor (P)' => ['fosfor_mg', 'mg', 'Metabolisme energi & struktur sel'],
+                                'Zat Besi (Fe)' => ['zat_besi_mg', 'mg', 'Pembentukan sel darah merah'],
+                                'Kalium (K)' => ['kalium_mg', 'mg', 'Keseimbangan cairan & tekanan darah'],
+                                'Magnesium (Mg)' => ['magnesium_mg', 'mg', 'Fungsi saraf & relaksasi otot'],
+                                'Seng (Zn)' => ['seng_mg', 'mg', 'Sistem imun & pemulihan jaringan'],
+                            ];
+                            foreach ($mineralList as $label => [$key, $unit, $manfaat]): 
+                                $status = $total_gizi['status_nutrisi'][$key] ?? null;
+                                $ada = !empty($status['tersedia']) && $status['nilai'] !== null;
+                            ?>
+                                <div class="spektrum-item <?= $ada ? '' : 'item-unavailable' ?>">
+                                    <div class="spektrum-item-header">
+                                        <span class="spektrum-name"><?= $label ?></span>
+                                        <?php if ($ada): ?>
+                                            <span class="badge-status-nutrisi badge-<?= $status['status'] ?>">
+                                                <?= $status['status'] === 'lengkap' ? '✓ Lengkap' : 'ℹ️ Sebagian' ?>
+                                            </span>
+                                        <?php else: ?>
+                                            <span class="badge-status-nutrisi badge-tidak_tersedia">— Tidak tersedia</span>
+                                        <?php endif; ?>
+                                    </div>
+                                    <p class="spektrum-val">
+                                        <?= $ada ? ($status['nilai'] . ' ' . $unit) : 'Tidak tersedia' ?>
+                                    </p>
+                                    <p class="spektrum-desc"><?= $manfaat ?></p>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+
+                    <!-- 3. Vitamin Esensial -->
+                    <div class="spektrum-subgroup">
+                        <h4 class="spektrum-subgroup-title">Vitamin Esensial</h4>
+                        <div class="spektrum-grid">
+                            <?php 
+                            $vitaminList = [
+                                'Vitamin A' => ['vit_a_mcg', 'mcg', 'Kesehatan mata & imunitas tubuh'],
+                                'Vitamin B1 (Tiamin)' => ['vit_b1_mg', 'mg', 'Metabolisme energi karbohidrat'],
+                                'Vitamin B2 (Riboflavin)' => ['vit_b2_mg', 'mg', 'Kesehatan kulit & regenerasi sel'],
+                                'Vitamin B3 (Niasin)' => ['vit_b3_mg', 'mg', 'Sistem saraf & sirkulasi darah'],
+                                'Vitamin B6' => ['vit_b6_mg', 'mg', 'Sintesis asam amino & imunitas'],
+                                'Vitamin B12' => ['vit_b12_mcg', 'mcg', 'Produksi sel darah merah & DNA'],
+                                'Vitamin C' => ['vit_c_mg', 'mg', 'Antioksidan & daya tahan tubuh'],
+                                'Vitamin D' => ['vit_d_mcg', 'mcg', 'Penyerapan kalsium & imunitas'],
+                                'Vitamin E' => ['vit_e_mg', 'mg', 'Antioksidan pelindung sel'],
+                            ];
+                            foreach ($vitaminList as $label => [$key, $unit, $manfaat]): 
+                                $status = $total_gizi['status_nutrisi'][$key] ?? null;
+                                $ada = !empty($status['tersedia']) && $status['nilai'] !== null;
+                            ?>
+                                <div class="spektrum-item <?= $ada ? '' : 'item-unavailable' ?>">
+                                    <div class="spektrum-item-header">
+                                        <span class="spektrum-name"><?= $label ?></span>
+                                        <?php if ($ada): ?>
+                                            <span class="badge-status-nutrisi badge-<?= $status['status'] ?>">
+                                                <?= $status['status'] === 'lengkap' ? '✓ Lengkap' : 'ℹ️ Sebagian' ?>
+                                            </span>
+                                        <?php else: ?>
+                                            <span class="badge-status-nutrisi badge-tidak_tersedia">— Tidak tersedia</span>
+                                        <?php endif; ?>
+                                    </div>
+                                    <p class="spektrum-val">
+                                        <?= $ada ? ($status['nilai'] . ' ' . $unit) : 'Tidak tersedia' ?>
+                                    </p>
+                                    <p class="spektrum-desc"><?= $manfaat ?></p>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+
+                    <!-- 4. Tabel Rincian Kontribusi Tiap Bahan -->
+                    <?php if (!empty($total_gizi['rincian_bahan'])): ?>
+                        <div class="spektrum-subgroup">
+                            <h4 class="spektrum-subgroup-title">Rincian Kontribusi Tiap Bahan (Porsi Ini)</h4>
+                            <div class="table-bahan-wrapper">
+                                <table class="table-bahan-gizi">
+                                    <thead>
+                                        <tr>
+                                            <th>Bahan</th>
+                                            <th>Takaran</th>
+                                            <th>Kalori</th>
+                                            <th>Protein</th>
+                                            <th>Lemak</th>
+                                            <th>Karbo</th>
+                                            <th>Sumber & Kualitas</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach ($total_gizi['rincian_bahan'] as $rb): ?>
+                                            <tr>
+                                                <td>
+                                                    <strong><?= e($rb['nama']) ?></strong>
+                                                    <?php if (!empty($rb['nama_kanonis']) && $rb['nama_kanonis'] !== $rb['nama']): ?>
+                                                        <br><span class="sub-kanonis">Ref: <?= e($rb['nama_kanonis']) ?></span>
+                                                    <?php endif; ?>
+                                                </td>
+                                                <td><?= e($rb['keterangan']) ?> (<?= $rb['berat_g'] ?>g)</td>
+                                                <td><strong><?= $rb['ada_data'] ? ($rb['nutrisi']['energi_kkal'] . ' kkal') : '-' ?></strong></td>
+                                                <td><?= $rb['ada_data'] ? ($rb['nutrisi']['protein_g'] . ' g') : '-' ?></td>
+                                                <td><?= $rb['ada_data'] ? ($rb['nutrisi']['lemak_g'] . ' g') : '-' ?></td>
+                                                <td><?= $rb['ada_data'] ? ($rb['nutrisi']['karbohidrat_g'] . ' g') : '-' ?></td>
+                                                <td>
+                                                    <span class="badge-source-tiny"><?= e($rb['sumber_data']) ?></span>
+                                                    <span class="badge-comp-tiny comp-<?= $rb['tingkat_kelengkapan'] ?>">
+                                                        <?= $rb['tingkat_kelengkapan'] === 'data_lengkap' ? 'Lengkap' : ($rb['tingkat_kelengkapan'] === 'data_sebagian' ? 'Sebagian' : 'Perlu Verifikasi') ?>
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                </div>
             </div>
 
             <div class="column-right">

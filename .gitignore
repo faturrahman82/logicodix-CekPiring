@@ -3,6 +3,11 @@
 *.log
 storage/uploads/*
 !storage/uploads/.gitkeep
+storage/sessions/*
+!storage/sessions/.gitkeep
+public/assets/uploads/*
+!public/assets/uploads/.gitkeep
+*.bak
 .DS_Store
 Thumbs.db
 .vscode/

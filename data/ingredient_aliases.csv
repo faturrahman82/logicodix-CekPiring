@@ -1,12 +1,33 @@
 nama_kunci,alias,catatan
-telur ayam,telur|telur ayam utuh|telur ayam negeri|telur negeri,Istilah generik telur diarahkan ke telur ayam utuh; bukan ikan telur asin atau telur asin.
-ayam,daging ayam|ayam segar|daging ayam segar,Istilah generik ayam diarahkan ke entri Ayam umum.
-daging sapi,sapi|daging sapi segar,Istilah generik sapi diarahkan ke daging sapi.
-tahu,tahu putih,Istilah generik tahu diarahkan ke tahu biasa.
-tempe,tempe kedelai,Istilah generik tempe diarahkan ke tempe biasa.
-bawang putih,,Alias bawang putih.
-tomat merah segar,tomat|tomat segar,Istilah generik tomat diarahkan ke tomat merah segar.
-cabai merah segar,cabai merah|cabe merah,Alias cabai merah segar.
-minyak kelapa sawit,minyak goreng|minyak sayur|minyak sawit,Minyak goreng umum dipetakan ke minyak kelapa sawit sebagai pendekatan; pengguna dapat mengoreksi jenis minyak.
+beras giling masak (nasi),nasi putih|nasi|nasi putih matang|nasi tim,Nasi putih matang TKPI AP008.
+ikan kembung goreng,ikan kembung goreng|kembung goreng|ikan kembung goreng tepung|ikan kembung|kembung,Ikan kembung goreng olahan TKPI GR050.
+tempe goreng,tempe goreng|tempe goreng tepung|mendoan|gorengan tempe,Tempe goreng olahan TKPI CP041.
+terong bakar,terong bakar|terung bakar|terong panggang|terung panggang|lalap terong bakar|lalapan terong bakar,Terong bakar tanpa minyak TKPI DR154.
+petai segar,petai|pete|petai segar|pete segar|petai mentah|pete mentah|petai lalap|pete lalap|petai goreng|pete goreng|lalap petai|lalap pete,Petai segar TKPI DR134.
+sayur asem,sayur asem|sayur asam|sayur asem sunda|sayur asem jakarta|kuah sayur asem,Sayur asem olahan TKPI DP047.
+sambal terasi,sambal terasi|sambel terasi|sambal belacan|sambel belacan|sambal terasi matang|sambal terasi mentah|sambal lalap|sambel lalap|sambal|sambel|sambal ulek,Sambal terasi komposit TKPI/Panganku.
+daun kemangi,kemangi|daun kemangi|kemangi segar|lalap kemangi|lalapan kemangi,Daun kemangi segar TKPI DR037.
+minyak kelapa sawit,minyak goreng|minyak sayur|minyak sawit|minyak kelapa sawit|minyak,Minyak goreng umum TKPI KR004.
+telur ayam,telur|telur ayam utuh|telur ayam negeri|telur negeri|telur dadar|telur ceplok|telur mata sapi|telur rebus|telor,Istilah generik telur diarahkan ke telur ayam utuh.
+ayam,daging ayam|ayam segar|daging ayam segar|ayam goreng|ayam suwir|suwiran ayam|daging ayam goreng,Istilah generik ayam diarahkan ke entri Ayam umum.
+daging sapi,sapi|daging sapi segar|daging sapi goreng|daging sapi empal,Istilah generik sapi diarahkan ke daging sapi.
+tahu,tahu putih|tahu goreng|tahu kuning,Istilah generik tahu diarahkan ke tahu biasa.
+tempe,tempe kedelai|tempe mentah,Istilah generik tempe diarahkan ke tempe kedelai murni.
+bawang putih,bawang putih|bawang putih segar|bawang putih halus,Bawang putih bumbu dapur.
+bawang merah,bawang merah|bawang merah segar|brambang,Bawang merah bumbu dapur.
+bawang merah goreng,bawang goreng|bawang merah goreng,Bawang goreng taburan.
+tomat merah segar,tomat|tomat segar|tomat merah,Istilah generik tomat diarahkan ke tomat merah segar.
+cabai merah segar,cabai merah|cabe merah|cabe|cabai|cabai rawit|cabe rawit,Alias cabai merah segar.
 kecap manis (rata-rata label kemasan),kecap manis|kecap,Kecap generik diarahkan ke rata-rata label kemasan kecap manis.
-beras giling masak (nasi),nasi putih|nasi|nasi putih matang,"Nasi generik diarahkan ke nasi matang, bukan beras mentah."
+taoge segar,tauge|toge|taoge|tauge segar|tauge kacang hijau,Taoge segar umum TKPI DR148.
+santan murni,santan|santan kelapa|santan murni|santan kelapa murni|kuah santan,Santan generik diarahkan ke santan murni.
+kacang tanah goreng,kacang tanah|kacang|kacang goreng|saus kacang|bumbu kacang,Kacang tanah bumbu saus atau goreng.
+ketimun,mentimun|timun|ketimun|timun segar|lalap timun|lalapan timun,Ketimun segar TKPI DR111.
+daun bawang,daun bawang segar|bawang daun|daun bawang,Daun bawang segar.
+seledri,daun seledri|seledri segar|seledri,Seledri segar.
+mi basah,mie|mi|bakmi|mie basah|mie kuning,Mi basah olahan.
+kerupuk udang,kerupuk|krupuk|kerupuk putih|krupuk putih|krupuk udang|kerupuk kaleng,Kerupuk pelengkap.
+wortel segar,wortel|wortel segar|wortel kukus|wortel rebus,Wortel segar umum TKPI DR166.
+kol krop segar,kol|kubis|daun kol|lalap kol|kol goreng,Kol segar TKPI DR113.
+kangkung,kangkung|kangkung segar|daun kangkung|kangkung tumis|tumis kangkung,Kangkung sayuran hijau.
+bayam segar,bayam|bayam segar|daun bayam|sayur bayam,Bayam segar.

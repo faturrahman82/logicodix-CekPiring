@@ -70,16 +70,29 @@
                                     <div class="item-bahan" data-id="<?= $index ?>">
                                         <div class="badge-check">✓</div>
                                         <div class="bahan-info">
-                                            <p class="bahan-nama"><?= e($item['nama']) ?></p>
+                                            <div class="bahan-header-line">
+                                                <p class="bahan-nama"><?= e($item['nama']) ?></p>
+                                                <?php if (!empty($item['kalori_estimasi'])): ?>
+                                                    <span class="badge-cal-inline">±<?= $item['kalori_estimasi'] ?> kkal</span>
+                                                <?php endif; ?>
+                                            </div>
                                             <p class="bahan-ket"><?= e($item['keterangan']) ?></p>
+                                            <div class="bahan-meta-tags">
+                                                <span class="badge-completeness completeness-<?= $item['kelengkapan'] ?? 'data_lengkap' ?>">
+                                                    <?= e($item['kelengkapan_label'] ?? 'Data Lengkap') ?>
+                                                </span>
+                                                <span class="badge-source-tag">
+                                                    <?= e($item['sumber_data'] ?? 'TKPI 2017') ?>
+                                                </span>
+                                            </div>
                                         </div>
                                         <input type="hidden" name="bahan_nama[]" value="<?= e($item['nama']) ?>">
                                         <input type="hidden" name="bahan_berat[]" value="<?= e($item['berat_g']) ?>">
                                         <input type="hidden" name="bahan_ket[]" value="<?= e($item['keterangan']) ?>">
                                         <div class="bahan-actions">
-<button type="button" class="btn-edit-item" onclick="editBahan(this)">Edit</button>
-<button type="button" class="btn-delete-item" onclick="hapusBahan(this)">Hapus</button>
-</div>
+                                            <button type="button" class="btn-edit-item" onclick="editBahan(this)">Edit</button>
+                                            <button type="button" class="btn-delete-item" onclick="hapusBahan(this)">Hapus</button>
+                                        </div>
                                     </div>
                                 <?php else: ?>
                                     <div class="item-bahan item-tanpa-data" data-id="<?= $index ?>">
@@ -87,15 +100,18 @@
                                         <div class="bahan-info">
                                             <p class="bahan-nama"><?= e($item['nama']) ?></p>
                                             <p class="bahan-ket"><?= e($item['keterangan']) ?></p>
-                                            <p class="bahan-warn-label">Data gizi belum tersedia, tidak ikut dihitung.</p>
+                                            <div class="bahan-meta-tags">
+                                                <span class="badge-completeness completeness-perlu_verifikasi">Perlu Verifikasi</span>
+                                                <span class="bahan-warn-label">Data gizi belum tersedia, tidak ikut dihitung.</span>
+                                            </div>
                                         </div>
                                         <input type="hidden" name="bahan_nama[]" value="<?= e($item['nama']) ?>">
                                         <input type="hidden" name="bahan_berat[]" value="<?= e($item['berat_g']) ?>">
                                         <input type="hidden" name="bahan_ket[]" value="<?= e($item['keterangan']) ?>">
                                         <div class="bahan-actions">
-<button type="button" class="btn-edit-item" onclick="editBahan(this)">Edit</button>
-<button type="button" class="btn-delete-item" onclick="hapusBahan(this)">Hapus</button>
-</div>
+                                            <button type="button" class="btn-edit-item" onclick="editBahan(this)">Edit</button>
+                                            <button type="button" class="btn-delete-item" onclick="hapusBahan(this)">Hapus</button>
+                                        </div>
                                     </div>
                                 <?php endif; ?>
                             <?php endforeach; ?>
