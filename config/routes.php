@@ -4,10 +4,12 @@
 
 $router->get('/', [\App\Controllers\ProfilController::class, 'index']);
 $router->get('/profil', [\App\Controllers\ProfilController::class, 'index']);
+$router->get('/profil/reset', [\App\Controllers\ProfilController::class, 'reset']);
 $router->post('/profil', [\App\Controllers\ProfilController::class, 'save']);
 $router->get('/profil/skip', [\App\Controllers\ProfilController::class, 'skip']);
 
 $router->get('/makanan', [\App\Controllers\MakananController::class, 'index']);
+$router->get('/makanan/reset', [\App\Controllers\MakananController::class, 'reset']);
 $router->post('/makanan', [\App\Controllers\MakananController::class, 'process']);
 
 $router->get('/konfirmasi', [\App\Controllers\KonfirmasiController::class, 'index']);

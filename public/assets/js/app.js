@@ -6,10 +6,33 @@ document.addEventListener('DOMContentLoaded', function () {
     const targetDeskripsi = document.getElementById('target-deskripsi');
 
     if (inputUmur && inputTinggi && inputBerat && targetAngka) {
+        const alertDataFisik = document.getElementById('alert-data-fisik');
+        const alertIcon = document.getElementById('alert-data-fisik-icon');
+        const alertTitle = document.getElementById('alert-data-fisik-title');
+        const alertDesc = document.getElementById('alert-data-fisik-desc');
+
+        function setAlert(type, title, desc, iconText) {
+            if (!alertDataFisik) return;
+            alertDataFisik.className = 'alert-box alert-sm ' + type;
+            alertDataFisik.style.display = 'flex';
+            if (alertIcon) alertIcon.textContent = iconText || '!';
+            if (alertTitle) alertTitle.textContent = title;
+            if (alertDesc) alertDesc.textContent = desc;
+        }
+
+        function clearAlert() {
+            if (!alertDataFisik) return;
+            alertDataFisik.style.display = 'none';
+        }
+
         function hitungKaloriClient() {
-            const umur = parseFloat(inputUmur.value);
-            const tinggi = parseFloat(inputTinggi.value);
-            const berat = parseFloat(inputBerat.value);
+            const uRaw = inputUmur.value.trim();
+            const tRaw = inputTinggi.value.trim();
+            const bRaw = inputBerat.value.trim();
+
+            const umur = parseFloat(uRaw);
+            const tinggi = parseFloat(tRaw);
+            const berat = parseFloat(bRaw);
 
             const genderEl = document.querySelector('input[name="gender"]:checked');
             const tujuanEl = document.querySelector('input[name="tujuan"]:checked');
@@ -21,7 +44,38 @@ document.addEventListener('DOMContentLoaded', function () {
             let tdee = 2000;
             let isCustom = false;
 
-            if (!isNaN(umur) && !isNaN(tinggi) && !isNaN(berat) && umur > 0 && tinggi > 0 && berat > 0) {
+            // Reset input highlight
+            inputUmur.classList.remove('input-error');
+            inputTinggi.classList.remove('input-error');
+            inputBerat.classList.remove('input-error');
+
+            const anyFilled = (uRaw !== '' || tRaw !== '' || bRaw !== '');
+            const allFilled = (uRaw !== '' && tRaw !== '' && bRaw !== '');
+
+            // Validasi jangkauan angka
+            let hasError = false;
+            if (uRaw !== '' && (isNaN(umur) || umur < 1 || umur > 120)) {
+                inputUmur.classList.add('input-error');
+                hasError = true;
+            }
+            if (tRaw !== '' && (isNaN(tinggi) || tinggi < 50 || tinggi > 250)) {
+                inputTinggi.classList.add('input-error');
+                hasError = true;
+            }
+            if (bRaw !== '' && (isNaN(berat) || berat < 20 || berat > 300)) {
+                inputBerat.classList.add('input-error');
+                hasError = true;
+            }
+
+            if (hasError) {
+                setAlert('alert-error', 'Angka tidak wajar', 'Masukkan umur (1–120 thn), tinggi (50–250 cm), dan berat (20–300 kg) yang wajar.', '!');
+            } else if (anyFilled && !allFilled) {
+                const missing = [];
+                if (uRaw === '') { missing.push('umur'); inputUmur.classList.add('input-error'); }
+                if (tRaw === '') { missing.push('tinggi'); inputTinggi.classList.add('input-error'); }
+                if (bRaw === '') { missing.push('berat'); inputBerat.classList.add('input-error'); }
+                setAlert('alert-warning', 'Data fisik belum lengkap', 'Lengkapi juga ' + missing.join(' dan ') + ' agar rumus Mifflin-St Jeor dapat menghitung target kalori personalmu.', '▲');
+            } else if (allFilled) {
                 isCustom = true;
                 let bmr = 0;
                 if (gender === 'laki-laki') {
@@ -30,6 +84,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     bmr = (10 * berat) + (6.25 * tinggi) - (5 * umur) - 161;
                 }
                 tdee = bmr * 1.375;
+                setAlert('alert-success', 'Data fisik lengkap', 'Target kalori personal kamu aktif menggunakan rumus Mifflin-St Jeor.', '✓');
+            } else {
+                // Semua kosong (menggunakan target umum)
+                clearAlert();
             }
 
             let kaloriFinal = tdee;
@@ -58,6 +116,87 @@ document.addEventListener('DOMContentLoaded', function () {
             el.addEventListener('change', hitungKaloriClient);
         });
 
+        // Mencegah input selain angka
+        [inputUmur, inputTinggi, inputBerat].forEach(inp => {
+            if (!inp) return;
+            inp.addEventListener('keydown', function(e) {
+                // Tombol kontrol navigasi & edit
+                if (['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) {
+                    return;
+                }
+                // Izinkan titik desimal hanya untuk berat badan
+                if (e.key === '.' && inp === inputBerat && !inp.value.includes('.')) {
+                    return;
+                }
+                // Blokir tombol selain angka 0-9
+                if (!/^[0-9]$/.test(e.key)) {
+                    e.preventDefault();
+                    setAlert('alert-error', 'Input hanya angka', 'Kolom ini hanya boleh diisi angka.', '!');
+                }
+            });
+        });
+
+        // Intercept form submit: Data fisik WAJIB diisi angka saat klik Simpan Profil
+        const formProfil = document.getElementById('form-profil');
+        if (formProfil) {
+            formProfil.addEventListener('submit', function (e) {
+                const uRaw = inputUmur.value.trim();
+                const tRaw = inputTinggi.value.trim();
+                const bRaw = inputBerat.value.trim();
+
+                const umur = parseFloat(uRaw);
+                const tinggi = parseFloat(tRaw);
+                const berat = parseFloat(bRaw);
+
+                // Cek jika ada yang masih kosong
+                if (uRaw === '' || tRaw === '' || bRaw === '') {
+                    e.preventDefault();
+                    const missing = [];
+                    if (uRaw === '') { missing.push('umur'); inputUmur.classList.add('input-error'); }
+                    if (tRaw === '') { missing.push('tinggi (cm)'); inputTinggi.classList.add('input-error'); }
+                    if (bRaw === '') { missing.push('berat (kg)'); inputBerat.classList.add('input-error'); }
+
+                    setAlert(
+                        'alert-error',
+                        'Data fisik belum diisi',
+                        'Mohon isi ' + missing.join(', ') + ' dengan angka terlebih dahulu sebelum menyimpan profil. Atau klik "Lewati, pakai target umum" jika tidak ingin mengisi.',
+                        '!'
+                    );
+
+                    if (uRaw === '') inputUmur.focus();
+                    else if (tRaw === '') inputTinggi.focus();
+                    else if (bRaw === '') inputBerat.focus();
+                    return false;
+                }
+
+                // Cek jika angka tidak valid atau tidak wajar
+                let hasInvalid = false;
+                if (isNaN(umur) || umur < 1 || umur > 120) {
+                    inputUmur.classList.add('input-error');
+                    hasInvalid = true;
+                }
+                if (isNaN(tinggi) || tinggi < 50 || tinggi > 250) {
+                    inputTinggi.classList.add('input-error');
+                    hasInvalid = true;
+                }
+                if (isNaN(berat) || berat < 20 || berat > 300) {
+                    inputBerat.classList.add('input-error');
+                    hasInvalid = true;
+                }
+
+                if (hasInvalid) {
+                    e.preventDefault();
+                    setAlert(
+                        'alert-error',
+                        'Angka tidak valid',
+                        'Pastikan umur (1–120 thn), tinggi (50–250 cm), dan berat (20–300 kg) diisi dengan angka yang wajar.',
+                        '!'
+                    );
+                    return false;
+                }
+            });
+        }
+
         hitungKaloriClient();
     }
 
@@ -75,13 +214,50 @@ document.addEventListener('DOMContentLoaded', function () {
     if (inputNama && btnSubmitMakanan) {
         function checkSubmitValid() {
             const namaValid = inputNama.value.trim().length > 0;
-            if (namaValid) {
+            const inputFotoPath = document.getElementById('input-foto-path');
+            const hasExistingFoto = inputFotoPath && inputFotoPath.value.trim() !== '';
+            const hasFoto = (inputFile && inputFile.files && inputFile.files.length > 0) || 
+                            hasExistingFoto ||
+                            (dropzonePreview && dropzonePreview.classList.contains('active') && imgPreview && imgPreview.getAttribute('src') && imgPreview.getAttribute('src').trim() !== '');
+
+            if (namaValid && hasFoto) {
                 btnSubmitMakanan.removeAttribute('disabled');
                 if (submitHint) submitHint.style.display = 'none';
             } else {
                 btnSubmitMakanan.setAttribute('disabled', 'disabled');
-                if (submitHint) submitHint.style.display = 'inline';
+                if (submitHint) {
+                    submitHint.style.display = 'inline';
+                    if (!namaValid && !hasFoto) {
+                        submitHint.textContent = 'Isi nama makanan dan tambah foto dulu.';
+                    } else if (!namaValid) {
+                        submitHint.textContent = 'Isi nama makanan dulu.';
+                    } else {
+                        submitHint.textContent = 'Tambah foto makanan dulu.';
+                    }
+                }
             }
+        }
+
+        const formMakanan = document.getElementById('form-makanan');
+        if (formMakanan) {
+            formMakanan.addEventListener('submit', function (e) {
+                const namaValid = inputNama.value.trim().length > 0;
+                const inputFotoPath = document.getElementById('input-foto-path');
+                const hasExistingFoto = inputFotoPath && inputFotoPath.value.trim() !== '';
+                const hasFoto = (inputFile && inputFile.files && inputFile.files.length > 0) || 
+                                hasExistingFoto ||
+                                (dropzonePreview && dropzonePreview.classList.contains('active') && imgPreview && imgPreview.getAttribute('src') && imgPreview.getAttribute('src').trim() !== '');
+
+                if (!namaValid || !hasFoto) {
+                    e.preventDefault();
+                    if (!namaValid) {
+                        inputNama.focus();
+                    } else if (btnPilihFoto) {
+                        btnPilihFoto.focus();
+                    }
+                    return false;
+                }
+            });
         }
 
         if (btnPilihFoto && inputFile) {
@@ -98,7 +274,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     reader.onload = function (e) {
                         if (imgPreview) imgPreview.src = e.target.result;
                         if (dropzoneEmpty) dropzoneEmpty.style.display = 'none';
-                        if (dropzonePreview) dropzonePreview.classList.add('active');
+                        if (dropzonePreview) {
+                            dropzonePreview.style.display = 'block';
+                            dropzonePreview.classList.add('active');
+                        }
                         checkSubmitValid();
                     };
                     reader.readAsDataURL(this.files[0]);

@@ -292,7 +292,7 @@
 
         <div class="bottom-actions flex-end">
             <a href="<?= base_url('konfirmasi') ?>" class="btn-outline">Koreksi bahan atau porsi</a>
-            <a href="<?= base_url('makanan') ?>" class="btn-primary">Analisis makanan lain</a>
+            <a href="<?= base_url('profil/reset') ?>" class="btn-primary">Analisis makanan lain</a>
         </div>
     </div>
 

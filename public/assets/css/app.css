@@ -250,6 +250,16 @@ button, input, select {
     box-shadow: 0 0 0 3px rgba(4, 120, 87, 0.15);
 }
 
+.form-input.input-error {
+    border-color: var(--highborder);
+    background-color: #fff8f8;
+}
+
+.form-input.input-error:focus {
+    border-color: var(--hightext);
+    box-shadow: 0 0 0 3px rgba(153, 27, 27, 0.15);
+}
+
 .form-input-lg {
     height: 60px;
 }
@@ -764,6 +774,70 @@ input:checked + .slider:before {
 .alert-desc {
     font-size: 14px;
     color: var(--muted);
+}
+
+.alert-warning {
+    background-color: var(--medbg);
+    border: 1px solid var(--medborder);
+}
+
+.alert-warning .alert-icon {
+    background-color: var(--medtext);
+}
+
+.alert-warning .alert-title {
+    color: var(--medtext);
+}
+
+.alert-info {
+    background-color: var(--infobg);
+    border: 1px solid var(--infoborder);
+}
+
+.alert-info .alert-icon {
+    background-color: var(--infotext);
+}
+
+.alert-info .alert-title {
+    color: var(--infotext);
+}
+
+.alert-success {
+    background-color: var(--lowbg);
+    border: 1px solid var(--lowborder);
+}
+
+.alert-success .alert-icon {
+    background-color: var(--lowtext);
+}
+
+.alert-success .alert-title {
+    color: var(--lowtext);
+}
+
+.alert-box.alert-sm {
+    padding: 12px 16px;
+    gap: 12px;
+    border-radius: 12px;
+    margin-top: 16px;
+    margin-bottom: 0;
+}
+
+.alert-box.alert-sm .alert-icon {
+    width: 26px;
+    height: 26px;
+    border-radius: 13px;
+    font-size: 14px;
+}
+
+.alert-box.alert-sm .alert-title {
+    font-size: 14px;
+    margin-bottom: 2px;
+}
+
+.alert-box.alert-sm .alert-desc {
+    font-size: 13px;
+    line-height: 1.4;
 }
 
 .banner-konflik {

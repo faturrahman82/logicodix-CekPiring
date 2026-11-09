@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CekPiring - Makanan</title>
-    <link rel="stylesheet" href="<?= asset_url('css/app.css') ?>">
+    <link rel="stylesheet" href="<?= asset_url('css/app.css') ?>?v=<?= time() ?>">
 </head>
 <body>
 
@@ -20,7 +20,7 @@
             <div class="alert-box alert-error">
                 <div class="alert-icon">!</div>
                 <div class="alert-content">
-                    <p class="alert-title">Makanan tidak dikenali</p>
+                    <p class="alert-title">Perhatian</p>
                     <p class="alert-desc"><?= e($error) ?></p>
                 </div>
             </div>
@@ -41,8 +41,9 @@
                 <div class="input-foto-col">
                     <div class="upload-dropzone" id="dropzone-foto">
                         <input type="file" id="input-file-foto" name="foto" accept="image/jpeg,image/png,image/webp" class="file-hidden">
+                        <input type="hidden" name="foto_path" id="input-foto-path" value="<?= e($analysis['foto'] ?? '') ?>">
                         
-                        <div class="dropzone-empty" id="dropzone-empty">
+                        <div class="dropzone-empty" id="dropzone-empty" style="<?= !empty($analysis['foto']) ? 'display: none;' : '' ?>">
                             <div class="plus-circle">
                                 <span>+</span>
                             </div>
@@ -51,7 +52,7 @@
                             <button type="button" class="btn-outline" id="btn-pilih-foto">Pilih foto</button>
                         </div>
 
-                        <div class="dropzone-preview <?= !empty($analysis['foto']) ? 'active' : '' ?>" id="dropzone-preview">
+                        <div class="dropzone-preview <?= !empty($analysis['foto']) ? 'active' : '' ?>" id="dropzone-preview" style="<?= empty($analysis['foto']) ? 'display: none;' : '' ?>">
                             <img src="<?= !empty($analysis['foto']) ? base_url($analysis['foto']) : '' ?>" alt="Pratinjau Makanan" id="img-preview">
                             <button type="button" class="btn-change-photo" id="btn-ganti-foto">Ganti foto</button>
                         </div>
@@ -70,6 +71,6 @@
         </form>
     </div>
 
-    <script src="<?= asset_url('js/app.js') ?>"></script>
+    <script src="<?= asset_url('js/app.js') ?>?v=<?= time() ?>"></script>
 </body>
 </html>
