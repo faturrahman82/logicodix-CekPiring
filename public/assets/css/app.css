@@ -1622,3 +1622,23 @@ input:checked + .slider:before {
         width: 100%;
     }
 }
+
+/* Aksi edit dan hapus bahan */
+.bahan-actions{display:flex;align-items:center;gap:10px;margin-left:auto;flex-shrink:0}
+.btn-edit-item,.btn-delete-item{border:0;background:transparent;cursor:pointer;font:inherit;font-weight:600;padding:8px 5px}
+.btn-edit-item{color:#2563eb}
+.btn-delete-item{color:var(--primary)}
+.btn-edit-item:hover,.btn-delete-item:hover{text-decoration:underline}
+.modal-overlay{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(15,23,42,.55)}
+.modal-overlay.active{display:flex}
+.modal-edit-card{width:min(100%,480px);background:#fff;border-radius:18px;box-shadow:0 24px 70px rgba(15,23,42,.25);overflow:hidden}
+.modal-edit-header{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;padding:22px 24px 16px;border-bottom:1px solid var(--border)}
+.modal-edit-header h2{font-size:20px;margin-bottom:5px}
+.modal-edit-header p,.modal-edit-note{color:var(--muted);font-size:13px}
+.modal-close{border:0;background:transparent;font-size:28px;line-height:1;color:var(--muted);cursor:pointer}
+.modal-edit-body{padding:20px 24px;display:grid;gap:10px}
+.edit-quantity-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px}
+.modal-edit-body .form-input{width:100%}
+.modal-edit-note{margin-top:4px}
+.modal-edit-footer{display:flex;justify-content:flex-end;gap:10px;padding:16px 24px 22px}
+@media(max-width:600px){.modal-edit-card{border-radius:14px}.modal-edit-header,.modal-edit-body{padding-left:18px;padding-right:18px}.modal-edit-footer{padding:14px 18px 18px}.bahan-actions{gap:4px}}

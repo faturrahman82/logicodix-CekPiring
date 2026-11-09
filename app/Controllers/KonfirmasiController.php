@@ -25,7 +25,7 @@ class KonfirmasiController extends Controller {
                 $adaBahanTanpaData = true;
             }
             $bahanDivalidasi[] = [
-                'nama' => $b['nama'],
+                'nama' => $fact['nama'] ?? NutritionFact::canonicalName($b['nama']),
                 'berat_g' => (float)($b['berat_g'] ?? 50),
                 'keterangan' => $b['keterangan'] ?? '',
                 'ada_data_gizi' => $adaGizi,
@@ -56,7 +56,7 @@ class KonfirmasiController extends Controller {
 
         $bahanBaru = [];
         for ($i = 0; $i < count($namaBahan); $i++) {
-            $nama = trim($namaBahan[$i]);
+            $nama = NutritionFact::canonicalName(trim($namaBahan[$i]));
             if (!empty($nama)) {
                 $berat = isset($beratBahan[$i]) ? (float)$beratBahan[$i] : 50;
                 $ket = $ketBahan[$i] ?? '';

@@ -364,7 +364,10 @@ function tambahBahanItem(nama, berat, ket) {
         <input type="hidden" name="bahan_nama[]" value="${escapeHtml(nama)}">
         <input type="hidden" name="bahan_berat[]" value="${berat}">
         <input type="hidden" name="bahan_ket[]" value="${escapeHtml(ket)}">
-        <button type="button" class="btn-delete-item" onclick="hapusBahan(this)">Hapus</button>
+        <div class="bahan-actions">
+            <button type="button" class="btn-edit-item" onclick="editBahan(this)">Edit</button>
+            <button type="button" class="btn-delete-item" onclick="hapusBahan(this)">Hapus</button>
+        </div>
     `;
     container.appendChild(div);
 }
@@ -376,3 +379,123 @@ function escapeHtml(str) {
               .replace(/"/g, '&quot;')
               .replace(/'/g, '&#039;');
 }
+
+
+// Modal koreksi bahan. Berat gram tetap disimpan untuk kompatibilitas kalkulator gizi.
+// Bahan cair ditampilkan dalam ml; bahan padat tetap menggunakan gram/butir/dll.
+let barisBahanSedangDiedit = null;
+
+function kategoriSatuanBahan(nama) {
+    const n = (nama || '').toLowerCase();
+    const cair = [
+        'minyak', 'kecap', 'saus', 'santan', 'susu', 'air', 'kaldu',
+        'kuah', 'cuka', 'madu', 'sirup', 'saus tiram', 'saus tomat',
+        'saus sambal', 'mayones', 'margarin cair'
+    ];
+    return cair.some(k => n.includes(k)) ? 'ml' : 'g';
+}
+
+function faktorGramPerMl(nama) {
+    const n = (nama || '').toLowerCase();
+    if (n.includes('minyak')) return 0.92;
+    if (n.includes('kecap')) return 1.15;
+    if (n.includes('madu')) return 1.42;
+    if (n.includes('santan') || n.includes('susu')) return 1.03;
+    if (n.includes('saus') || n.includes('sirup')) return 1.10;
+    return 1.00; // air, kuah, kaldu, cuka, dan cairan lain: estimasi mendekati air
+}
+
+function konversiKeGram(jumlah, satuan, nama) {
+    const faktor = {
+        g: 1, butir: 55, sdm: 15, sdt: 5,
+        potong: 50, buah: 50, siung: 5, lembar: 5,
+        mangkuk: 200, tusuk: 20
+    };
+    if (satuan === 'ml') return jumlah * faktorGramPerMl(nama);
+    return jumlah * (faktor[satuan] || 1);
+}
+
+function editBahan(button) {
+    const row = button.closest('.item-bahan');
+    if (!row) return;
+    barisBahanSedangDiedit = row;
+    const nama = row.querySelector('input[name="bahan_nama[]"]')?.value || '';
+    const berat = parseFloat(row.querySelector('input[name="bahan_berat[]"]')?.value || '100');
+    const satuan = kategoriSatuanBahan(nama);
+    const jumlah = satuan === 'ml'
+        ? berat / faktorGramPerMl(nama)
+        : berat;
+
+    document.getElementById('edit-nama-bahan').value = nama;
+    document.getElementById('edit-jumlah-bahan').value = Number(jumlah.toFixed(1));
+    document.getElementById('edit-satuan-bahan').value = satuan;
+    const modal = document.getElementById('modal-edit-bahan');
+    modal.classList.add('active');
+    modal.setAttribute('aria-hidden', 'false');
+    document.getElementById('edit-nama-bahan').focus();
+}
+
+function tutupModalEdit() {
+    const modal = document.getElementById('modal-edit-bahan');
+    if (modal) {
+        modal.classList.remove('active');
+        modal.setAttribute('aria-hidden', 'true');
+    }
+    barisBahanSedangDiedit = null;
+}
+
+function simpanEditBahan() {
+    if (!barisBahanSedangDiedit) return;
+    const nama = document.getElementById('edit-nama-bahan').value.trim();
+    const jumlah = parseFloat(document.getElementById('edit-jumlah-bahan').value);
+    const satuan = document.getElementById('edit-satuan-bahan').value;
+    if (!nama || !Number.isFinite(jumlah) || jumlah <= 0) {
+        alert('Nama bahan dan jumlah harus diisi dengan benar.');
+        return;
+    }
+
+    const gram = Math.max(1, Math.round(konversiKeGram(jumlah, satuan, nama)));
+    const labelSatuan = {
+        g: 'g', butir: 'butir', sdm: 'sdm', sdt: 'sdt', ml: 'ml',
+        potong: 'potong', buah: 'buah', siung: 'siung', lembar: 'lembar',
+        mangkuk: 'mangkuk', tusuk: 'tusuk'
+    };
+    const jumlahTampil = Number.isInteger(jumlah) ? jumlah : Number(jumlah.toFixed(1));
+    const keterangan = satuan === 'ml'
+        ? `${jumlahTampil} ml (perkiraan ${gram} g)`
+        : `${jumlahTampil} ${labelSatuan[satuan]} (perkiraan ${gram} g)`;
+    const row = barisBahanSedangDiedit;
+
+    row.querySelector('.bahan-nama').textContent = nama;
+    row.querySelector('.bahan-ket').textContent = keterangan;
+    row.querySelector('input[name="bahan_nama[]"]').value = nama;
+    row.querySelector('input[name="bahan_berat[]"]').value = gram;
+    row.querySelector('input[name="bahan_ket[]"]').value = keterangan;
+    tutupModalEdit();
+}
+
+// Tampilkan bahan cair yang terdeteksi dalam ml sejak awal, bukan sendok/gram.
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('#list-bahan-container .item-bahan').forEach(row => {
+        const nama = row.querySelector('input[name="bahan_nama[]"]')?.value || '';
+        if (kategoriSatuanBahan(nama) !== 'ml') return;
+        const gramInput = row.querySelector('input[name="bahan_berat[]"]');
+        const ket = row.querySelector('input[name="bahan_ket[]"]');
+        const label = row.querySelector('.bahan-ket');
+        const gram = parseFloat(gramInput?.value || '0');
+        if (!gram || !ket || !label) return;
+        const ml = gram / faktorGramPerMl(nama);
+        const mlTampil = Number(ml.toFixed(1));
+        const keterangan = `${mlTampil} ml (perkiraan ${gram} g)`;
+        ket.value = keterangan;
+        label.textContent = keterangan;
+    });
+});
+
+document.addEventListener('click', function(event) {
+    const modal = document.getElementById('modal-edit-bahan');
+    if (modal && event.target === modal) tutupModalEdit();
+});
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') tutupModalEdit();
+});

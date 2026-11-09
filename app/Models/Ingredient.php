@@ -10,11 +10,11 @@ class Ingredient {
     public bool $ada_data_gizi;
 
     public function __construct(string $nama, float $berat_g = 100, string $keterangan = '') {
-        $this->nama = $nama;
+        $this->nama = NutritionFact::canonicalName($nama);
         $this->berat_g = $berat_g;
         $this->keterangan = $keterangan;
         
-        $fact = NutritionFact::findByName($nama);
+        $fact = NutritionFact::findByName($this->nama);
         if ($fact !== null) {
             $this->gizi = $fact;
             $this->ada_data_gizi = true;

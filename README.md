@@ -18,3 +18,11 @@ Data gizi ada di folder [`data/`](data/). Rincian kolom, perubahan, dan batasann
 Data kosong berarti tidak tersedia, bukan nol. Aplikasi menampilkan "data belum tersedia" untuk bahan itu dan tidak memasukkannya ke perhitungan.
 
 Gula dan lemak jenuh masakan lokal (rawon, soto, rendang, nasi goreng) belum ada di sumber terbuka yang sudah diperiksa.
+
+
+### Alias bahan makanan (pencocokan nama)
+
+Daftar `data/ingredient_aliases.csv` memetakan nama umum ke `nama_kunci` kanonis pada `data/nutrition_bersih.csv`.
+Contoh: `telur` diarahkan ke `telur ayam`, sehingga tidak akan cocok secara parsial dengan `ikan telur asin mentah`.
+Jika menambah alias baru, pastikan `nama_kunci` tujuan benar-benar ada di `nutrition_bersih.csv`.
+File alias ini dibaca oleh aplikasi PHP dan tidak perlu diimpor ke tabel `nutrition_facts`.

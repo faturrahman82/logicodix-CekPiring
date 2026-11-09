@@ -76,7 +76,10 @@
                                         <input type="hidden" name="bahan_nama[]" value="<?= e($item['nama']) ?>">
                                         <input type="hidden" name="bahan_berat[]" value="<?= e($item['berat_g']) ?>">
                                         <input type="hidden" name="bahan_ket[]" value="<?= e($item['keterangan']) ?>">
-                                        <button type="button" class="btn-delete-item" onclick="hapusBahan(this)">Hapus</button>
+                                        <div class="bahan-actions">
+<button type="button" class="btn-edit-item" onclick="editBahan(this)">Edit</button>
+<button type="button" class="btn-delete-item" onclick="hapusBahan(this)">Hapus</button>
+</div>
                                     </div>
                                 <?php else: ?>
                                     <div class="item-bahan item-tanpa-data" data-id="<?= $index ?>">
@@ -89,7 +92,10 @@
                                         <input type="hidden" name="bahan_nama[]" value="<?= e($item['nama']) ?>">
                                         <input type="hidden" name="bahan_berat[]" value="<?= e($item['berat_g']) ?>">
                                         <input type="hidden" name="bahan_ket[]" value="<?= e($item['keterangan']) ?>">
-                                        <button type="button" class="btn-delete-item" onclick="hapusBahan(this)">Hapus</button>
+                                        <div class="bahan-actions">
+<button type="button" class="btn-edit-item" onclick="editBahan(this)">Edit</button>
+<button type="button" class="btn-delete-item" onclick="hapusBahan(this)">Hapus</button>
+</div>
                                     </div>
                                 <?php endif; ?>
                             <?php endforeach; ?>
@@ -130,6 +136,28 @@
         </form>
     </div>
 
-    <script src="<?= asset_url('js/app.js') ?>"></script>
+
+    <div class="modal-overlay" id="modal-edit-bahan" aria-hidden="true">
+      <div class="modal-edit-card" role="dialog" aria-modal="true" aria-labelledby="modal-edit-title">
+        <div class="modal-edit-header"><div><h2 id="modal-edit-title">Edit bahan makanan</h2><p>Sesuaikan bahan dan jumlah sesuai yang kamu masak.</p></div>
+          <button type="button" class="modal-close" onclick="tutupModalEdit()" aria-label="Tutup">&times;</button>
+        </div>
+        <div class="modal-edit-body">
+          <label class="form-label" for="edit-nama-bahan">Nama bahan</label>
+          <input class="form-input" type="text" id="edit-nama-bahan" autocomplete="off">
+          <div class="edit-quantity-grid">
+            <div><label class="form-label" for="edit-jumlah-bahan">Jumlah</label><input class="form-input" type="number" id="edit-jumlah-bahan" min="0.1" step="0.1" value="100"></div>
+            <div><label class="form-label" for="edit-satuan-bahan">Satuan</label>
+              <select class="form-input" id="edit-satuan-bahan">
+                <option value="g">gram (g)</option><option value="butir">butir</option><option value="sdm">sendok makan</option><option value="sdt">sendok teh</option><option value="ml">mililiter (ml)</option><option value="potong">potong</option><option value="buah">buah</option><option value="siung">siung</option><option value="lembar">lembar</option><option value="mangkuk">mangkuk</option><option value="tusuk">tusuk</option>
+              </select>
+            </div>
+          </div>
+          <p class="modal-edit-note">Bahan cair seperti minyak dan kecap menggunakan ml; bahan padat menggunakan gram. Sistem mengonversi perkiraan berat ke gram untuk perhitungan gizi.</p>
+        </div>
+        <div class="modal-edit-footer"><button type="button" class="btn-secondary" onclick="tutupModalEdit()">Batal</button><button type="button" class="btn-primary" onclick="simpanEditBahan()">Simpan perubahan</button></div>
+      </div>
+    </div>
+\n    <script src="<?= asset_url('js/app.js') ?>"></script>
 </body>
 </html>
