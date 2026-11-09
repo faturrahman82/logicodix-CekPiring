@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CekPiring - Atur Profil</title>
-    <link rel="stylesheet" href="<?= asset_url('css/app.css') ?>">
+    <link rel="stylesheet" href="<?= asset_url('css/app.css') ?>?v=<?= time() ?>">
 </head>
 <body>
 
@@ -52,9 +52,9 @@
                         </div>
                     </div>
 
-                    <div class="card">
+                    <div class="card card-data-fisik">
                         <h2 class="card-title">Data fisik</h2>
-                        <p class="card-desc">Boleh dikosongkan. Tanpa ini, aplikasi memakai target umum.</p>
+                        <p class="card-desc">Wajib diisi angka untuk menyimpan profil. Atau klik "Lewati" jika ingin memakai target umum.</p>
 
                         <div class="form-group">
                             <label class="form-label">Jenis kelamin</label>
@@ -72,16 +72,25 @@
 
                         <div class="form-row">
                             <div class="form-group">
-                                <label class="form-label" for="input-umur">Umur</label>
-                                <input type="number" id="input-umur" name="umur" class="form-input" placeholder="21" value="<?= e($profile['umur'] ?? '') ?>">
+                                <label class="form-label" for="input-umur">Umur (tahun)</label>
+                                <input type="number" id="input-umur" name="umur" class="form-input" placeholder="Contoh: 21" min="1" max="120" value="<?= e($profile['umur'] ?? '') ?>" inputmode="numeric">
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="input-tinggi">Tinggi (cm)</label>
-                                <input type="number" id="input-tinggi" name="tinggi" class="form-input" placeholder="165" value="<?= e($profile['tinggi'] ?? '') ?>">
+                                <input type="number" id="input-tinggi" name="tinggi" class="form-input" placeholder="Contoh: 165" min="50" max="250" value="<?= e($profile['tinggi'] ?? '') ?>" inputmode="numeric">
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="input-berat">Berat (kg)</label>
-                                <input type="number" id="input-berat" name="berat" class="form-input" placeholder="60" value="<?= e($profile['berat'] ?? '') ?>">
+                                <input type="number" id="input-berat" name="berat" class="form-input" placeholder="Contoh: 60" min="20" max="300" step="0.1" value="<?= e($profile['berat'] ?? '') ?>" inputmode="decimal">
+                            </div>
+                        </div>
+
+                        <!-- Alert Inputan Data Fisik -->
+                        <div id="alert-data-fisik" class="alert-box alert-sm <?= !empty($error) ? 'alert-error' : '' ?>" style="<?= !empty($error) ? 'display: flex;' : 'display: none;' ?>">
+                            <div class="alert-icon" id="alert-data-fisik-icon"><?= !empty($error) ? '!' : '' ?></div>
+                            <div class="alert-content">
+                                <p class="alert-title" id="alert-data-fisik-title"><?= !empty($error) ? 'Periksa Data Fisik' : '' ?></p>
+                                <p class="alert-desc" id="alert-data-fisik-desc"><?= !empty($error) ? e($error) : '' ?></p>
                             </div>
                         </div>
                     </div>
@@ -161,6 +170,6 @@
         </form>
     </div>
 
-    <script src="<?= asset_url('js/app.js') ?>"></script>
+    <script src="<?= asset_url('js/app.js') ?>?v=<?= time() ?>"></script>
 </body>
 </html>

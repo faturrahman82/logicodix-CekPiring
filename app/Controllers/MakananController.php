@@ -13,6 +13,7 @@ class MakananController extends Controller {
             return;
         }
 
+        // Ambil data analisis jika ada (misal pengguna kembali dari konfirmasi atau ubah profil)
         $analysis = session_get('analysis_data', [
             'nama_makanan' => '',
             'foto' => null
@@ -24,6 +25,16 @@ class MakananController extends Controller {
             'error' => session_get('flash_error')
         ]);
         session_set('flash_error', null);
+    }
+
+    /**
+     * Dijalankan saat pengguna selesai hitung gizi dan klik "Analisis makanan lain"
+     */
+    public function reset(): void {
+        session_set('user_profile', null);
+        session_set('analysis_data', null);
+        session_set('flash_error', null);
+        $this->redirect('profil');
     }
 
     public function process(): void {
@@ -51,10 +62,10 @@ class MakananController extends Controller {
         }
 
         if (empty($photoUploaded)) {
-            $photoUploaded = $_POST['foto_path'] ?? 'assets/img/demo_nasi_goreng.jpg';
+            $photoUploaded = !empty($_POST['foto_path']) ? trim($_POST['foto_path']) : null;
         }
 
-        if (empty($namaMakanan)) {
+        if (empty($namaMakanan) || empty($photoUploaded)) {
             session_set('flash_error', 'Isi nama makanan dan tambah foto dulu.');
             $this->redirect('makanan');
             return;
