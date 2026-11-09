@@ -138,17 +138,30 @@ class AiClient {
      */
     public static function identify(string $namaInput, ?string $photoPath = null): array {
         $namaLower = mb_strtolower(trim($namaInput));
-        $apiKey = getenv('GEMINI_API_KEY');
+        $apiKey = getenv('GEMINI_API_KEY') ?: ($_ENV['GEMINI_API_KEY'] ?? ($_SERVER['GEMINI_API_KEY'] ?? ''));
 
-        // Cek API jika tersedia
-        if (!empty($apiKey) && !empty($photoPath) && file_exists($photoPath)) {
-            $apiResult = self::callGeminiVision($apiKey, $namaInput, $photoPath);
-            if ($apiResult !== null) {
+        // Cek path foto (relatif vs absolut)
+        $fullPhotoPath = null;
+        if (!empty($photoPath)) {
+            if (file_exists($photoPath)) {
+                $fullPhotoPath = $photoPath;
+            } else {
+                $publicPath = __DIR__ . '/../../public/' . ltrim($photoPath, '/');
+                if (file_exists($publicPath)) {
+                    $fullPhotoPath = $publicPath;
+                }
+            }
+        }
+
+        // 1. Panggil Gemini Multimodal Vision API jika API key dan foto tersedia
+        if (!empty($apiKey) && !empty($fullPhotoPath) && file_exists($fullPhotoPath)) {
+            $apiResult = self::callGeminiVision($apiKey, $namaInput, $fullPhotoPath);
+            if ($apiResult !== null && !empty($apiResult['bahan'])) {
                 return $apiResult;
             }
         }
 
-        // Cek apakah ada konflik yang disengaja untuk skenario demo State 3b
+        // 2. Cek apakah ada konflik yang disengaja untuk skenario demo State 3b
         // Contoh di PRD: Pengguna menulis "Nasi goreng telur", tapi foto soto ayam
         if (strpos($namaLower, 'nasi goreng') !== false && !empty($photoPath) && strpos(mb_strtolower($photoPath), 'soto') !== false) {
             $data = self::$resepLokal['nasi goreng telur'];
@@ -163,7 +176,7 @@ class AiClient {
             ];
         }
 
-        // Cari resep yang cocok dari kamus lokal
+        // 3. Cari resep yang cocok dari kamus lokal (fallback deterministik)
         foreach (self::$resepLokal as $kunci => $data) {
             if (strpos($namaLower, $kunci) !== false || strpos($kunci, $namaLower) !== false) {
                 return [
@@ -177,7 +190,7 @@ class AiClient {
             }
         }
 
-        // Makanan umum tidak dikenal di kamus, buat perkiraan bahan dasar
+        // 4. Makanan umum tidak dikenal di kamus, buat perkiraan bahan dasar
         if (!empty($namaInput)) {
             return [
                 'sukses' => true,
@@ -197,9 +210,128 @@ class AiClient {
         ];
     }
 
+    /**
+     * Panggilan ke Google Gemini Multimodal Vision API
+     */
     private static function callGeminiVision(string $apiKey, string $nama, string $photoPath): ?array {
-        // cURL ke Gemini Multimodal endpoint
-        // Bila respons valid JSON dengan list bahan, kembalikan
-        return null; // Fallback ke deterministik
+        if (!file_exists($photoPath)) {
+            return null;
+        }
+
+        $fileData = file_get_contents($photoPath);
+        if ($fileData === false || strlen($fileData) === 0) {
+            return null;
+        }
+
+        $mimeType = mime_content_type($photoPath);
+        if (!$mimeType || !in_array($mimeType, ['image/jpeg', 'image/png', 'image/webp', 'image/heic'])) {
+            $mimeType = 'image/jpeg';
+        }
+
+        $base64Image = base64_encode($fileData);
+
+        $prompt = <<<PROMPT
+Kamu adalah AI ahli gizi kuliner dan porsi makanan Indonesia pada aplikasi web CekPiring.
+Pengguna mengunggah foto makanan dan menuliskan nama makanan: "{$nama}".
+
+Tugasmu:
+1. Periksa apakah foto makanan tersebut sesuai dengan nama makanan yang ditulis pengguna ("{$nama}").
+   - Jika pengguna menulis "Nasi goreng telur" tetapi fotonya soto atau bakso (sangat bertolak belakang), set "konflik": true, sebutkan nama makanan di foto pada "nama_foto", dan buat penjelasan ramah di "konflik_teks".
+   - Jika sesuai atau foto memperlihatkan makanan yang mirip, set "konflik": false.
+2. Analisis bahan-bahan utama yang terlihat di foto beserta takarannya (porsi):
+   - Perkirakan berat bahan dalam gram secara dinamis dan realistis berdasarkan ukuran porsi yang terlihat di foto (contoh: nasi putih 150-250 g, telur 55 g per butir, suwiran ayam 40-80 g, minyak tumis 5-15 g, kecap manis 10-20 g, kuah/sayur, dll).
+   - Gunakan nama bahan umum Indonesia yang standar (contoh: "Nasi putih", "Telur", "Daging ayam", "Daging sapi", "Minyak goreng", "Kecap manis", "Tahu", "Tempe", "Bawang merah", dll).
+   - Berikan keterangan takaran ramah (contoh: "200 g, perkiraan dari foto", "1 butir (sekitar 55 g)", "1 sendok makan", dll).
+
+Kembalikan HANYA format JSON valid tanpa format markdown atau backtick codeblock:
+{
+  "sukses": true,
+  "nama": "Nama Makanan Sesuai",
+  "deskripsi": "Deskripsi singkat makanan dan perkiraan porsi dari foto",
+  "konflik": false,
+  "konflik_teks": "",
+  "nama_foto": "",
+  "bahan": [
+    {
+      "nama": "Nasi putih",
+      "berat_g": 200,
+      "keterangan": "200 g, perkiraan dari foto"
+    }
+  ]
+}
+PROMPT;
+
+        $requestBody = [
+            'contents' => [
+                [
+                    'parts' => [
+                        [
+                            'text' => $prompt
+                        ],
+                        [
+                            'inline_data' => [
+                                'mime_type' => $mimeType,
+                                'data' => $base64Image
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            'generationConfig' => [
+                'response_mime_type' => 'application/json',
+                'temperature' => 0.2
+            ]
+        ];
+
+        $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" . urlencode($apiKey);
+
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($requestBody));
+        curl_setopt($ch, CURLOPT_TIMEOUT, 15);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+
+        $response = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $curlErr = curl_error($ch);
+        curl_close($ch);
+
+        if ($curlErr || $httpCode !== 200 || empty($response)) {
+            return null;
+        }
+
+        $responseData = json_decode($response, true);
+        $rawText = $responseData['candidates'][0]['content']['parts'][0]['text'] ?? null;
+
+        if (empty($rawText)) {
+            return null;
+        }
+
+        $cleanJson = trim($rawText);
+        $cleanJson = preg_replace('/^```(?:json)?\s*/i', '', $cleanJson);
+        $cleanJson = preg_replace('/\s*```$/', '', $cleanJson);
+
+        $parsed = json_decode($cleanJson, true);
+        if (!is_array($parsed) || empty($parsed['bahan']) || !is_array($parsed['bahan'])) {
+            return null;
+        }
+
+        return [
+            'sukses' => true,
+            'nama' => $parsed['nama'] ?? ucwords($nama),
+            'deskripsi' => $parsed['deskripsi'] ?? 'Analisis Gemini Vision berdasarkan foto.',
+            'bahan' => array_map(function($b) {
+                return [
+                    'nama' => trim($b['nama'] ?? 'Bahan'),
+                    'berat_g' => (float)($b['berat_g'] ?? 50),
+                    'keterangan' => $b['keterangan'] ?? (($b['berat_g'] ?? 50) . ' g, estimasi dari foto')
+                ];
+            }, $parsed['bahan']),
+            'konflik' => !empty($parsed['konflik']),
+            'konflik_teks' => $parsed['konflik_teks'] ?? '',
+            'nama_foto' => $parsed['nama_foto'] ?? ''
+        ];
     }
 }

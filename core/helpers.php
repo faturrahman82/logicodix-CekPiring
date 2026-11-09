@@ -19,7 +19,10 @@ if (!function_exists('base_url')) {
 
 if (!function_exists('asset_url')) {
     function asset_url(string $path = ''): string {
-        return base_url('assets/' . ltrim($path, '/'));
+        $cleanPath = ltrim($path, '/');
+        $fullPath = __DIR__ . '/../public/assets/' . $cleanPath;
+        $version = file_exists($fullPath) ? '?v=' . filemtime($fullPath) : '';
+        return base_url('assets/' . $cleanPath) . $version;
     }
 }
 

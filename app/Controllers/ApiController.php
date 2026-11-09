@@ -8,6 +8,7 @@ use App\Services\NutritionCalculator;
 use App\Services\RiskEvaluator;
 use App\Services\PortionAdvisor;
 use App\Services\VerdictBuilder;
+use App\Services\ClinicalAdvisor;
 
 class ApiController extends Controller {
     public function recalculate(): void {
@@ -36,6 +37,7 @@ class ApiController extends Controller {
         $risiko = RiskEvaluator::evaluasi($totalGizi, $kondisi);
         $porsiDisarankan = PortionAdvisor::hitung($risiko, $adaKondisi);
         $verdict = VerdictBuilder::build($totalGizi, $risiko, $profile, $porsiDisarankan);
+        $clinicalAdvice = ClinicalAdvisor::generate($totalGizi, $risiko, $profile, $analysis);
 
         $targetKalori = (int)($profile['target_kalori'] ?? 2000);
         $persenKalori = ($targetKalori > 0) ? round(($totalGizi['energi_kkal'] / $targetKalori) * 100) : 0;
@@ -47,6 +49,7 @@ class ApiController extends Controller {
             'total_gizi' => $totalGizi,
             'risiko' => $risiko,
             'verdict' => $verdict,
+            'clinical_advice' => $clinicalAdvice,
             'persen_kalori' => $persenKalori,
             'sisa_kalori' => $sisaKalori,
             'porsi_disarankan' => $porsiDisarankan

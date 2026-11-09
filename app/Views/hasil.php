@@ -14,7 +14,15 @@
         <div class="page-title">
             <h1 id="hasil-title">Estimasi gizi: <?= e($analysis['nama_makanan']) ?></h1>
             <p id="hasil-subtitle">
-                <span id="label-porsi-header"><?= str_replace('.', ',', (string)$porsi) ?></span> porsi, sekitar <span id="label-berat-header"><?= $total_gizi['berat_total_g'] ?></span> g. Data demo untuk profil <?= ucfirst($profile['tujuan']) ?><?= !empty($profile['kondisi']['diabetes']) ? ' dan diabetes' : '' ?>.
+                <?php
+                    $kondisiAktifList = [];
+                    if (!empty($profile['kondisi']['diabetes'])) $kondisiAktifList[] = 'diabetes';
+                    if (!empty($profile['kondisi']['kolesterol'])) $kondisiAktifList[] = 'kolesterol tinggi';
+                    if (!empty($profile['kondisi']['hipertensi'])) $kondisiAktifList[] = 'hipertensi';
+                    if (!empty($profile['kondisi']['asam_urat'])) $kondisiAktifList[] = 'asam urat';
+                    $kondisiTeks = !empty($kondisiAktifList) ? ' dengan kondisi ' . implode(', ', $kondisiAktifList) : '';
+                ?>
+                <span id="label-porsi-header"><?= str_replace('.', ',', (string)$porsi) ?></span> porsi, sekitar <span id="label-berat-header"><?= $total_gizi['berat_total_g'] ?></span> g. Evaluasi gizi untuk profil <?= ucfirst($profile['tujuan']) ?><?= $kondisiTeks ?>.
             </p>
         </div>
 
@@ -106,6 +114,80 @@
                                 <div class="progress-fill bar-fat" id="bar-lemak" style="width: <?= $total_gizi['makro_persen']['lemak'] ?>%;"></div>
                             </div>
                         </div>
+
+                        <div class="makro-item">
+                            <div class="makro-row">
+                                <span class="makro-name">Serat Pangan</span>
+                                <span class="makro-val" id="serat-val"><?= $total_gizi['serat_g'] ?> g <span id="serat-pct">(<?= round(($total_gizi['serat_g'] / 30) * 100) ?>% target harian)</span></span>
+                            </div>
+                            <div class="progress-track">
+                                <div class="progress-fill bar-fiber" id="bar-serat" style="width: <?= min(100, round(($total_gizi['serat_g'] / 30) * 100)) ?>%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="makro-fiber-note">
+                        Target serat harian: 30 g (AKG Kemenkes). Serat pangan dari sayur, buah, dan kacang-kacangan sangat efektif membantu mengikat kolesterol dan menstabilkan glukosa darah.
+                    </p>
+                </div>
+
+                <!-- Modul Analisis Klinis & Panduan Piring Sehat (Ahli Gizi POV) -->
+                <div class="card card-analisis-klinis" id="card-analisis-klinis">
+                    <div class="card-header-clean">
+                        <div class="analisis-header-row">
+                            <div class="analisis-header-text">
+                                <h3 class="card-title">Analisis Klinis & Panduan Piring</h3>
+                                <p class="card-desc">Rekomendasi spesifik berbasis profil <strong id="analisis-profil-label"><?= e($clinical_advice['profil_label']) ?></strong></p>
+                            </div>
+                            <span class="badge-ahli-gizi">🩺 Tinjauan Ahli Gizi</span>
+                        </div>
+                    </div>
+
+                    <div class="analisis-summary-box" id="analisis-summary-box">
+                        <p class="summary-text" id="analisis-summary-text"><?= e($clinical_advice['ringkasan_medis']) ?></p>
+                    </div>
+
+                    <div class="analisis-cards-container">
+                        <!-- 1. Peringatan / Cautions -->
+                        <div class="analisis-subcard subcard-caution" id="subcard-caution">
+                            <div class="subcard-header">
+                                <span class="subcard-icon">⚠️</span>
+                                <h4 class="subcard-title" id="caution-title"><?= e($clinical_advice['cautions']['judul']) ?></h4>
+                            </div>
+                            <div class="subcard-content" id="caution-body">
+                                <p><?= $clinical_advice['cautions']['teks'] ?></p>
+                            </div>
+                        </div>
+
+                        <!-- 2. Smart Swaps / Trik Makan -->
+                        <div class="analisis-subcard subcard-swaps" id="subcard-swaps">
+                            <div class="subcard-header">
+                                <span class="subcard-icon">💡</span>
+                                <h4 class="subcard-title" id="swaps-title"><?= e($clinical_advice['swaps']['judul']) ?></h4>
+                            </div>
+                            <div class="subcard-content" id="swaps-body">
+                                <ul class="subcard-list" id="swaps-list">
+                                    <?php foreach ($clinical_advice['swaps']['tips'] as $tip): ?>
+                                        <li><?= $tip ?></li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- 3. Isi Piringku & Serat -->
+                        <div class="analisis-subcard subcard-plate" id="subcard-plate">
+                            <div class="subcard-header">
+                                <span class="subcard-icon">🥗</span>
+                                <h4 class="subcard-title" id="plate-title"><?= e($clinical_advice['plate']['judul']) ?></h4>
+                            </div>
+                            <div class="subcard-content" id="plate-body">
+                                <p id="plate-text"><?= $clinical_advice['plate']['teks'] ?></p>
+                                <?php if (!empty($clinical_advice['plate']['catatan'])): ?>
+                                    <div class="subcard-highlight" id="plate-highlight">
+                                        <?= $clinical_advice['plate']['catatan'] ?>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -114,43 +196,81 @@
                 <div class="card card-perhatian">
                     <div class="card-header-clean">
                         <h3 class="card-title">Perhatian nutrisi</h3>
-                        <p class="card-desc">Dibandingkan dengan batas harian sesuai profilmu.</p>
+                        <p class="card-desc">Diprioritaskan sesuai kondisi kesehatan dan batas harian profilmu.</p>
                     </div>
 
-                    <div class="risiko-list">
-                        <div class="risiko-item">
-                            <div class="risiko-row-top">
-                                <span class="risiko-label">Natrium</span>
-                                <span class="badge-level level-<?= $risiko['natrium']['badge'] ?>" id="badge-natrium">
-                                    <?= $risiko['natrium']['simbol'] ?> <?= $risiko['natrium']['level'] ?>
-                                </span>
-                            </div>
-                            <p class="risiko-angka" id="angka-natrium"><?= $total_gizi['natrium_mg'] ?> mg</p>
-                            <p class="risiko-pct" id="desc-natrium"><?= $risiko['natrium']['persen'] ?>% dari batas harian 2.000 mg</p>
-                            <div class="progress-track">
-                                <div class="progress-fill fill-<?= $risiko['natrium']['badge'] ?>" id="bar-natrium" style="width: <?= min(100, $risiko['natrium']['persen']) ?>%;"></div>
-                            </div>
-                            <?php if (!empty($risiko['natrium']['penyumbang'])): ?>
-                                <p class="penyumbang-text" id="penyumbang-natrium"><?= e($risiko['natrium']['penyumbang']) ?></p>
-                            <?php endif; ?>
-                        </div>
+                    <?php
+                        // Tentukan urutan prioritas nutrisi berdasarkan kondisi aktif profil
+                        $nutrisiConfig = [
+                            'lemak_jenuh' => [
+                                'kunci' => 'lemak_jenuh',
+                                'nama' => 'Lemak Jenuh',
+                                'satuan' => 'g',
+                                'nilai' => $total_gizi['lemak_jenuh_g'],
+                                'data' => $risiko['lemak_jenuh'],
+                                'prioritas' => !empty($profile['kondisi']['kolesterol']) ? 10 : ($risiko['lemak_jenuh']['persen'] > 33 ? 5 : 2),
+                            ],
+                            'gula' => [
+                                'kunci' => 'gula',
+                                'nama' => 'Gula',
+                                'satuan' => 'g',
+                                'nilai' => $total_gizi['gula_g'],
+                                'data' => $risiko['gula'],
+                                'prioritas' => !empty($profile['kondisi']['diabetes']) ? 10 : ($risiko['gula']['persen'] > 33 ? 5 : 2),
+                            ],
+                            'natrium' => [
+                                'kunci' => 'natrium',
+                                'nama' => 'Natrium',
+                                'satuan' => 'mg',
+                                'nilai' => $total_gizi['natrium_mg'],
+                                'data' => $risiko['natrium'],
+                                'prioritas' => !empty($profile['kondisi']['hipertensi']) ? 10 : ($risiko['natrium']['persen'] > 33 ? 5 : 2),
+                            ],
+                            'purin' => [
+                                'kunci' => 'purin',
+                                'nama' => 'Purin',
+                                'satuan' => 'mg',
+                                'nilai' => $total_gizi['purin_mg'],
+                                'data' => $risiko['purin'],
+                                'prioritas' => !empty($profile['kondisi']['asam_urat']) ? 10 : ($risiko['purin']['persen'] > 33 ? 5 : 1),
+                            ],
+                        ];
 
-                        <div class="risiko-item">
-                            <div class="risiko-row-top">
-                                <span class="risiko-label">Gula</span>
-                                <span class="badge-level level-<?= $risiko['gula']['badge'] ?>" id="badge-gula">
-                                    <?= $risiko['gula']['simbol'] ?> <?= $risiko['gula']['level'] ?>
-                                </span>
+                        uasort($nutrisiConfig, function($a, $b) {
+                            if ($a['prioritas'] === $b['prioritas']) {
+                                return $b['data']['persen'] <=> $a['data']['persen'];
+                            }
+                            return $b['prioritas'] <=> $a['prioritas'];
+                        });
+                    ?>
+
+                    <div class="risiko-list" id="risiko-list-container">
+                        <?php foreach ($nutrisiConfig as $item): ?>
+                            <?php $d = $item['data']; ?>
+                            <div class="risiko-item" id="item-risiko-<?= $item['kunci'] ?>">
+                                <div class="risiko-row-top">
+                                    <span class="risiko-label">
+                                        <?= e($item['nama']) ?>
+                                        <?php if (!empty($d['kondisi_aktif'])): ?>
+                                            <span class="badge-kondisi-fokus">Fokus Profil</span>
+                                        <?php endif; ?>
+                                    </span>
+                                    <span class="badge-level level-<?= $d['badge'] ?>" id="badge-<?= $item['kunci'] ?>">
+                                        <?= $d['simbol'] ?> <?= $d['level'] ?>
+                                    </span>
+                                </div>
+                                <p class="risiko-angka" id="angka-<?= $item['kunci'] ?>"><?= $item['nilai'] ?> <?= $item['satuan'] ?></p>
+                                <p class="risiko-pct" id="desc-<?= $item['kunci'] ?>"><?= $d['persen'] ?>% <?= e($d['keterangan_profil']) ?></p>
+                                <div class="progress-track">
+                                    <div class="progress-fill fill-<?= $d['badge'] ?>" id="bar-<?= $item['kunci'] ?>" style="width: <?= min(100, $d['persen']) ?>%;"></div>
+                                </div>
+                                <?php if (!empty($d['penyumbang'])): ?>
+                                    <p class="penyumbang-text" id="penyumbang-<?= $item['kunci'] ?>"><?= e($d['penyumbang']) ?></p>
+                                <?php else: ?>
+                                    <p class="penyumbang-text" id="penyumbang-<?= $item['kunci'] ?>" style="display:none;"></p>
+                                <?php endif; ?>
                             </div>
-                            <p class="risiko-angka" id="angka-gula"><?= $total_gizi['gula_g'] ?> g</p>
-                            <p class="risiko-pct" id="desc-gula"><?= $risiko['gula']['persen'] ?>% <?= e($risiko['gula']['keterangan_profil']) ?></p>
-                            <div class="progress-track">
-                                <div class="progress-fill fill-<?= $risiko['gula']['badge'] ?>" id="bar-gula" style="width: <?= min(100, $risiko['gula']['persen']) ?>%;"></div>
-                            </div>
-                            <?php if (!empty($risiko['gula']['penyumbang'])): ?>
-                                <p class="penyumbang-text" id="penyumbang-gula"><?= e($risiko['gula']['penyumbang']) ?></p>
-                            <?php endif; ?>
-                        </div>
+                        <?php endforeach; ?>
                     </div>
 
                     <p class="risiko-panduan">

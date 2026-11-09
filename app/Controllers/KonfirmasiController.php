@@ -24,10 +24,22 @@ class KonfirmasiController extends Controller {
             if (!$adaGizi) {
                 $adaBahanTanpaData = true;
             }
+
+            $berat = (float)($b['berat_g'] ?? 50);
+            $ket = trim($b['keterangan'] ?? '');
+            if (empty($ket)) {
+                $ket = round($berat) . ' g';
+            } elseif (!preg_match('/\b\d+(\.\d+)?\s*(g|gram|ml)\b/i', $ket)) {
+                $ket = $ket . ' (sekitar ' . round($berat) . ' g)';
+            }
+
+            // Gunakan nama kuliner ramah pengguna, bukan istilah mentah tabel database
+            $namaTampil = !empty($b['nama']) ? $b['nama'] : ($fact['nama'] ?? 'Bahan');
+
             $bahanDivalidasi[] = [
-                'nama' => $fact['nama'] ?? NutritionFact::canonicalName($b['nama']),
-                'berat_g' => (float)($b['berat_g'] ?? 50),
-                'keterangan' => $b['keterangan'] ?? '',
+                'nama' => $namaTampil,
+                'berat_g' => $berat,
+                'keterangan' => $ket,
                 'ada_data_gizi' => $adaGizi,
                 'gizi' => $fact
             ];
@@ -56,10 +68,15 @@ class KonfirmasiController extends Controller {
 
         $bahanBaru = [];
         for ($i = 0; $i < count($namaBahan); $i++) {
-            $nama = NutritionFact::canonicalName(trim($namaBahan[$i]));
+            $nama = trim($namaBahan[$i]);
             if (!empty($nama)) {
                 $berat = isset($beratBahan[$i]) ? (float)$beratBahan[$i] : 50;
-                $ket = $ketBahan[$i] ?? '';
+                $ket = trim($ketBahan[$i] ?? '');
+                if (empty($ket)) {
+                    $ket = round($berat) . ' g';
+                } elseif (!preg_match('/\b\d+(\.\d+)?\s*(g|gram|ml)\b/i', $ket)) {
+                    $ket = $ket . ' (sekitar ' . round($berat) . ' g)';
+                }
                 $bahanBaru[] = [
                     'nama' => $nama,
                     'berat_g' => $berat,

@@ -283,6 +283,16 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (lemakVal) lemakVal.innerHTML = `${res.total_gizi.lemak_g} g, <span>${res.total_gizi.makro_persen.lemak}%</span> energi`;
                     if (barLemak) barLemak.style.width = res.total_gizi.makro_persen.lemak + '%';
 
+                    const seratVal = document.getElementById('serat-val');
+                    const barSerat = document.getElementById('bar-serat');
+                    if (seratVal) {
+                        const seratPct = Math.round((res.total_gizi.serat_g / 30) * 100);
+                        seratVal.innerHTML = `${res.total_gizi.serat_g} g <span id="serat-pct">(${seratPct}% target harian)</span>`;
+                    }
+                    if (barSerat) {
+                        barSerat.style.width = Math.min(100, Math.round((res.total_gizi.serat_g / 30) * 100)) + '%';
+                    }
+
                     const angkaNatrium = document.getElementById('angka-natrium');
                     const descNatrium = document.getElementById('desc-natrium');
                     const barNatrium = document.getElementById('bar-natrium');
@@ -315,6 +325,52 @@ document.addEventListener('DOMContentLoaded', function () {
                         badgeGula.textContent = `${res.risiko.gula.simbol} ${res.risiko.gula.level}`;
                     }
 
+                    const angkaJenuh = document.getElementById('angka-lemak_jenuh');
+                    const descJenuh = document.getElementById('desc-lemak_jenuh');
+                    const barJenuh = document.getElementById('bar-lemak_jenuh');
+                    const badgeJenuh = document.getElementById('badge-lemak_jenuh');
+                    const penyumbangJenuh = document.getElementById('penyumbang-lemak_jenuh');
+
+                    if (res.risiko && res.risiko.lemak_jenuh) {
+                        if (angkaJenuh) angkaJenuh.textContent = res.total_gizi.lemak_jenuh_g + ' g';
+                        if (descJenuh) descJenuh.textContent = `${res.risiko.lemak_jenuh.persen}% ${res.risiko.lemak_jenuh.keterangan_profil}`;
+                        if (barJenuh) {
+                            barJenuh.style.width = Math.min(100, res.risiko.lemak_jenuh.persen) + '%';
+                            barJenuh.className = `progress-fill fill-${res.risiko.lemak_jenuh.badge}`;
+                        }
+                        if (badgeJenuh) {
+                            badgeJenuh.className = `badge-level level-${res.risiko.lemak_jenuh.badge}`;
+                            badgeJenuh.textContent = `${res.risiko.lemak_jenuh.simbol} ${res.risiko.lemak_jenuh.level}`;
+                        }
+                        if (penyumbangJenuh && res.risiko.lemak_jenuh.penyumbang) {
+                            penyumbangJenuh.textContent = res.risiko.lemak_jenuh.penyumbang;
+                            penyumbangJenuh.style.display = 'block';
+                        }
+                    }
+
+                    const angkaPurin = document.getElementById('angka-purin');
+                    const descPurin = document.getElementById('desc-purin');
+                    const barPurin = document.getElementById('bar-purin');
+                    const badgePurin = document.getElementById('badge-purin');
+                    const penyumbangPurin = document.getElementById('penyumbang-purin');
+
+                    if (res.risiko && res.risiko.purin) {
+                        if (angkaPurin) angkaPurin.textContent = res.total_gizi.purin_mg + ' mg';
+                        if (descPurin) descPurin.textContent = `${res.risiko.purin.persen}% ${res.risiko.purin.keterangan_profil}`;
+                        if (barPurin) {
+                            barPurin.style.width = Math.min(100, res.risiko.purin.persen) + '%';
+                            barPurin.className = `progress-fill fill-${res.risiko.purin.badge}`;
+                        }
+                        if (badgePurin) {
+                            badgePurin.className = `badge-level level-${res.risiko.purin.badge}`;
+                            badgePurin.textContent = `${res.risiko.purin.simbol} ${res.risiko.purin.level}`;
+                        }
+                        if (penyumbangPurin && res.risiko.purin.penyumbang) {
+                            penyumbangPurin.textContent = res.risiko.purin.penyumbang;
+                            penyumbangPurin.style.display = 'block';
+                        }
+                    }
+
                     const verdictCard = document.getElementById('verdict-card');
                     const verdictBadge = document.getElementById('verdict-badge');
                     const verdictTitle = document.getElementById('verdict-title');
@@ -327,6 +383,39 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                     if (verdictTitle) verdictTitle.textContent = res.verdict.judul;
                     if (verdictDesc) verdictDesc.textContent = res.verdict.deskripsi;
+
+                    // Update modul analisis klinis dinamis
+                    if (res.clinical_advice) {
+                        const ca = res.clinical_advice;
+                        const sumText = document.getElementById('analisis-summary-text');
+                        if (sumText) sumText.textContent = ca.ringkasan_medis;
+
+                        const cautionTitle = document.getElementById('caution-title');
+                        const cautionBody = document.getElementById('caution-body');
+                        if (cautionTitle) cautionTitle.textContent = ca.cautions.judul;
+                        if (cautionBody) cautionBody.innerHTML = `<p>${ca.cautions.teks}</p>`;
+
+                        const swapsTitle = document.getElementById('swaps-title');
+                        const swapsList = document.getElementById('swaps-list');
+                        if (swapsTitle) swapsTitle.textContent = ca.swaps.judul;
+                        if (swapsList && Array.isArray(ca.swaps.tips)) {
+                            swapsList.innerHTML = ca.swaps.tips.map(t => `<li>${t}</li>`).join('');
+                        }
+
+                        const plateTitle = document.getElementById('plate-title');
+                        const plateText = document.getElementById('plate-text');
+                        const plateHighlight = document.getElementById('plate-highlight');
+                        if (plateTitle) plateTitle.textContent = ca.plate.judul;
+                        if (plateText) plateText.innerHTML = ca.plate.teks;
+                        if (plateHighlight) {
+                            if (ca.plate.catatan) {
+                                plateHighlight.innerHTML = ca.plate.catatan;
+                                plateHighlight.style.display = 'block';
+                            } else {
+                                plateHighlight.style.display = 'none';
+                            }
+                        }
+                    }
                 }
             })
             .catch(err => console.error('Gagal memperbarui porsi:', err));
@@ -474,21 +563,26 @@ function simpanEditBahan() {
     tutupModalEdit();
 }
 
-// Tampilkan bahan cair yang terdeteksi dalam ml sejak awal, bukan sendok/gram.
+// Pastikan setiap bahan menampilkan takaran ramah beserta takaran gram/ml
 document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('#list-bahan-container .item-bahan').forEach(row => {
         const nama = row.querySelector('input[name="bahan_nama[]"]')?.value || '';
-        if (kategoriSatuanBahan(nama) !== 'ml') return;
         const gramInput = row.querySelector('input[name="bahan_berat[]"]');
-        const ket = row.querySelector('input[name="bahan_ket[]"]');
+        const ketInput = row.querySelector('input[name="bahan_ket[]"]');
         const label = row.querySelector('.bahan-ket');
         const gram = parseFloat(gramInput?.value || '0');
-        if (!gram || !ket || !label) return;
-        const ml = gram / faktorGramPerMl(nama);
-        const mlTampil = Number(ml.toFixed(1));
-        const keterangan = `${mlTampil} ml (perkiraan ${gram} g)`;
-        ket.value = keterangan;
-        label.textContent = keterangan;
+        if (!gram || !ketInput || !label) return;
+
+        let teks = label.textContent.trim();
+        if (kategoriSatuanBahan(nama) === 'ml') {
+            const ml = gram / faktorGramPerMl(nama);
+            const mlTampil = Number(ml.toFixed(1));
+            teks = `${mlTampil} ml (sekitar ${Math.round(gram)} g)`;
+        } else if (!/\b\d+(\.\d+)?\s*(g|gram|ml)\b/i.test(teks)) {
+            teks = `${teks} (sekitar ${Math.round(gram)} g)`;
+        }
+        ketInput.value = teks;
+        label.textContent = teks;
     });
 });
 

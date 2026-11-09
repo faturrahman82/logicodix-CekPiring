@@ -7,6 +7,7 @@ use App\Services\NutritionCalculator;
 use App\Services\RiskEvaluator;
 use App\Services\PortionAdvisor;
 use App\Services\VerdictBuilder;
+use App\Services\ClinicalAdvisor;
 
 class HasilController extends Controller {
     public function menghitung(): void {
@@ -48,6 +49,7 @@ class HasilController extends Controller {
         $risiko = RiskEvaluator::evaluasi($totalGizi, $kondisi);
         $porsiDisarankan = PortionAdvisor::hitung($risiko, $adaKondisi);
         $verdict = VerdictBuilder::build($totalGizi, $risiko, $profile, $porsiDisarankan);
+        $clinicalAdvice = ClinicalAdvisor::generate($totalGizi, $risiko, $profile, $analysis);
 
         $targetKalori = (int)($profile['target_kalori'] ?? 2000);
         $persenKalori = ($targetKalori > 0) ? round(($totalGizi['energi_kkal'] / $targetKalori) * 100) : 0;
@@ -61,6 +63,7 @@ class HasilController extends Controller {
             'porsi' => $porsi,
             'porsi_disarankan' => $porsiDisarankan,
             'verdict' => $verdict,
+            'clinical_advice' => $clinicalAdvice,
             'target_kalori' => $targetKalori,
             'persen_kalori' => $persenKalori,
             'sisa_kalori' => $sisaKalori,

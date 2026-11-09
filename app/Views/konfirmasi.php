@@ -158,6 +158,7 @@
         <div class="modal-edit-footer"><button type="button" class="btn-secondary" onclick="tutupModalEdit()">Batal</button><button type="button" class="btn-primary" onclick="simpanEditBahan()">Simpan perubahan</button></div>
       </div>
     </div>
-\n    <script src="<?= asset_url('js/app.js') ?>"></script>
+
+    <script src="<?= asset_url('js/app.js') ?>"></script>
 </body>
 </html>
