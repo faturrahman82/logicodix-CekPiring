@@ -3,202 +3,282 @@
 namespace App\Services;
 
 class AiClient {
-    // Standard Indonesian dishes dictionary for instant demo / fallback
+    private const DAFTAR_BAHAN = [
+        'Air', 'Nasi putih', 'Ketupat ketan', 'Mi basah', 'Mi kering', 'Bihun',
+        'Makaroni', 'Tepung terigu', 'Kentang', 'Telur ayam', 'Daging ayam', 'Daging sapi',
+        'Daging kambing', 'Hati sapi', 'Bakso', 'Udang segar', 'Cumi-cumi segar', 'Ikan kembung',
+        'Ikan tongkol segar', 'Ikan bandeng', 'Ikan mas', 'Ikan lele goreng', 'Tahu', 'Tempe',
+        'Oncom', 'Wortel', 'Kol', 'Sawi', 'Bayam', 'Kangkung',
+        'Buncis', 'Kacang panjang', 'Labu siam', 'Terong', 'Tomat', 'Mentimun',
+        'Selada', 'Tauge', 'Jagung muda', 'Daun singkong', 'Nangka muda', 'Melinjo',
+        'Petai', 'Jamur tiram segar', 'Daun bawang', 'Seledri', 'Bawang merah', 'Bawang putih',
+        'Bawang bombay', 'Cabai merah', 'Kemiri', 'Jahe', 'Kunyit', 'Jeruk nipis',
+        'Kluwek', 'Santan', 'Minyak goreng', 'Mentega', 'Margarin', 'Keju',
+        'Susu sapi', 'Susu kental manis', 'Kecap manis', 'Sambal terasi', 'Garam dapur', 'Gula pasir',
+        'Gula aren', 'Kacang tanah', 'Kacang hijau', 'Kacang merah', 'Kerupuk udang goreng',
+        'Dada ayam tanpa kulit', 'Serai', 'Lengkuas', 'Ketumbar', 'Jintan', 'Asam jawa', 'Saus tiram', 'Kecap ikan', 'Kaldu bubuk ayam',
+    ];
+
     private static array $resepLokal = [
-        'nasi goreng telur' => [
-            'nama' => 'Nasi goreng telur',
-            'deskripsi' => 'Nasi goreng dengan bumbu kecap manis, telur, dan minyak goreng.',
+        'sayur sop' => [
+            'nama' => 'Sayur sop',
             'bahan' => [
-                ['nama' => 'Nasi putih', 'berat_g' => 200, 'keterangan' => '200 g, perkiraan dari foto'],
-                ['nama' => 'Telur', 'berat_g' => 55, 'keterangan' => '1 butir, sekitar 55 g'],
+                ['nama' => 'Wortel', 'berat_g' => 40, 'keterangan' => 'potongan wortel'],
+                ['nama' => 'Kentang', 'berat_g' => 50, 'keterangan' => 'potongan kentang'],
+                ['nama' => 'Kol', 'berat_g' => 40, 'keterangan' => 'potongan kol'],
+                ['nama' => 'Buncis', 'berat_g' => 20, 'keterangan' => 'beberapa batang'],
+                ['nama' => 'Makaroni', 'berat_g' => 15, 'keterangan' => 'makaroni kering'],
+                ['nama' => 'Daun bawang', 'berat_g' => 5, 'keterangan' => 'irisan'],
+                ['nama' => 'Seledri', 'berat_g' => 3, 'keterangan' => 'irisan'],
+                ['nama' => 'Bawang putih', 'berat_g' => 5, 'keterangan' => 'bumbu'],
+                ['nama' => 'Garam dapur', 'berat_g' => 2, 'keterangan' => 'garam kuah'],
+            ]
+        ],
+        'sayur asem' => [
+            'nama' => 'Sayur asem',
+            'bahan' => [
+                ['nama' => 'Labu siam', 'berat_g' => 40, 'keterangan' => 'potongan labu siam'],
+                ['nama' => 'Kacang panjang', 'berat_g' => 25, 'keterangan' => 'potongan'],
+                ['nama' => 'Jagung muda', 'berat_g' => 30, 'keterangan' => 'potongan jagung'],
+                ['nama' => 'Melinjo', 'berat_g' => 15, 'keterangan' => 'buah dan daun melinjo'],
+                ['nama' => 'Kacang tanah', 'berat_g' => 10, 'keterangan' => 'kacang tanah'],
+                ['nama' => 'Gula aren', 'berat_g' => 5, 'keterangan' => 'gula merah'],
+                ['nama' => 'Garam dapur', 'berat_g' => 2, 'keterangan' => 'garam kuah'],
+            ]
+        ],
+        'nasi goreng' => [
+            'nama' => 'Nasi goreng telur',
+            'bahan' => [
+                ['nama' => 'Nasi putih', 'berat_g' => 200, 'keterangan' => '1 piring nasi'],
+                ['nama' => 'Telur ayam', 'berat_g' => 55, 'keterangan' => '1 butir'],
                 ['nama' => 'Minyak goreng', 'berat_g' => 14, 'keterangan' => '1 sendok makan'],
-                ['nama' => 'Kecap manis', 'berat_g' => 15, 'keterangan' => '1 sendok makan, terlihat dari warna nasi'],
+                ['nama' => 'Kecap manis', 'berat_g' => 15, 'keterangan' => '1 sendok makan'],
+                ['nama' => 'Bawang merah', 'berat_g' => 10, 'keterangan' => 'bumbu'],
+                ['nama' => 'Garam dapur', 'berat_g' => 1, 'keterangan' => 'sejumput'],
+            ]
+        ],
+        'mie goreng' => [
+            'nama' => 'Mi goreng',
+            'bahan' => [
+                ['nama' => 'Mi basah', 'berat_g' => 150, 'keterangan' => '1 porsi mi'],
+                ['nama' => 'Telur ayam', 'berat_g' => 55, 'keterangan' => '1 butir'],
+                ['nama' => 'Sawi', 'berat_g' => 30, 'keterangan' => 'beberapa helai'],
+                ['nama' => 'Kecap manis', 'berat_g' => 15, 'keterangan' => '1 sendok makan'],
+                ['nama' => 'Minyak goreng', 'berat_g' => 10, 'keterangan' => 'minyak tumis'],
+                ['nama' => 'Bawang putih', 'berat_g' => 5, 'keterangan' => 'bumbu'],
             ]
         ],
         'soto ayam' => [
             'nama' => 'Soto ayam',
-            'deskripsi' => 'Soto ayam berkuah kuning dengan suwiran ayam, soun, dan tauge.',
             'bahan' => [
-                ['nama' => 'Daging ayam', 'berat_g' => 80, 'keterangan' => 'Suwiran daging ayam'],
-                ['nama' => 'Soun', 'berat_g' => 50, 'keterangan' => 'Soun rebus'],
-                ['nama' => 'Tauge kacang hijau', 'berat_g' => 30, 'keterangan' => 'Tauge segar rebus'],
-                ['nama' => 'Garam dapur', 'berat_g' => 3, 'keterangan' => 'Garam dalam kuah soto'],
-                ['nama' => 'Minyak kelapa sawit', 'berat_g' => 5, 'keterangan' => 'Minyak tumis bumbu']
-            ]
-        ],
-        'rawon daging sapi' => [
-            'nama' => 'Rawon daging sapi',
-            'deskripsi' => 'Sup daging sapi khas Jawa Timur berkuah hitam kluwek.',
-            'bahan' => [
-                ['nama' => 'Daging sapi', 'berat_g' => 90, 'keterangan' => 'Potongan daging sapi'],
-                ['nama' => 'Tauge kacang hijau', 'berat_g' => 30, 'keterangan' => 'Tauge pendek pelengkap'],
-                ['nama' => 'Garam dapur', 'berat_g' => 3, 'keterangan' => 'Garam kuah rawon'],
-                ['nama' => 'Minyak kelapa sawit', 'berat_g' => 5, 'keterangan' => 'Minyak tumis bumbu'],
-                ['nama' => 'Kluwek', 'berat_g' => 20, 'keterangan' => '2 buah, dari foto'] // State 3c demo
-            ]
-        ],
-        'rendang daging' => [
-            'nama' => 'Rendang daging',
-            'deskripsi' => 'Daging sapi dimasak perlahan dalam santan dan rempah.',
-            'bahan' => [
-                ['nama' => 'Daging sapi', 'berat_g' => 100, 'keterangan' => '1 potong daging sapi matang'],
-                ['nama' => 'Santan kelapa murni', 'berat_g' => 120, 'keterangan' => 'Kuah santan kental tereduksi'],
-                ['nama' => 'Minyak kelapa sawit', 'berat_g' => 10, 'keterangan' => 'Minyak tumis bumbu'],
-                ['nama' => 'Garam dapur', 'berat_g' => 2, 'keterangan' => 'Garam bumbu']
-            ]
-        ],
-        'bakso' => [
-            'nama' => 'Bakso',
-            'deskripsi' => 'Bakso dengan mi, sayuran, dan kuah kaldu.',
-            'bahan' => [
-                ['nama' => 'Bakso daging sapi', 'berat_g' => 150, 'keterangan' => '5 butir ukuran sedang'],
-                ['nama' => 'Mi kuning basah', 'berat_g' => 100, 'keterangan' => '1 porsi mi'],
-                ['nama' => 'Soun', 'berat_g' => 30, 'keterangan' => 'Segenggam kecil'],
-                ['nama' => 'Sawi hijau', 'berat_g' => 25, 'keterangan' => 'Beberapa helai'],
-                ['nama' => 'Kaldu', 'berat_g' => 200, 'keterangan' => '1 mangkuk kuah']
-            ]
-        ],
-        'mie ayam' => [
-            'nama' => 'Mi ayam',
-            'deskripsi' => 'Mi ayam dengan potongan ayam, sawi, dan kuah.',
-            'bahan' => [
-                ['nama' => 'Mi telur basah', 'berat_g' => 150, 'keterangan' => '1 porsi mi'],
-                ['nama' => 'Daging ayam', 'berat_g' => 60, 'keterangan' => 'Topping ayam sekitar 1 sendok saji'],
-                ['nama' => 'Sawi hijau', 'berat_g' => 30, 'keterangan' => 'Beberapa helai'],
-                ['nama' => 'Minyak kelapa sawit', 'berat_g' => 8, 'keterangan' => 'Sekitar 1/2 sendok makan minyak bumbu']
-            ]
-        ],
-        'ayam geprek' => [
-            'nama' => 'Ayam geprek',
-            'deskripsi' => 'Ayam goreng tepung dengan sambal dan nasi.',
-            'bahan' => [
-                ['nama' => 'Nasi putih', 'berat_g' => 200, 'keterangan' => '1 porsi nasi'],
-                ['nama' => 'Daging ayam', 'berat_g' => 100, 'keterangan' => '1 potong ayam'],
-                ['nama' => 'Tepung terigu', 'berat_g' => 25, 'keterangan' => 'Lapisan tepung'],
-                ['nama' => 'Cabai merah', 'berat_g' => 15, 'keterangan' => 'Sambal sekitar 3 buah cabai'],
-                ['nama' => 'Minyak kelapa sawit', 'berat_g' => 15, 'keterangan' => 'Minyak terserap perkiraan']
-            ]
-        ],
-        'gado-gado' => [
-            'nama' => 'Gado-gado',
-            'deskripsi' => 'Sayuran rebus dengan tahu, telur, dan saus kacang.',
-            'bahan' => [
-                ['nama' => 'Tauge kacang hijau', 'berat_g' => 40, 'keterangan' => 'Segenggam tauge'],
-                ['nama' => 'Kangkung', 'berat_g' => 50, 'keterangan' => '1 porsi sayuran'],
-                ['nama' => 'Tahu', 'berat_g' => 50, 'keterangan' => '1 potong tahu'],
-                ['nama' => 'Telur', 'berat_g' => 55, 'keterangan' => '1 butir telur'],
-                ['nama' => 'Kacang tanah', 'berat_g' => 35, 'keterangan' => 'Saus kacang sekitar 2 sendok makan']
-            ]
-        ],
-        'pecel' => [
-            'nama' => 'Pecel',
-            'deskripsi' => 'Sayuran rebus dengan saus kacang.',
-            'bahan' => [
-                ['nama' => 'Kangkung', 'berat_g' => 50, 'keterangan' => '1 porsi sayuran'],
-                ['nama' => 'Tauge kacang hijau', 'berat_g' => 40, 'keterangan' => 'Segenggam tauge'],
-                ['nama' => 'Kacang panjang', 'berat_g' => 40, 'keterangan' => 'Beberapa potong'],
-                ['nama' => 'Kacang tanah', 'berat_g' => 35, 'keterangan' => 'Saus kacang sekitar 2 sendok makan'],
-                ['nama' => 'Nasi putih', 'berat_g' => 150, 'keterangan' => '1 porsi nasi']
-            ]
-        ],
-        'sate ayam' => [
-            'nama' => 'Sate ayam',
-            'deskripsi' => 'Sate ayam dengan bumbu kacang dan lontong.',
-            'bahan' => [
-                ['nama' => 'Daging ayam', 'berat_g' => 100, 'keterangan' => '5 tusuk sate, daging tanpa tusuk'],
-                ['nama' => 'Kacang tanah', 'berat_g' => 40, 'keterangan' => 'Bumbu kacang sekitar 2 sendok makan'],
-                ['nama' => 'Kecap manis', 'berat_g' => 10, 'keterangan' => 'Sekitar 2 sendok teh'],
-                ['nama' => 'Lontong', 'berat_g' => 150, 'keterangan' => '1 porsi lontong']
-            ]
-        ],
-        'nasi uduk' => [
-            'nama' => 'Nasi uduk',
-            'deskripsi' => 'Nasi gurih dengan santan dan lauk pelengkap.',
-            'bahan' => [
-                ['nama' => 'Nasi putih', 'berat_g' => 200, 'keterangan' => '1 porsi nasi uduk'],
-                ['nama' => 'Santan kelapa murni', 'berat_g' => 35, 'keterangan' => 'Santan yang digunakan saat memasak'],
-                ['nama' => 'Telur', 'berat_g' => 55, 'keterangan' => '1 butir telur, jika disajikan'],
-                ['nama' => 'Tempe', 'berat_g' => 40, 'keterangan' => '1 potong tempe, jika disajikan']
+                ['nama' => 'Daging ayam', 'berat_g' => 80, 'keterangan' => 'suwiran ayam'],
+                ['nama' => 'Bihun', 'berat_g' => 30, 'keterangan' => 'bihun/soun'],
+                ['nama' => 'Tauge', 'berat_g' => 30, 'keterangan' => 'tauge'],
+                ['nama' => 'Telur ayam', 'berat_g' => 25, 'keterangan' => 'setengah butir'],
+                ['nama' => 'Kunyit', 'berat_g' => 3, 'keterangan' => 'bumbu kuah kuning'],
+                ['nama' => 'Minyak goreng', 'berat_g' => 5, 'keterangan' => 'minyak tumis bumbu'],
+                ['nama' => 'Seledri', 'berat_g' => 3, 'keterangan' => 'irisan'],
+                ['nama' => 'Garam dapur', 'berat_g' => 3, 'keterangan' => 'garam kuah'],
             ]
         ],
         'rawon' => [
             'nama' => 'Rawon',
-            'deskripsi' => 'Sup daging sapi berkuah kluwek khas Jawa Timur.',
             'bahan' => [
-                ['nama' => 'Daging sapi', 'berat_g' => 90, 'keterangan' => '1 porsi daging'],
-                ['nama' => 'Tauge kacang hijau', 'berat_g' => 30, 'keterangan' => 'Tauge pendek pelengkap'],
-                ['nama' => 'Kluwek', 'berat_g' => 15, 'keterangan' => 'Bumbu kluwek'],
-                ['nama' => 'Nasi putih', 'berat_g' => 150, 'keterangan' => '1 porsi nasi, jika disertakan']
+                ['nama' => 'Daging sapi', 'berat_g' => 90, 'keterangan' => 'potongan daging'],
+                ['nama' => 'Kluwek', 'berat_g' => 15, 'keterangan' => 'bumbu kluwek'],
+                ['nama' => 'Tauge', 'berat_g' => 30, 'keterangan' => 'tauge pendek'],
+                ['nama' => 'Nasi putih', 'berat_g' => 150, 'keterangan' => '1 porsi nasi'],
+                ['nama' => 'Minyak goreng', 'berat_g' => 5, 'keterangan' => 'minyak tumis bumbu'],
+                ['nama' => 'Garam dapur', 'berat_g' => 3, 'keterangan' => 'garam kuah'],
             ]
-        ]
+        ],
+        'rendang' => [
+            'nama' => 'Rendang daging',
+            'bahan' => [
+                ['nama' => 'Daging sapi', 'berat_g' => 100, 'keterangan' => '1 potong daging'],
+                ['nama' => 'Santan', 'berat_g' => 120, 'keterangan' => 'kuah santan kental'],
+                ['nama' => 'Minyak goreng', 'berat_g' => 10, 'keterangan' => 'minyak tumis bumbu'],
+                ['nama' => 'Garam dapur', 'berat_g' => 2, 'keterangan' => 'garam bumbu'],
+            ]
+        ],
+        'bakso' => [
+            'nama' => 'Bakso',
+            'bahan' => [
+                ['nama' => 'Bakso', 'berat_g' => 150, 'keterangan' => '5 butir sedang'],
+                ['nama' => 'Mi basah', 'berat_g' => 75, 'keterangan' => 'mi kuning'],
+                ['nama' => 'Bihun', 'berat_g' => 25, 'keterangan' => 'bihun/soun'],
+                ['nama' => 'Sawi', 'berat_g' => 25, 'keterangan' => 'beberapa helai'],
+                ['nama' => 'Seledri', 'berat_g' => 2, 'keterangan' => 'irisan'],
+                ['nama' => 'Garam dapur', 'berat_g' => 2, 'keterangan' => 'garam kuah'],
+            ]
+        ],
+        'mie ayam' => [
+            'nama' => 'Mi ayam',
+            'bahan' => [
+                ['nama' => 'Mi basah', 'berat_g' => 150, 'keterangan' => '1 porsi mi'],
+                ['nama' => 'Daging ayam', 'berat_g' => 60, 'keterangan' => 'topping ayam'],
+                ['nama' => 'Sawi', 'berat_g' => 30, 'keterangan' => 'beberapa helai'],
+                ['nama' => 'Kecap manis', 'berat_g' => 10, 'keterangan' => 'bumbu ayam'],
+                ['nama' => 'Minyak goreng', 'berat_g' => 8, 'keterangan' => 'minyak bumbu'],
+            ]
+        ],
+        'ayam geprek' => [
+            'nama' => 'Ayam geprek',
+            'bahan' => [
+                ['nama' => 'Nasi putih', 'berat_g' => 200, 'keterangan' => '1 porsi nasi'],
+                ['nama' => 'Daging ayam', 'berat_g' => 100, 'keterangan' => '1 potong ayam'],
+                ['nama' => 'Tepung terigu', 'berat_g' => 25, 'keterangan' => 'lapisan tepung'],
+                ['nama' => 'Cabai merah', 'berat_g' => 15, 'keterangan' => 'sambal'],
+                ['nama' => 'Minyak goreng', 'berat_g' => 15, 'keterangan' => 'minyak terserap'],
+            ]
+        ],
+        'gado-gado' => [
+            'nama' => 'Gado-gado',
+            'bahan' => [
+                ['nama' => 'Tauge', 'berat_g' => 40, 'keterangan' => 'segenggam'],
+                ['nama' => 'Kangkung', 'berat_g' => 50, 'keterangan' => 'sayur rebus'],
+                ['nama' => 'Kentang', 'berat_g' => 40, 'keterangan' => 'kentang rebus'],
+                ['nama' => 'Tahu', 'berat_g' => 50, 'keterangan' => '1 potong'],
+                ['nama' => 'Telur ayam', 'berat_g' => 55, 'keterangan' => '1 butir'],
+                ['nama' => 'Kacang tanah', 'berat_g' => 35, 'keterangan' => 'saus kacang'],
+                ['nama' => 'Kerupuk', 'berat_g' => 10, 'keterangan' => 'kerupuk'],
+            ]
+        ],
+        'pecel lele' => [
+            'nama' => 'Pecel lele',
+            'bahan' => [
+                ['nama' => 'Ikan lele goreng', 'berat_g' => 100, 'keterangan' => '1 ekor'],
+                ['nama' => 'Nasi putih', 'berat_g' => 150, 'keterangan' => '1 porsi nasi'],
+                ['nama' => 'Sambal terasi', 'berat_g' => 20, 'keterangan' => 'sambal'],
+                ['nama' => 'Mentimun', 'berat_g' => 30, 'keterangan' => 'lalapan'],
+            ]
+        ],
+        'pecel' => [
+            'nama' => 'Pecel',
+            'bahan' => [
+                ['nama' => 'Kangkung', 'berat_g' => 50, 'keterangan' => 'sayur rebus'],
+                ['nama' => 'Tauge', 'berat_g' => 40, 'keterangan' => 'segenggam'],
+                ['nama' => 'Kacang panjang', 'berat_g' => 40, 'keterangan' => 'beberapa potong'],
+                ['nama' => 'Kacang tanah', 'berat_g' => 35, 'keterangan' => 'bumbu pecel'],
+                ['nama' => 'Nasi putih', 'berat_g' => 150, 'keterangan' => '1 porsi nasi'],
+            ]
+        ],
+        'sate ayam' => [
+            'nama' => 'Sate ayam',
+            'bahan' => [
+                ['nama' => 'Daging ayam', 'berat_g' => 100, 'keterangan' => '5 tusuk'],
+                ['nama' => 'Kacang tanah', 'berat_g' => 40, 'keterangan' => 'bumbu kacang'],
+                ['nama' => 'Kecap manis', 'berat_g' => 10, 'keterangan' => '2 sendok teh'],
+                ['nama' => 'Nasi putih', 'berat_g' => 150, 'keterangan' => 'lontong, dihitung seperti nasi'],
+            ]
+        ],
+        'nasi uduk' => [
+            'nama' => 'Nasi uduk',
+            'bahan' => [
+                ['nama' => 'Nasi putih', 'berat_g' => 200, 'keterangan' => '1 porsi nasi'],
+                ['nama' => 'Santan', 'berat_g' => 35, 'keterangan' => 'santan untuk menanak'],
+                ['nama' => 'Telur ayam', 'berat_g' => 55, 'keterangan' => '1 butir'],
+                ['nama' => 'Tempe', 'berat_g' => 40, 'keterangan' => '1 potong tempe goreng'],
+                ['nama' => 'Sambal terasi', 'berat_g' => 15, 'keterangan' => 'sambal'],
+            ]
+        ],
+        'opor ayam' => [
+            'nama' => 'Opor ayam',
+            'bahan' => [
+                ['nama' => 'Daging ayam', 'berat_g' => 100, 'keterangan' => '1 potong ayam'],
+                ['nama' => 'Santan', 'berat_g' => 100, 'keterangan' => 'kuah santan'],
+                ['nama' => 'Bawang merah', 'berat_g' => 10, 'keterangan' => 'bumbu'],
+                ['nama' => 'Bawang putih', 'berat_g' => 5, 'keterangan' => 'bumbu'],
+                ['nama' => 'Kemiri', 'berat_g' => 5, 'keterangan' => 'bumbu'],
+                ['nama' => 'Garam dapur', 'berat_g' => 2, 'keterangan' => 'garam kuah'],
+            ]
+        ],
+        'capcay' => [
+            'nama' => 'Capcay',
+            'bahan' => [
+                ['nama' => 'Wortel', 'berat_g' => 30, 'keterangan' => 'irisan'],
+                ['nama' => 'Kol', 'berat_g' => 40, 'keterangan' => 'potongan kol'],
+                ['nama' => 'Sawi', 'berat_g' => 40, 'keterangan' => 'sawi'],
+                ['nama' => 'Udang segar', 'berat_g' => 30, 'keterangan' => 'beberapa ekor'],
+                ['nama' => 'Bawang putih', 'berat_g' => 5, 'keterangan' => 'bumbu'],
+                ['nama' => 'Minyak goreng', 'berat_g' => 7, 'keterangan' => 'minyak tumis'],
+                ['nama' => 'Garam dapur', 'berat_g' => 2, 'keterangan' => 'garam'],
+            ]
+        ],
+        'tumis kangkung' => [
+            'nama' => 'Tumis kangkung',
+            'bahan' => [
+                ['nama' => 'Kangkung', 'berat_g' => 100, 'keterangan' => '1 ikat kecil'],
+                ['nama' => 'Bawang putih', 'berat_g' => 5, 'keterangan' => 'bumbu'],
+                ['nama' => 'Cabai merah', 'berat_g' => 5, 'keterangan' => 'irisan'],
+                ['nama' => 'Minyak goreng', 'berat_g' => 7, 'keterangan' => 'minyak tumis'],
+                ['nama' => 'Garam dapur', 'berat_g' => 1, 'keterangan' => 'sejumput'],
+            ]
+        ],
+        'ketoprak' => [
+            'nama' => 'Ketoprak',
+            'bahan' => [
+                ['nama' => 'Tahu', 'berat_g' => 60, 'keterangan' => 'tahu goreng'],
+                ['nama' => 'Bihun', 'berat_g' => 40, 'keterangan' => 'bihun'],
+                ['nama' => 'Tauge', 'berat_g' => 30, 'keterangan' => 'tauge'],
+                ['nama' => 'Kacang tanah', 'berat_g' => 35, 'keterangan' => 'bumbu kacang'],
+                ['nama' => 'Kecap manis', 'berat_g' => 10, 'keterangan' => 'kecap'],
+                ['nama' => 'Nasi putih', 'berat_g' => 100, 'keterangan' => 'lontong, dihitung seperti nasi'],
+            ]
+        ],
     ];
 
-    /**
-     * Identifikasi makanan dari foto dan nama
-     */
     public static function identify(string $namaInput, ?string $photoPath = null): array {
         $namaLower = mb_strtolower(trim($namaInput));
         $apiKey = getenv('GEMINI_API_KEY') ?: ($_ENV['GEMINI_API_KEY'] ?? ($_SERVER['GEMINI_API_KEY'] ?? ''));
 
-        // Cek path foto (relatif vs absolut)
         $fullPhotoPath = null;
         if (!empty($photoPath)) {
-            if (file_exists($photoPath)) {
-                $fullPhotoPath = $photoPath;
-            } else {
-                $publicPath = __DIR__ . '/../../public/' . ltrim($photoPath, '/');
-                if (file_exists($publicPath)) {
-                    $fullPhotoPath = $publicPath;
-                }
+            $uploadDir = realpath(__DIR__ . '/../../public/assets/uploads');
+            $kandidat = realpath(__DIR__ . '/../../public/' . ltrim($photoPath, '/'));
+            if ($uploadDir && $kandidat && strpos($kandidat, $uploadDir . DIRECTORY_SEPARATOR) === 0 && is_file($kandidat)) {
+                $fullPhotoPath = $kandidat;
             }
         }
 
-        // 1. Panggil Gemini Multimodal Vision API jika API key dan foto tersedia
-        if (!empty($apiKey) && !empty($fullPhotoPath) && file_exists($fullPhotoPath)) {
+        if (!empty($apiKey) && !empty($fullPhotoPath)) {
             $apiResult = self::callGeminiVision($apiKey, $namaInput, $fullPhotoPath);
             if ($apiResult !== null && !empty($apiResult['bahan'])) {
                 return $apiResult;
             }
         }
 
-        // 2. Cek apakah ada konflik yang disengaja untuk skenario demo State 3b
-        // Contoh di PRD: Pengguna menulis "Nasi goreng telur", tapi foto soto ayam
-        if (strpos($namaLower, 'nasi goreng') !== false && !empty($photoPath) && strpos(mb_strtolower($photoPath), 'soto') !== false) {
-            $data = self::$resepLokal['nasi goreng telur'];
-            return [
-                'sukses' => true,
-                'nama' => $data['nama'],
-                'deskripsi' => $data['deskripsi'],
-                'bahan' => $data['bahan'],
-                'konflik' => true, // State 3b
-                'konflik_teks' => 'Kamu menulis “' . $data['nama'] . '”, tetapi fotonya tampak seperti soto ayam. Pilih yang mau dipakai untuk menentukan bahan.',
-                'nama_foto' => 'Soto ayam'
-            ];
+        $resep = self::$resepLokal;
+        uksort($resep, fn($a, $b) => mb_strlen($b) <=> mb_strlen($a));
+        $namaCari = preg_replace('/(^|\s)mi(\s|$)/u', '$1mie$2', $namaLower);
+        if (isset($resep[$namaCari])) {
+            $resep = [$namaCari => $resep[$namaCari]] + $resep;
         }
-
-        // 3. Cari resep yang cocok dari kamus lokal (fallback deterministik)
-        foreach (self::$resepLokal as $kunci => $data) {
-            if (strpos($namaLower, $kunci) !== false || strpos($kunci, $namaLower) !== false) {
+        foreach ($resep as $kunci => $data) {
+            if ($namaLower !== '' && (strpos($namaCari, $kunci) !== false || (mb_strlen($namaLower) >= 4 && strpos($kunci, $namaLower) !== false))) {
                 return [
                     'sukses' => true,
                     'nama' => $data['nama'],
-                    'deskripsi' => $data['deskripsi'],
+                    'deskripsi' => 'Bahan dari resep contoh, bukan dari foto. Periksa dan sesuaikan.',
                     'bahan' => $data['bahan'],
+                    'ukuran_porsi' => PortionSize::bawaan(),
+                    'sumber_analisis' => 'contoh',
                     'konflik' => false,
                     'konflik_teks' => ''
                 ];
             }
         }
 
-        // 4. Makanan umum tidak dikenal di kamus, buat perkiraan bahan dasar
         if (!empty($namaInput)) {
             return [
                 'sukses' => true,
                 'nama' => ucwords($namaInput),
-                'deskripsi' => 'Analisis bahan berdasarkan nama dan foto makanan.',
+                'deskripsi' => 'Bahan belum bisa ditebak otomatis. Tambah atau koreksi bahan di bawah.',
                 'bahan' => [
-                    ['nama' => ucwords($namaInput), 'berat_g' => 200, 'keterangan' => 'Estimasi awal 200 g; silakan koreksi bahan dan berat sesuai makanan sebenarnya']
+                    ['nama' => ucwords($namaInput), 'berat_g' => 200, 'keterangan' => 'Perkiraan awal 200 g']
                 ],
+                'ukuran_porsi' => PortionSize::bawaan(),
+                'sumber_analisis' => 'contoh',
                 'konflik' => false,
                 'konflik_teks' => ''
             ];
@@ -210,113 +290,103 @@ class AiClient {
         ];
     }
 
-    /**
-     * Panggilan ke Google Gemini Multimodal Vision API
-     */
     private static function callGeminiVision(string $apiKey, string $nama, string $photoPath): ?array {
-        if (!file_exists($photoPath)) {
-            return null;
-        }
-
-        $fileData = file_get_contents($photoPath);
+        $fileData = @file_get_contents($photoPath);
         if ($fileData === false || strlen($fileData) === 0) {
             return null;
         }
 
         $mimeType = mime_content_type($photoPath);
-        if (!$mimeType || !in_array($mimeType, ['image/jpeg', 'image/png', 'image/webp', 'image/heic'])) {
-            $mimeType = 'image/jpeg';
+        if (!in_array($mimeType, ['image/jpeg', 'image/png', 'image/webp'], true)) {
+            return null;
         }
 
-        $base64Image = base64_encode($fileData);
+        $daftarBahan = implode(', ', self::DAFTAR_BAHAN);
+        $namaAman = str_replace(['"', "\n", "\r"], ["'", ' ', ' '], mb_substr($nama, 0, 100));
 
         $prompt = <<<PROMPT
-Kamu adalah AI ahli gizi kuliner dan estimasi porsi makanan Indonesia pada aplikasi web CekPiring.
-Pengguna mengunggah foto makanan dan menuliskan nama makanan: "{$nama}".
+Kamu membantu aplikasi CekPiring mengenali makanan Indonesia dari foto.
+Nama makanan yang ditulis pengguna: "{$namaAman}".
 
-Tugasmu:
-1. Periksa kesesuaian antara foto makanan dan nama makanan yang ditulis pengguna:
-   - Jika pengguna menulis nama makanan yang bertolak belakang dengan isi foto (misalnya menulis "Nasi goreng telur" padahal foto adalah soto ayam atau bakso), set "konflik": true, sebutkan nama makanan asli di foto pada "nama_foto", dan buat penjelasan ramah di "konflik_teks".
-   - Jika sesuai, mirip, atau nama input umum, set "konflik": false.
-   - Jika nama makanan yang ditulis pengguna kosong atau kurang spesifik, tentukan nama hidangan yang paling tepat dari foto pada atribut "nama".
-2. Analisis semua bahan makanan (komponen & bumbu utama) yang terlihat atau terkandung dalam hidangan pada foto:
-   - Perkirakan takaran masing-masing bahan secara realistis berdasarkan tampilan visual pada foto:
-     * Dalam gram (berat_g) untuk perhitungan nutrisi (misal nasi 150-250 g, ayam 60-100 g, telur 55 g, minyak 10-15 g, sayur 30-80 g, sambal 10-20 g).
-     * Untuk cairan/kuah/saus/susu, konversikan takaran mililiter (ml) ke gram (misal 150 ml kuah ≈ 150 g).
-     * Untuk takaran butir/buah/potong/sendok makan, cantumkan di "keterangan" (misal: "1 butir (sekitar 55 g)", "2 buah", "1 potong sedang (sekitar 80 g)", "1 sendok makan (sekitar 15 g)", "200 ml kuah").
-   - Gunakan nama bahan kuliner Indonesia yang baku/standar agar mudah dicocokkan dengan data gizi TKPI (contoh: "Nasi putih", "Daging ayam", "Telur ayam", "Daging sapi", "Tahu", "Tempe", "Minyak kelapa sawit", "Kecap manis", "Garam dapur", "Bawang merah", "Bawang putih", "Tauge", "Kangkung", dll).
+Tugas:
+1. Kenali hidangan di foto. Isi "nama" dengan nama hidangan yang TERLIHAT di foto. Bila nama dari pengguna jelas berbeda dengan isi foto (misalnya menulis "Sate ayam" padahal fotonya sayur sop), isi "konflik": true, "nama_foto" dengan nama hidangan di foto, dan "konflik_teks" satu kalimat ramah yang menyebut keduanya. Bila sesuai atau mirip, "konflik": false.
+2. Tebak ukuran porsi di foto: "kecil", "sedang", atau "besar" (porsi sedang = satu piring makan biasa, sekitar 350 g total). Isi "alasan_porsi" maksimal 12 kata, berdasarkan yang terlihat (misalnya "nasi menutupi setengah piring").
+3. Bahan SELALU berdasarkan isi foto, bukan nama ketikan. Sebutkan bahan utama dan bumbu yang berpengaruh (minyak, santan, kecap, garam, gula), maksimal 12 bahan. Perkirakan gram setiap bahan sesuai ukuran porsi yang kamu tebak. Cairan: 1 ml dianggap 1 g.
+4. Untuk nama bahan, PILIH dari daftar ini bila cocok (data gizinya tersedia): {$daftarBahan}. Tulis persis seperti di daftar. Bila bahan tidak ada di daftar, pakai nama umum Indonesia yang singkat. Kuah bening dari air ditulis "Air"; kaldu instan ditulis "Kaldu bubuk ayam" (takaran kecil, 1-3 g). Daun aromatik yang tidak dimakan atau tidak punya data (daun jeruk, daun pandan, daun salam, kencur, taburan di bawah 3 g) TIDAK perlu ditulis sebagai bahan.
+5. JANGAN menyebut kalori atau angka gizi apa pun. Angka gizi dihitung aplikasi dari tabel resmi.
 
-Kembalikan HANYA format JSON valid tanpa format markdown atau backtick codeblock:
+Jawab HANYA dengan JSON valid:
 {
-  "sukses": true,
-  "nama": "Nama Makanan",
-  "deskripsi": "Deskripsi singkat hidangan dan takaran porsi dari foto",
+  "nama": "Nama hidangan",
+  "deskripsi": "Satu kalimat singkat",
+  "ukuran_porsi": "sedang",
+  "alasan_porsi": "nasi sekitar satu centong, lauk satu potong",
   "konflik": false,
   "konflik_teks": "",
   "nama_foto": "",
   "bahan": [
-    {
-      "nama": "Nasi putih",
-      "berat_g": 200,
-      "keterangan": "1 piring sedang (sekitar 200 g)"
-    }
+    {"nama": "Nasi putih", "berat_g": 150, "keterangan": "1 centong"}
   ]
 }
 PROMPT;
 
         $requestBody = [
-            'contents' => [
-                [
-                    'parts' => [
-                        [
-                            'text' => $prompt
-                        ],
-                        [
-                            'inline_data' => [
-                                'mime_type' => $mimeType,
-                                'data' => $base64Image
-                            ]
-                        ]
-                    ]
-                ]
-            ],
+            'contents' => [[
+                'parts' => [
+                    ['text' => $prompt],
+                    ['inline_data' => ['mime_type' => $mimeType, 'data' => base64_encode($fileData)]],
+                ],
+            ]],
             'generationConfig' => [
                 'response_mime_type' => 'application/json',
-                'temperature' => 0.2
-            ]
+                'temperature' => 0.2,
+            ],
         ];
 
-        $primaryModel = getenv('GEMINI_MODEL') ?: ($_ENV['GEMINI_MODEL'] ?? 'gemini-3.1-flash-lite');
-        $modelsToTry = array_unique([$primaryModel, 'gemini-3-flash-preview', 'gemini-3.5-flash-lite', 'gemini-3.8-flash']);
+        $primaryModel = getenv('GEMINI_MODEL') ?: ($_ENV['GEMINI_MODEL'] ?? '');
+        $modelsToTry = array_values(array_unique(array_filter([
+            $primaryModel,
+            'gemini-3-flash-preview',
+            'gemini-3.1-flash-lite',
+        ])));
 
         $response = null;
         $httpCode = 0;
-        $curlErr = '';
 
         foreach ($modelsToTry as $currentModel) {
-            $url = "https://generativelanguage.googleapis.com/v1beta/models/{$currentModel}:generateContent?key=" . urlencode($apiKey);
+            if (!preg_match('/^[a-z0-9.\-]+$/i', $currentModel)) {
+                continue;
+            }
+            $url = "https://generativelanguage.googleapis.com/v1beta/models/{$currentModel}:generateContent";
 
             $ch = curl_init($url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_POST, true);
             curl_setopt($ch, CURLOPT_HTTPHEADER, [
                 'Content-Type: application/json',
-                'x-goog-api-key: ' . $apiKey
+                'x-goog-api-key: ' . $apiKey,
             ]);
             curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($requestBody));
             curl_setopt($ch, CURLOPT_TIMEOUT, 25);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 8);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+            if (defined('CURLSSLOPT_NATIVE_CA')) {
+                curl_setopt($ch, CURLOPT_SSL_OPTIONS, CURLSSLOPT_NATIVE_CA);
+            }
+            $caBundle = getenv('CURL_CA_BUNDLE') ?: '';
+            if ($caBundle !== '' && is_file($caBundle)) {
+                curl_setopt($ch, CURLOPT_CAINFO, $caBundle);
+            }
 
             $response = curl_exec($ch);
-            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            $httpCode = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE);
             $curlErr = curl_error($ch);
             curl_close($ch);
 
             if ($httpCode === 200 && !empty($response)) {
                 break;
-            } else {
-                error_log("CekPiring - Gemini Vision [{$currentModel}] HTTP {$httpCode}: " . ($curlErr ?: substr($response, 0, 200)));
             }
+            error_log("CekPiring - Gemini [{$currentModel}] HTTP {$httpCode}: " . ($curlErr ?: substr((string)$response, 0, 200)));
         }
 
         if ($httpCode !== 200 || empty($response)) {
@@ -325,7 +395,6 @@ PROMPT;
 
         $responseData = json_decode($response, true);
         $rawText = $responseData['candidates'][0]['content']['parts'][0]['text'] ?? null;
-
         if (empty($rawText)) {
             return null;
         }
@@ -339,20 +408,37 @@ PROMPT;
             return null;
         }
 
+        $bahan = [];
+        foreach (array_slice($parsed['bahan'], 0, 15) as $b) {
+            if (!is_array($b)) {
+                continue;
+            }
+            $namaBahan = trim(strip_tags((string)($b['nama'] ?? '')));
+            if ($namaBahan === '') {
+                continue;
+            }
+            $berat = (float)($b['berat_g'] ?? 0);
+            $berat = max(1, min(1000, $berat > 0 ? $berat : 50));
+            $bahan[] = [
+                'nama' => mb_substr($namaBahan, 0, 80),
+                'berat_g' => round($berat),
+                'keterangan' => mb_substr(trim(strip_tags((string)($b['keterangan'] ?? ''))), 0, 80),
+            ];
+        }
+        if (empty($bahan)) {
+            return null;
+        }
+
         return [
             'sukses' => true,
-            'nama' => $parsed['nama'] ?? ucwords($nama),
-            'deskripsi' => $parsed['deskripsi'] ?? 'Analisis Gemini Vision berdasarkan foto.',
-            'bahan' => array_map(function($b) {
-                return [
-                    'nama' => trim($b['nama'] ?? 'Bahan'),
-                    'berat_g' => (float)($b['berat_g'] ?? 50),
-                    'keterangan' => $b['keterangan'] ?? (($b['berat_g'] ?? 50) . ' g, estimasi dari foto')
-                ];
-            }, $parsed['bahan']),
+            'nama' => mb_substr(trim(strip_tags((string)($parsed['nama'] ?? ''))), 0, 80) ?: ucwords($nama),
+            'deskripsi' => mb_substr(trim(strip_tags((string)($parsed['deskripsi'] ?? ''))), 0, 160),
+            'bahan' => $bahan,
+            'ukuran_porsi' => PortionSize::dariAi($parsed['ukuran_porsi'] ?? null, $parsed['alasan_porsi'] ?? ''),
+            'sumber_analisis' => 'ai',
             'konflik' => !empty($parsed['konflik']),
-            'konflik_teks' => $parsed['konflik_teks'] ?? '',
-            'nama_foto' => $parsed['nama_foto'] ?? ''
+            'konflik_teks' => mb_substr(trim(strip_tags((string)($parsed['konflik_teks'] ?? ''))), 0, 200),
+            'nama_foto' => mb_substr(trim(strip_tags((string)($parsed['nama_foto'] ?? ''))), 0, 80),
         ];
     }
 }
