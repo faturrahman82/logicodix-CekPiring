@@ -28,7 +28,7 @@ id,id_asli,nama,nama_kunci,energi_kkal,protein_g,lemak_g,karbohidrat_g,serat_g,g
 27,27.0,"Asam payak segar","asam payak segar",135.0,0.8,0.4,32.1,10.0,,,,0.0,tkpi,NR006,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (NR006)",data_lengkap
 28,28.0,"Asan kandis kering","asan kandis kering",261.0,0.9,1.6,63.3,5.0,,,,26.0,tkpi,NR003,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (NR003)",data_lengkap
 29,29.0,"Asinan Bogor sayuran","asinan bogor sayuran",98.0,3.9,2.6,14.8,0.5,,,,483.0,tkpi,DP022,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (DP022)",data_lengkap
-30,30.0,Ayam,ayam,302.0,18.2,25.0,0.0,,,,,,,,,,,,124.9,"padanan: rata-rata 5 potongan daging Chicken",sedang,,,,,,,,,,,,,,,,,"TKPI 2017 Kemenkes RI",data_sebagian
+30,30.0,Ayam,ayam,302.0,18.2,25.0,0.0,0,,7.27,99,64,usda,,172382,,,,124.9,padanan: rata-rata 5 potongan daging Chicken,sedang,,,,,,,,,,,,,,,,,TKPI 2017 Kemenkes RI & USDA SR Legacy (172382),data_sebagian
 31,32.0,"Ayam ampela goreng","ayam ampela goreng",270.0,32.3,11.2,9.9,0.0,,,,980.0,tkpi,FP001,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (FP001)",data_lengkap
 32,33.0,"Ayam dideh/darah segar","ayam dideh/darah segar",75.0,13.8,1.9,0.7,0.0,,,,337.0,tkpi,FR006,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (FR006)",data_lengkap
 33,34.0,"Ayam goreng church texa sayap","ayam goreng church texa sayap",295.0,34.0,16.0,1.5,0.0,,,,771.0,tkpi,FP023,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (FP023)",data_lengkap
@@ -76,13 +76,13 @@ id,id_asli,nama,nama_kunci,energi_kkal,protein_g,lemak_g,karbohidrat_g,serat_g,g
 75,75.0,"Batatas kelapa ubi segar","batatas kelapa ubi segar",89.0,1.1,0.1,21.0,4.0,,,,20.0,tkpi,BR003,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (BR003)",data_lengkap
 76,76.0,"Batatas tali ubi rebus","batatas tali ubi rebus",182.0,2.4,0.4,42.2,9.2,,,,20.0,tkpi,BP003,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (BP003)",data_lengkap
 77,77.0,"Bawang Bombay","bawang bombay",45.0,1.4,0.2,10.3,2.0,4.24,0.042,0.0,12.0,tkpi,DR007,170000.0,nama_sama,,,2.3,"tepat: Onion",rendah,,,,,,,,,,,,,,,,,"TKPI 2017 & USDA SR Legacy",data_lengkap
-78,78.0,"Bawang Merah","bawang merah",46.0,1.5,0.3,9.2,1.7,4.24,0.042,0.0,7.0,tkpi,NR007,170000.0,koreksi_tkpi,,"disamakan dengan TKPI 2017 NR007 ""Bawang merah, segar"" hal. 68: energi_kkal 39 -> 46; karbohidrat_g 0.2 -> 9.2",,,,,,,,,,,,,,,,,,,,"TKPI 2017 & USDA SR Legacy",data_lengkap
+78,78.0,Bawang Merah,bawang merah,46.0,1.5,0.3,9.2,1.7,4.24,0.042,0.0,7.0,tkpi,NR007,170000.0,koreksi_tkpi,,"disamakan dengan TKPI 2017 NR007 ""Bawang merah, segar"" hal. 68: energi_kkal 39 -> 46; karbohidrat_g 0.2 -> 9.2",2.3,padanan: Onion (Kaneko 2014),rendah,,,,,,,,,,,,,,,,,TKPI 2017 & USDA SR Legacy,data_lengkap
 79,79.0,"Bawang Putih","bawang putih",95.0,4.5,0.2,23.1,0.6,,,,46.0,tkpi,NR008,,nama_sama,,,17.0,"tepat: Garlic",rendah,,,,,,,,,,,,,,,,,"TKPI 2017 (NR008)",data_lengkap
 80,80.0,"Bayam kukus","bayam kukus",30.0,1.3,0.7,5.8,1.2,,,,15.0,tkpi,DP001,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (DP001)",data_lengkap
 81,81.0,"Bayam Merah","bayam merah",51.0,4.6,0.5,10.0,2.2,,,,20.0,tkpi,DR009,,nama_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (DR009)",data_lengkap
 82,82.0,"Bayam merah segar","bayam merah segar",41.0,2.2,0.8,6.3,2.2,,,,20.0,tkpi,DR009,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (DR009)",data_lengkap
 83,83.0,"Bayam rebus","bayam rebus",23.0,1.2,0.6,3.7,1.1,,,,16.0,tkpi,DP002,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (DP002)",data_lengkap
-84,84.0,"Bayam segar","bayam segar",36.0,3.5,0.5,6.5,,,,,,,,,,,,51.4,"tepat: Spinach (daun)",sedang,,,,,,,,,,,,,,,,,"TKPI 2017 Kemenkes RI",data_sebagian
+84,84.0,Bayam segar,bayam segar,36.0,3.5,0.5,6.5,2.2,0.42,0.063,0,79,usda,,168462,,,,51.4,tepat: Spinach (daun),sedang,,,,,,,,,,,,,,,,,TKPI 2017 Kemenkes RI & USDA SR Legacy (168462),data_sebagian
 85,85.0,"Bayam tumis + oncom","bayam tumis + oncom",102.0,3.7,6.7,6.9,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 Kemenkes RI",data_sebagian
 86,86.0,"Bayam tumis bersantan","bayam tumis bersantan",48.0,1.4,4.2,2.6,0.5,,,,,,DP059,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (DP059)",data_sebagian
 87,87.0,"Bebek (itik)","bebek (itik)",326.0,16.0,28.6,0.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 Kemenkes RI",data_sebagian
@@ -134,7 +134,7 @@ id,id_asli,nama,nama_kunci,energi_kkal,protein_g,lemak_g,karbohidrat_g,serat_g,g
 133,134.0,"Beras tumbuk mentah","beras tumbuk mentah",354.0,7.8,0.4,79.9,3.8,,,,5.0,tkpi,AR012,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (AR012)",data_lengkap
 134,135.0,"Beras tumbuk merah mentah","beras tumbuk merah mentah",352.0,7.3,0.9,76.2,0.8,,,,10.0,tkpi,AR013,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (AR013)",data_lengkap
 135,136.0,"Betok wadi masakan","betok wadi masakan",145.0,16.3,7.0,4.1,,,,,69.0,tkpi,GP055,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (GP055)",data_sebagian
-136,137.0,Bihun,bihun,360.0,4.7,0.1,82.1,1.2,,,,12.0,tkpi,AP006,,nama_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (AP006)",data_lengkap
+136,137.0,Bihun,bihun,360.0,4.7,0.1,82.1,1.2,0.12,0.153,0,12.0,tkpi,AP006,169742,nama_sama,,,,,,,,,,,,,,,,,,,,,,TKPI 2017 (AP006) & USDA SR Legacy (169742),data_lengkap
 137,138.0,"Bihun Goreng","bihun goreng",154.0,3.0,4.5,25.5,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 Kemenkes RI",data_sebagian
 138,139.0,"Bihun goreng instan","bihun goreng instan",381.0,6.1,3.9,80.3,,,,,928.0,tkpi,AP007,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (AP007)",data_sebagian
 139,140.0,"Bihun Jagung mentah","bihun jagung mentah",354.0,0.5,0.3,87.4,3.0,,,,49.0,tkpi,AP008,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (AP008)",data_lengkap
@@ -178,7 +178,7 @@ id,id_asli,nama,nama_kunci,energi_kkal,protein_g,lemak_g,karbohidrat_g,serat_g,g
 177,178.0,"Bulgogi masakan","bulgogi masakan",72.0,11.4,4.9,1.4,1.7,,,,509.0,tkpi,FP040,,nilai_sama,"sesuai_tkpi_2017 (FP040); selisih_energi_ada_di_sumber",,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (FP040)",data_lengkap
 178,179.0,"Bulung Jajan","bulung jajan",212.0,16.9,0.2,47.6,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 Kemenkes RI",data_sebagian
 179,180.0,"Bulung Sangu","bulung sangu",237.0,14.7,0.2,56.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 Kemenkes RI",data_sebagian
-180,181.0,Buncis,buncis,35.0,2.4,0.2,7.7,1.9,,,,8.0,tkpi,DR013,,nama_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (DR013)",data_lengkap
+180,181.0,Buncis,buncis,35.0,2.4,0.2,7.7,1.9,3.26,0.05,0,8.0,tkpi,DR013,169961,nama_sama,,,,,,,,,,,,,,,,,,,,,,TKPI 2017 (DR013) & USDA SR Legacy (169961),data_lengkap
 181,182.0,"Buncis asam","buncis asam",60.0,5.1,0.5,8.5,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 Kemenkes RI",data_sebagian
 182,183.0,"Buncis rebus","buncis rebus",30.0,2.2,0.2,6.4,1.5,,,,7.0,tkpi,DP003,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (DP003)",data_lengkap
 183,184.0,"Bunga pepaya segar","bunga pepaya segar",45.0,2.6,0.3,8.1,1.6,,,,2.0,tkpi,DR014,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (DR014)",data_lengkap
@@ -220,18 +220,18 @@ id,id_asli,nama,nama_kunci,energi_kkal,protein_g,lemak_g,karbohidrat_g,serat_g,g
 219,220.0,"Cue Selar Kuning","cue selar kuning",145.0,27.0,2.3,0.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 Kemenkes RI",data_sebagian
 220,221.0,Cuka,cuka,12.0,0.1,0.1,5.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 Kemenkes RI",data_sebagian
 221,222.0,"Cumi-cumi goreng","cumi-cumi goreng",265.0,40.6,10.1,0.0,0.0,,,,86.0,tkpi,GP003,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (GP003)",data_lengkap
-222,223.0,"Cumi-cumi segar","cumi-cumi segar",75.0,16.1,0.7,0.1,0.0,,,,37.0,tkpi,GR003,,nilai_sama,,,173.7,"padanan: rata-rata 2 jenis cumi",sedang,,,,,,,,,,,,,,,,,"TKPI 2017 (GR003)",data_lengkap
+222,223.0,Cumi-cumi segar,cumi-cumi segar,75.0,16.1,0.7,0.1,0.0,0,0.358,233,37.0,tkpi,GR003,174223,nilai_sama,,,173.7,padanan: rata-rata 2 jenis cumi,sedang,,,,,,,,,,,,,,,,,TKPI 2017 (GR003) & USDA SR Legacy (174223),data_lengkap
 223,224.0,"Daging Anak Sapi","daging anak sapi",190.0,19.1,12.0,0.0,0.0,,,,99.0,tkpi,FR003,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (FR003)",data_lengkap
 224,225.0,"Daging Asap","daging asap",191.0,32.0,6.0,0.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 Kemenkes RI",data_sebagian
 225,226.0,"Daging Babi Gemuk","daging babi gemuk",457.0,11.6,45.0,0.0,,,,,,,,,,,,92.2,"padanan: rata-rata 8 potongan daging Pork",sedang,,,,,,,,,,,,,,,,,"TKPI 2017 Kemenkes RI",data_sebagian
 226,227.0,"Daging Babi Kurus","daging babi kurus",376.0,14.1,35.0,0.0,,,,,,,,,,,,92.2,"padanan: rata-rata 8 potongan daging Pork",sedang,,,,,,,,,,,,,,,,,"TKPI 2017 Kemenkes RI",data_sebagian
 227,228.0,"Daging Domba","daging domba",206.0,17.1,14.8,0.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 Kemenkes RI",data_sebagian
-228,229.0,"Daging Kambing","daging kambing",154.0,16.6,9.2,0.0,,,,,,,,,,,,94.8,"padanan: Mutton (domba)",sedang,,,,,,,,,,,,,,,,,"TKPI 2017 Kemenkes RI",data_sebagian
+228,229.0,Daging Kambing,daging kambing,154.0,16.6,9.2,0.0,0,0,3.371,56,73,usda,,175264,,,,94.8,padanan: Mutton (domba),sedang,,,,,,,,,,,,,,,,,TKPI 2017 Kemenkes RI & USDA SR Legacy (175264),data_sebagian
 229,230.0,"Daging Kerbau","daging kerbau",84.0,18.7,0.5,0.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 Kemenkes RI",data_sebagian
 230,231.0,"Daging Kuda","daging kuda",118.0,18.1,4.1,0.9,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 Kemenkes RI",data_sebagian
-231,232.0,"Daging Sapi","daging sapi",207.0,18.8,14.0,0.0,,,,,,,,,,,,93.5,"padanan: rata-rata 9 potongan daging Beef",sedang,,,,,,,,,,,,,,,,,"TKPI 2017 Kemenkes RI",data_sebagian
+231,232.0,Daging Sapi,daging sapi,207.0,18.8,14.0,0.0,0,0,6.154,70,77,usda,,170831,,,,93.5,padanan: rata-rata 9 potongan daging Beef,sedang,,,,,,,,,,,,,,,,,TKPI 2017 Kemenkes RI & USDA SR Legacy (170831),data_sebagian
 232,233.0,"Daun bangun-bangun segar","daun bangun-bangun segar",27.0,1.3,0.6,4.0,1.0,,,,4.0,tkpi,DR017,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (DR017)",data_lengkap
-233,234.0,"Daun Bawang","daun bawang",29.0,1.8,0.7,5.2,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 Kemenkes RI",data_sebagian
+233,234.0,Daun Bawang,daun bawang,29.0,1.8,0.7,5.2,2.6,2.33,0.032,0,16,usda,,170005,,,,,,,,,,,,,,,,,,,,,,,TKPI 2017 Kemenkes RI & USDA SR Legacy (170005),data_sebagian
 234,235.0,"Daun bawang merah segar","daun bawang merah segar",41.0,2.0,0.3,7.8,2.1,,,,30.0,tkpi,DR018,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (DR018)",data_lengkap
 235,236.0,"Daun bebuas segar","daun bebuas segar",41.0,2.7,1.0,7.3,2.1,,,,,,DR019,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (DR019)",data_sebagian
 236,237.0,"Daun belem segar","daun belem segar",50.0,4.4,1.4,7.8,1.9,,,,,,DR020,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (DR020)",data_sebagian
@@ -387,7 +387,7 @@ id,id_asli,nama,nama_kunci,energi_kkal,protein_g,lemak_g,karbohidrat_g,serat_g,g
 386,387.0,"Ginjal Sapi","ginjal sapi",141.0,15.0,8.1,0.9,,,,,,,,,,,,174.2,"tepat: Beef kidney",sedang,,,,,,,,,,,,,,,,,"TKPI 2017 Kemenkes RI",data_sebagian
 387,388.0,Gudeg,gudeg,53.0,1.6,1.6,8.8,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 Kemenkes RI",data_sebagian
 388,389.0,"Gudeg sayur","gudeg sayur",160.0,3.3,9.2,16.0,2.3,,,,,,DP032,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (DP032)",data_sebagian
-389,390.0,"Gula Aren","gula aren",368.0,0.0,0.0,95.0,0.0,,,,15.0,tkpi,MP005,,nama_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (MP005)",data_lengkap
+389,390.0,Gula Aren,gula aren,368.0,0.0,0.0,95.0,0.0,97.02,0,0,15.0,tkpi,MP005,168833,nama_sama,,,,,,,,,,,,,,,,,,,,,,TKPI 2017 (MP005) & USDA SR Legacy (168833),data_lengkap
 390,391.0,"Gula Kelapa","gula kelapa",386.0,3.0,10.0,76.0,0.0,,,,2.0,tkpi,MP006,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (MP006)",data_lengkap
 391,392.0,"Gula Merah Tebu belum dimurnikan","gula merah tebu belum dimurnikan",356.0,0.4,0.5,90.6,,97.02,0.0,0.0,28.0,usda,,168833.0,,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 & USDA SR Legacy",data_sebagian
 392,393.0,"Gula putih","gula putih",394.0,0.0,0.0,94.0,0.0,99.8,0.0,0.0,1.0,tkpi,MP007,169655.0,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 & USDA SR Legacy",data_lengkap
@@ -404,7 +404,7 @@ id,id_asli,nama,nama_kunci,energi_kkal,protein_g,lemak_g,karbohidrat_g,serat_g,g
 403,404.0,Ham,ham,389.0,16.9,35.0,0.3,0.0,,,,112.0,tkpi,FP005,,nama_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (FP005)",data_lengkap
 404,405.0,Hangop,hangop,65.0,10.0,1.0,3.5,0.0,,,,126.0,tkpi,JP002,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (JP002)",data_lengkap
 405,406.0,"Hati Babi","hati babi",134.0,19.7,4.8,1.7,,,,,,,,,,,,284.8,"tepat: Pork liver",tinggi,,,,,,,,,,,,,,,,,"TKPI 2017 Kemenkes RI",data_sebagian
-406,407.0,"Hati Sapi","hati sapi",136.0,19.7,3.2,6.0,,,,,,,,,,,,219.8,"tepat: Beef liver",tinggi,,,,,,,,,,,,,,,,,"TKPI 2017 Kemenkes RI",data_sebagian
+406,407.0,Hati Sapi,hati sapi,136.0,19.7,3.2,6.0,0,0,1.233,275,69,usda,,169451,,,,219.8,tepat: Beef liver,tinggi,,,,,,,,,,,,,,,,,TKPI 2017 Kemenkes RI & USDA SR Legacy (169451),data_sebagian
 407,408.0,Havermout,havermout,390.0,14.2,7.4,68.2,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 Kemenkes RI",data_sebagian
 408,409.0,"Hofa/Ubi hutan segar","hofa/ubi hutan segar",127.0,1.2,0.5,29.5,3.4,,,,3.0,tkpi,BR011,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (BR011)",data_lengkap
 409,410.0,"Ikan asar merah masakan","ikan asar merah masakan",146.0,17.7,5.9,5.6,,,,,170.0,tkpi,GP069,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (GP069)",data_sebagian
@@ -419,7 +419,7 @@ id,id_asli,nama,nama_kunci,energi_kkal,protein_g,lemak_g,karbohidrat_g,serat_g,g
 418,419.0,"Ikan Bader (Tawes)","ikan bader (tawes)",198.0,19.0,13.0,0.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 Kemenkes RI",data_sebagian
 419,420.0,"Ikan balong segar","ikan balong segar",107.0,16.5,3.9,1.5,0.0,,,,86.0,tkpi,GR005,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (GR005)",data_lengkap
 420,421.0,"Ikan bambangan segar","ikan bambangan segar",112.0,20.0,1.3,3.7,0.0,,,,148.0,tkpi,GR006,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (GR006)",data_lengkap
-421,422.0,"Ikan Bandeng","ikan bandeng",129.0,20.0,4.8,0.0,0.0,,,,67.0,tkpi,GR007,,nama_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (GR007)",data_lengkap
+421,422.0,Ikan Bandeng,ikan bandeng,129.0,20.0,4.8,0.0,0.0,,1.66,52,67.0,tkpi,GR007,173675,nama_sama,,,,,,,,,,,,,,,,,,,,,,TKPI 2017 (GR007) & USDA SR Legacy (173675),data_lengkap
 422,423.0,"Ikan bandeng presto masakan","ikan bandeng presto masakan",296.0,17.1,20.3,11.3,0.0,,,,,,GP005,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (GP005)",data_sebagian
 423,424.0,"Ikan banjar segar","ikan banjar segar",111.0,19.4,0.9,4.8,0.0,,,,99.0,tkpi,GR008,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (GR008)",data_lengkap
 424,425.0,"Ikan baronang segar","ikan baronang segar",78.0,14.5,0.6,3.7,0.0,,,,26.0,tkpi,GR009,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (GR009)",data_lengkap
@@ -534,7 +534,7 @@ id,id_asli,nama,nama_kunci,energi_kkal,protein_g,lemak_g,karbohidrat_g,serat_g,g
 533,534.0,"Jagung kuning pipil rebus","jagung kuning pipil rebus",154.0,3.8,3.5,28.4,0.7,,,,5.0,tkpi,AP012,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (AP012)",data_lengkap
 534,535.0,"Jagung Kuning segar","jagung kuning segar",140.0,4.7,1.3,33.1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 Kemenkes RI",data_sebagian
 535,536.0,"Jagung kuning tepung","jagung kuning tepung",355.0,9.2,3.9,73.7,7.2,,,,11.0,tkpi,AP011,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (AP011)",data_lengkap
-536,537.0,"Jagung muda","jagung muda",35.0,2.2,0.1,7.4,1.9,,,,353.0,tkpi,DR085,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (DR085)",data_lengkap
+536,537.0,Jagung muda,jagung muda,35.0,2.2,0.1,7.4,1.9,,,,353.0,tkpi,DR085,,nilai_sama,,,11.7,padanan: Corn (Kaneko 2014),rendah,,,,,,,,,,,,,,,,,TKPI 2017 (DR085),data_lengkap
 537,538.0,"Jagung muda kuning mentah","jagung muda kuning mentah",147.0,5.1,0.7,31.5,1.3,,,,5.0,tkpi,AR015,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (AR015)",data_lengkap
 538,539.0,"Jagung muda rebus","jagung muda rebus",142.0,5.0,0.7,30.3,0.8,,,,5.0,tkpi,AP010,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (AP010)",data_lengkap
 539,540.0,"Jagung pipil var. harapan kering","jagung pipil var. harapan kering",367.0,6.2,5.1,76.2,2.6,,,,1.0,tkpi,AR017,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (AR017)",data_lengkap
@@ -547,7 +547,7 @@ id,id_asli,nama,nama_kunci,energi_kkal,protein_g,lemak_g,karbohidrat_g,serat_g,g
 546,547.0,"Jagung Rebus","jagung rebus",175.0,1.8,1.8,35.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 Kemenkes RI",data_sebagian
 547,548.0,"Jagung Sayur (tumis)","jagung sayur (tumis)",148.9,10.4,10.4,20.1,,,,,,,,,,"tidak_ditemukan_di_tkpi_2017 (energi_lebih_rendah_dari_makro)",,,,,,,,,,,,,,,,,,,,,"TKPI 2017 Kemenkes RI",data_sebagian
 548,549.0,"Jagung titi","jagung titi",374.0,9.4,2.2,79.1,0.8,,,,,,AP052,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (AP052)",data_sebagian
-549,550.0,Jahe,jahe,51.0,1.5,1.0,10.1,12.0,,,,12.0,tkpi,NR018,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (NR018)",data_lengkap
+549,550.0,Jahe,jahe,51.0,1.5,1.0,10.1,12.0,,,,12.0,tkpi,NR018,,nilai_sama,,,2.3,tepat: Ginger (Kaneko 2014),rendah,,,,,,,,,,,,,,,,,TKPI 2017 (NR018),data_lengkap
 550,551.0,Jali,jali,289.0,11.0,4.0,61.0,3.1,,,,24.0,tkpi,AR019,,nama_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (AR019)",data_lengkap
 551,552.0,"Jam selai","jam selai",239.0,0.5,0.6,64.5,1.0,,,,30.0,tkpi,MP008,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (MP008)",data_lengkap
 552,553.0,"Jambal goreng","jambal goreng",286.0,48.5,9.2,2.3,,,,,,,GP070,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (GP070)",data_sebagian
@@ -564,7 +564,7 @@ id,id_asli,nama,nama_kunci,energi_kkal,protein_g,lemak_g,karbohidrat_g,serat_g,g
 563,564.0,"Jamur merang segar","jamur merang segar",30.0,3.5,0.2,4.0,2.4,,,,6.0,tkpi,DR089,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (DR089)",data_lengkap
 564,565.0,"Jamur Putih (kulat putih)","jamur putih (kulat putih)",48.0,2.8,4.1,2.9,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 Kemenkes RI",data_sebagian
 565,566.0,"Jamur sagu","jamur sagu",48.0,1.9,3.2,2.8,1.0,,,,100.0,tkpi,DR091,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (DR091)",data_lengkap
-566,567.0,"Jamur tiram segar","jamur tiram segar",30.0,1.9,0.1,5.5,3.6,,,,22.0,tkpi,DR090,,nilai_sama,,,142.3,"tepat: Hiratake (Pleurotus ostreatus)",sedang,,,,,,,,,,,,,,,,,"TKPI 2017 (DR090)",data_lengkap
+566,567.0,Jamur tiram segar,jamur tiram segar,30.0,1.9,0.1,5.5,3.6,1.11,0.062,0,22.0,tkpi,DR090,168580,nilai_sama,,,142.3,tepat: Hiratake (Pleurotus ostreatus),sedang,,,,,,,,,,,,,,,,,TKPI 2017 (DR090) & USDA SR Legacy (168580),data_lengkap
 567,568.0,"Jangang bintatoeng masakan","jangang bintatoeng masakan",107.0,5.3,2.2,16.5,,,,,482.0,tkpi,FP048,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (FP048)",data_sebagian
 568,569.0,"Jantung Pisang segar","jantung pisang segar",31.0,1.2,0.3,7.1,3.2,,,,3.0,tkpi,DR092,,nama_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (DR092)",data_lengkap
 569,570.0,Japilus,japilus,500.0,1.2,25.1,67.3,0.4,,,,,,AP053,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (AP053)",data_sebagian
@@ -577,7 +577,7 @@ id,id_asli,nama,nama_kunci,energi_kkal,protein_g,lemak_g,karbohidrat_g,serat_g,g
 576,577.0,"Jeruk Garut","jeruk garut",44.0,0.8,0.3,10.9,1.6,,,,5.0,tkpi,ER037,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (ER037)",data_lengkap
 577,578.0,"Jeruk Kalamansi segar","jeruk kalamansi segar",39.0,0.3,0.3,8.9,2.3,,,,3.0,tkpi,ER038,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (ER038)",data_lengkap
 578,579.0,"Jeruk Manis","jeruk manis",45.0,0.9,0.2,11.2,1.4,9.35,0.015,0.0,4.0,tkpi,ER039,169097.0,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 & USDA SR Legacy",data_lengkap
-579,580.0,"Jeruk Nipis","jeruk nipis",44.0,0.5,0.2,10.0,0.4,,,,3.0,tkpi,ER040,,koreksi_tkpi,,"disamakan dengan TKPI 2017 ER040 ""Jeruk nipis, segar"" hal. 45: energi_kkal 37 -> 44; protein_g 0.8 -> 0.5; lemak_g 0.1 -> 0.2; karbohidrat_g 12.3 -> 10",,,,,,,,,,,,,,,,,,,,"TKPI 2017 (ER040)",data_lengkap
+579,580.0,Jeruk Nipis,jeruk nipis,44.0,0.5,0.2,10.0,0.4,1.69,0.022,0,3.0,tkpi,ER040,168155,koreksi_tkpi,,"disamakan dengan TKPI 2017 ER040 ""Jeruk nipis, segar"" hal. 45: energi_kkal 37 -> 44; protein_g 0.8 -> 0.5; lemak_g 0.1 -> 0.2; karbohidrat_g 12.3 -> 10",,,,,,,,,,,,,,,,,,,,TKPI 2017 (ER040) & USDA SR Legacy (168155),data_lengkap
 580,581.0,"Jeruk ragi segar","jeruk ragi segar",49.0,0.7,0.2,11.1,0.5,,,,4.0,tkpi,ER041,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (ER041)",data_lengkap
 581,582.0,Jotang,jotang,32.0,1.9,0.3,7.1,3.5,,,,59.0,tkpi,DR094,,nama_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (DR094)",data_lengkap
 582,583.0,"Jukku pallu kaloa masakan","jukku pallu kaloa masakan",15.0,15.2,4.3,8.8,,,,,605.0,tkpi,GP071,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (GP071)",data_sebagian
@@ -624,7 +624,7 @@ id,id_asli,nama,nama_kunci,energi_kkal,protein_g,lemak_g,karbohidrat_g,serat_g,g
 623,624.0,"Kacang lebui /iris kering","kacang lebui /iris kering",346.0,16.5,1.5,66.6,37.3,,,,17.0,tkpi,CR022,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (CR022)",data_lengkap
 624,625.0,"Kacang mekah polong segar","kacang mekah polong segar",22.0,1.1,1.0,3.4,1.1,,,,2.0,tkpi,DR096,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (DR096)",data_lengkap
 625,626.0,"Kacang mentega kering","kacang mentega kering",344.0,16.7,2.1,64.6,13.0,,,,1.0,tkpi,CR023,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (CR023)",data_lengkap
-626,627.0,"Kacang Merah","kacang merah",336.0,23.1,1.7,59.5,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 Kemenkes RI",data_sebagian
+626,627.0,Kacang Merah,kacang merah,336.0,23.1,1.7,59.5,15.2,2.1,0.154,0,12,usda,,173744,,,,,,,,,,,,,,,,,,,,,,,TKPI 2017 Kemenkes RI & USDA SR Legacy (173744),data_sebagian
 627,628.0,"Kacang merah /banda kering","kacang merah /banda kering",350.0,13.9,3.0,66.9,26.3,,,,19.0,tkpi,CR024,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (CR024)",data_lengkap
 628,629.0,"Kacang merah kering","kacang merah kering",314.0,22.1,1.1,56.2,4.0,,,,11.0,tkpi,CR026,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (CR026)",data_lengkap
 629,630.0,"Kacang Merah kering rebus","kacang merah kering rebus",158.0,10.3,0.9,28.2,2.6,,,,6.0,tkpi,CP008,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (CP008)",data_lengkap
@@ -634,7 +634,7 @@ id,id_asli,nama,nama_kunci,energi_kkal,protein_g,lemak_g,karbohidrat_g,serat_g,g
 633,634.0,"Kacang mete/biji jambu monyet goreng","kacang mete/biji jambu monyet goreng",629.0,20.4,56.3,19.8,1.1,,,,13.0,tkpi,CP010,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (CP010)",data_lengkap
 634,635.0,"Kacang mete/biji jambu monyet segar","kacang mete/biji jambu monyet segar",616.0,16.3,48.4,28.7,0.9,,,,26.0,tkpi,CR028,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (CR028)",data_lengkap
 635,636.0,"Kacang negara","kacang negara",480.0,18.4,19.1,58.5,11.7,,,,1010.0,tkpi,CP033,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (CP033)",data_lengkap
-636,637.0,"Kacang Panjang","kacang panjang",44.0,2.7,0.3,7.8,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 Kemenkes RI",data_sebagian
+636,637.0,Kacang Panjang,kacang panjang,44.0,2.7,0.3,7.8,,,0.105,0,4,usda,,169222,,,,,,,,,,,,,,,,,,,,,,,TKPI 2017 Kemenkes RI & USDA SR Legacy (169222),data_sebagian
 637,638.0,"Kacang Panjang biji","kacang panjang biji",357.0,17.3,1.5,70.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 Kemenkes RI",data_sebagian
 638,639.0,"Kacang Panjang kukus","kacang panjang kukus",39.0,3.0,0.6,7.6,1.7,,,,28.0,tkpi,DP011,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (DP011)",data_lengkap
 639,640.0,"Kacang Panjang tumis","kacang panjang tumis",150.0,2.5,12.5,7.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 Kemenkes RI",data_sebagian
@@ -642,7 +642,7 @@ id,id_asli,nama,nama_kunci,energi_kkal,protein_g,lemak_g,karbohidrat_g,serat_g,g
 641,642.0,"Kacang sukro","kacang sukro",484.0,8.8,26.1,57.7,1.8,,,,,,CP034,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (CP034)",data_sebagian
 642,643.0,"Kacang Sukro Putih","kacang sukro putih",488.0,25.6,25.6,59.6,,,,,,,,,,"tidak_ditemukan_di_tkpi_2017 (makro_melebihi_100g)",,,,,,,,,,,,,,,,,,,,,"TKPI 2017 Kemenkes RI",data_sebagian
 643,644.0,"Kacang Tanah atom","kacang tanah atom",535.0,27.8,38.1,28.8,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 Kemenkes RI",data_sebagian
-644,645.0,"Kacang tanah goreng","kacang tanah goreng",564.0,25.5,44.4,25.5,2.8,,,,,,CP012,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (CP012)",data_sebagian
+644,645.0,Kacang tanah goreng,kacang tanah goreng,564.0,25.5,44.4,25.5,2.8,4.9,7.723,0,,,CP012,173806,nilai_sama,,,49.1,padanan: Peanut (Kaneko 2014),rendah,,,,,,,,,,,,,,,,,TKPI 2017 (CP012) & USDA SR Legacy (173806),data_sebagian
 645,646.0,"Kacang Tanah kacang sari","kacang tanah kacang sari",561.0,25.5,43.8,26.0,2.2,,,,,,CP035,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (CP035)",data_sebagian
 646,647.0,"Kacang tanah kering","kacang tanah kering",525.0,27.9,42.7,17.4,2.4,4.72,6.279,0.0,31.0,tkpi,CR032,172430.0,nilai_sama,,,49.1,"tepat: Peanut",rendah,,,,,,,,,,,,,,,,,"TKPI 2017 & USDA SR Legacy",data_lengkap
 647,648.0,"Kacang Tanah Rebus","kacang tanah rebus",385.0,14.0,31.0,13.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 Kemenkes RI",data_sebagian
@@ -670,7 +670,7 @@ id,id_asli,nama,nama_kunci,energi_kkal,protein_g,lemak_g,karbohidrat_g,serat_g,g
 669,670.0,"Kalio telur masakan","kalio telur masakan",193.0,10.6,12.4,9.7,,,,,540.0,tkpi,HP007,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (HP007)",data_sebagian
 670,671.0,"Kambing daging segar","kambing daging segar",149.0,16.6,9.2,0.0,0.0,,,,96.0,tkpi,FR019,,nilai_sama,,,94.8,"padanan: Mutton (domba)",sedang,,,,,,,,,,,,,,,,,"TKPI 2017 (FR019)",data_lengkap
 671,672.0,Kambose,kambose,164.0,3.0,2.4,32.6,4.3,,,,0.0,tkpi,AP055,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (AP055)",data_lengkap
-672,673.0,Kangkung,kangkung,29.0,3.0,0.3,5.4,2.0,,,,65.0,tkpi,DR100,,nama_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (DR100)",data_lengkap
+672,673.0,Kangkung,kangkung,29.0,3.0,0.3,5.4,2.0,,,0,65.0,tkpi,DR100,169301,nama_sama,,,,,,,,,,,,,,,,,,,,,,TKPI 2017 (DR100) & USDA SR Legacy (169301),data_lengkap
 673,674.0,"Kangkung kukus","kangkung kukus",30.0,3.2,0.7,4.7,1.8,,,,45.0,tkpi,DP013,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (DP013)",data_lengkap
 674,675.0,"Kangkung rebus","kangkung rebus",22.0,2.5,0.6,3.1,1.2,,,,31.0,tkpi,DP014,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (DP014)",data_lengkap
 675,676.0,"Kangkung tondano","kangkung tondano",43.0,1.8,0.2,8.4,4.3,,,,30.0,tkpi,DR101,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (DR101)",data_lengkap
@@ -694,7 +694,7 @@ id,id_asli,nama,nama_kunci,energi_kkal,protein_g,lemak_g,karbohidrat_g,serat_g,g
 693,694.0,"Kecipir muda segar","kecipir muda segar",32.0,2.9,0.2,5.8,5.5,,,,3.0,tkpi,DR104,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (DR104)",data_lengkap
 694,695.0,"Kecombrang segar","kecombrang segar",34.0,0.9,1.0,6.7,2.6,,,,47.0,tkpi,DR105,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (DR105)",data_lengkap
 695,696.0,"Kedondong segar","kedondong segar",47.0,0.5,0.2,10.4,2.7,,,,2.0,tkpi,ER044,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (ER044)",data_lengkap
-696,697.0,Keju,keju,326.0,22.8,20.3,13.1,0.0,,,,1410.0,tkpi,JP003,,nilai_sama,,,5.7,"tepat: Cheese",rendah,,,,,,,,,,,,,,,,,"TKPI 2017 (JP003)",data_lengkap
+696,697.0,Keju,keju,326.0,22.8,20.3,13.1,0.0,2.24,11.472,65,1410.0,tkpi,JP003,170900,nilai_sama,,,5.7,tepat: Cheese,rendah,,,,,,,,,,,,,,,,,TKPI 2017 (JP003) & USDA SR Legacy (170900),data_lengkap
 697,698.0,"Keju Kacang Tanah","keju kacang tanah",590.0,27.0,49.0,20.9,1.6,,,,355.0,tkpi,CP036,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (CP036)",data_lengkap
 698,699.0,"Kelapa hutan kering","kelapa hutan kering",623.0,2.0,52.1,36.5,15.3,,,,100.0,tkpi,ER045,,nama_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (ER045)",data_lengkap
 699,700.0,"Kelapa Muda air","kelapa muda air",17.0,0.2,0.1,3.8,0.0,,,,1.0,tkpi,QR001,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (QR001)",data_lengkap
@@ -710,7 +710,7 @@ id,id_asli,nama,nama_kunci,energi_kkal,protein_g,lemak_g,karbohidrat_g,serat_g,g
 709,710.0,Kemiri,kemiri,636.0,19.0,63.0,8.0,3.0,,,,25.0,tkpi,NR019,,nama_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (NR019)",data_lengkap
 710,711.0,Kenari,kenari,657.0,15.0,66.0,13.0,,,,,3.0,tkpi,CR038,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (CR038)",data_sebagian
 711,712.0,"Kenari banda kering","kenari banda kering",616.0,13.9,56.2,13.7,,,,,11.0,tkpi,CR037,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (CR037)",data_sebagian
-712,713.0,Kentang,kentang,83.0,2.0,0.1,19.1,,0.82,0.025,0.0,6.0,usda,,170026.0,,,,6.5,"tepat: Potato",rendah,,,,,,,,,,,,,,,,,"TKPI 2017 & USDA SR Legacy",data_sebagian
+712,713.0,Kentang,kentang,83.0,2.0,0.1,19.1,2.1,0.82,0.025,0.0,6.0,usda,,170026.0,,,,6.5,tepat: Potato,rendah,,,,,,,,,,,,,,,,,TKPI 2017 & USDA SR Legacy,data_sebagian
 713,714.0,"Kentang Hitam","kentang hitam",142.0,0.9,0.4,33.7,5.4,,,,22.0,tkpi,BR014,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (BR014)",data_lengkap
 714,715.0,Keong,keong,64.0,12.0,1.0,2.0,0.0,,,,231.0,tkpi,GR072,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (GR072)",data_lengkap
 715,716.0,"Kepala Susu (Krim)","kepala susu (krim)",204.0,2.6,20.0,4.0,0.0,,,,,,JR001,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (JR001)",data_sebagian
@@ -758,7 +758,7 @@ id,id_asli,nama,nama_kunci,energi_kkal,protein_g,lemak_g,karbohidrat_g,serat_g,g
 757,758.0,"Ketela Pohon Kuning","ketela pohon kuning",157.0,0.8,0.3,37.9,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 Kemenkes RI",data_sebagian
 758,760.0,"Ketela pohon/singkong kukus","ketela pohon/singkong kukus",153.0,1.2,0.3,36.4,1.3,,,,2.0,tkpi,BP008,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (BP008)",data_lengkap
 759,759.0,"Ketela singkong segar","ketela singkong segar",154.0,1.0,0.3,36.8,0.9,,,,2.0,tkpi,BR016,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (BR016)",data_lengkap
-760,761.0,Ketimun,ketimun,12.0,0.7,0.1,2.7,,,,,,,,,,,,9.4,"tepat: Cucumber",rendah,,,,,,,,,,,,,,,,,"TKPI 2017 Kemenkes RI",data_sebagian
+760,761.0,Ketimun,ketimun,12.0,0.7,0.1,2.7,0.5,1.67,0.037,0,2,usda,,168409,,,,9.4,tepat: Cucumber,rendah,,,,,,,,,,,,,,,,,TKPI 2017 Kemenkes RI & USDA SR Legacy (168409),data_sebagian
 761,762.0,"Ketimun madura segar","ketimun madura segar",9.0,0.5,0.1,1.9,0.7,,,,2.0,tkpi,DR111,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (DR111)",data_lengkap
 762,763.0,Ketoprak,ketoprak,153.0,7.9,7.7,13.0,2.9,,,,,,AP060,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (AP060)",data_sebagian
 763,764.0,Ketumbar,ketumbar,404.0,14.1,16.1,54.2,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 Kemenkes RI",data_sebagian
@@ -817,7 +817,7 @@ id,id_asli,nama,nama_kunci,energi_kkal,protein_g,lemak_g,karbohidrat_g,serat_g,g
 816,817.0,"Kwark (Quark)","kwark (quark)",242.0,19.0,17.0,3.0,0.0,,,,37.0,tkpi,JP004,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (JP004)",data_lengkap
 817,818.0,"Labu Air","labu air",17.0,0.6,0.2,3.8,0.6,,,,2.0,tkpi,DR121,,nama_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (DR121)",data_lengkap
 818,819.0,"Labu kuning segar","labu kuning segar",51.0,1.7,0.5,10.0,2.7,,,,280.0,tkpi,DR122,,nilai_sama,,,56.6,"padanan: Japanese pumpkin",sedang,,,,,,,,,,,,,,,,,"TKPI 2017 (DR122)",data_lengkap
-819,820.0,"Labu Siam","labu siam",26.0,0.6,0.1,6.7,6.2,,,,3.0,tkpi,DR123,,nama_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (DR123)",data_lengkap
+819,820.0,Labu Siam,labu siam,26.0,0.6,0.1,6.7,6.2,1.66,0.028,0,3.0,tkpi,DR123,170402,nama_sama,,,,,,,,,,,,,,,,,,,,,,TKPI 2017 (DR123) & USDA SR Legacy (170402),data_lengkap
 820,821.0,"Labu waluh segar","labu waluh segar",32.0,1.1,0.1,6.6,0.5,,,,1.0,tkpi,DR124,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (DR124)",data_lengkap
 821,822.0,Laksa,laksa,166.3,2.7,3.9,29.5,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 Kemenkes RI",data_sebagian
 822,823.0,"Lamtoro (pete cina) biji muda","lamtoro (pete cina) biji muda",85.0,5.7,0.3,15.4,10.8,,,,35.0,tkpi,CR046,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (CR046)",data_lengkap
@@ -857,7 +857,7 @@ id,id_asli,nama,nama_kunci,energi_kkal,protein_g,lemak_g,karbohidrat_g,serat_g,g
 856,857.0,"Lupis ketan","lupis ketan",164.0,1.8,2.1,34.5,0.7,,,,,,AP079,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (AP079)",data_sebagian
 857,858.0,Madu,madu,294.0,0.3,0.0,79.5,0.2,,,,6.0,tkpi,MP010,,nilai_sama,,,0.9,"tepat: Honey",rendah,,,,,,,,,,,,,,,,,"TKPI 2017 (MP010)",data_lengkap
 858,859.0,"Maizena tepung","maizena tepung",341.0,0.3,0.0,85.0,7.0,,,,6.0,tkpi,AP019,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (AP019)",data_lengkap
-859,860.0,Makaroni,makaroni,363.0,8.7,0.4,78.7,4.9,,,,5.0,tkpi,AP020,,nama_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (AP020)",data_lengkap
+859,860.0,Makaroni,makaroni,363.0,8.7,0.4,78.7,4.9,2.67,0.277,0,5.0,tkpi,AP020,169736,nama_sama,,,,,,,,,,,,,,,,,,,,,,TKPI 2017 (AP020) & USDA SR Legacy (169736),data_lengkap
 860,861.0,"Mangga benggala segar","mangga benggala segar",63.0,2.4,0.4,12.4,5.8,,,,3.0,tkpi,ER055,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (ER055)",data_lengkap
 861,862.0,"Mangga Gedong","mangga gedong",44.0,0.7,0.2,11.2,1.6,,,,2.0,tkpi,ER056,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (ER056)",data_lengkap
 862,863.0,"Mangga Golek","mangga golek",63.0,0.5,0.2,16.7,2.3,,,,3.0,tkpi,ER057,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (ER057)",data_lengkap
@@ -869,7 +869,7 @@ id,id_asli,nama,nama_kunci,energi_kkal,protein_g,lemak_g,karbohidrat_g,serat_g,g
 868,869.0,"Mangga Muda","mangga muda",59.0,0.5,0.4,15.1,,,,,2.0,tkpi,ER063,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (ER063)",data_sebagian
 869,870.0,"Mangga segar","mangga segar",52.0,0.7,0.0,12.3,1.6,,,,3.0,tkpi,ER054,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (ER054)",data_lengkap
 870,871.0,Manggis,manggis,63.0,0.6,0.6,15.6,1.5,,,,10.0,tkpi,ER064,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (ER064)",data_lengkap
-871,872.0,Margarin,margarin,720.0,0.6,81.0,0.4,0.0,,,,760.0,tkpi,KP001,,nama_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (KP001)",data_lengkap
+871,872.0,Margarin,margarin,720.0,0.6,81.0,0.4,0.0,0,15.189,0,760.0,tkpi,KP001,171040,nama_sama,,,,,,,,,,,,,,,,,,,,,,TKPI 2017 (KP001) & USDA SR Legacy (171040),data_lengkap
 872,873.0,"Markisa segar","markisa segar",144.0,3.5,1.2,29.8,11.4,,,,37.0,tkpi,ER065,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (ER065)",data_lengkap
 873,874.0,"Markisa squash","markisa squash",217.0,2.5,1.0,49.6,,,,,14.0,tkpi,MP011,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (MP011)",data_sebagian
 874,875.0,"Markisa squash BD","markisa squash bd",104.0,1.2,0.5,23.7,,,,,40.0,tkpi,MP012,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (MP012)",data_sebagian
@@ -1102,7 +1102,7 @@ id,id_asli,nama,nama_kunci,energi_kkal,protein_g,lemak_g,karbohidrat_g,serat_g,g
 1101,1102.0,"Sate penyu masakan","sate penyu masakan",179.0,22.5,3.5,13.3,0.0,,,,,,FP064,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (FP064)",data_sebagian
 1102,1103.0,"Sate pusut masakan","sate pusut masakan",274.0,12.9,18.6,13.6,,,,,609.0,tkpi,FP065,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (FP065)",data_sebagian
 1103,1104.0,"Sate Usus","sate usus",126.7,14.0,7.3,1.3,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 Kemenkes RI",data_sebagian
-1104,1105.0,Sawi,sawi,22.0,2.3,0.3,4.0,2.5,,,,22.0,tkpi,DR141,,nama_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (DR141)",data_lengkap
+1104,1105.0,Sawi,sawi,22.0,2.3,0.3,4.0,2.5,1.32,0.01,0,22.0,tkpi,DR141,169256,nama_sama,,,,,,,,,,,,,,,,,,,,,,TKPI 2017 (DR141) & USDA SR Legacy (169256),data_lengkap
 1105,1106.0,"Sawi putih / pecai segar","sawi putih / pecai segar",9.0,1.0,0.1,1.7,0.8,,,,5.0,tkpi,DR142,,nilai_sama,,,7.0,"tepat: Chinese cabbage",rendah,,,,,,,,,,,,,,,,,"TKPI 2017 (DR142)",data_lengkap
 1106,1107.0,"Sawi taiwan segar","sawi taiwan segar",30.0,1.9,0.5,4.4,2.7,,,,27.0,tkpi,DR143,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (DR143)",data_lengkap
 1107,1108.0,"Sawi tanah segar","sawi tanah segar",19.0,1.3,0.2,2.9,2.2,,,,17.0,tkpi,DR144,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (DR144)",data_lengkap
@@ -1120,10 +1120,10 @@ id,id_asli,nama,nama_kunci,energi_kkal,protein_g,lemak_g,karbohidrat_g,serat_g,g
 1119,1120.0,"Sayur sop","sayur sop",27.0,1.3,2.0,1.0,0.3,,,,,,DP053,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (DP053)",data_sebagian
 1120,1121.0,"Sayur umbut kelapa","sayur umbut kelapa",67.0,5.2,2.9,5.1,1.4,,,,313.0,tkpi,DP054,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (DP054)",data_lengkap
 1121,1122.0,"Sayur umbut rotan","sayur umbut rotan",57.0,5.4,2.6,3.1,1.6,,,,256.0,tkpi,DP055,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (DP055)",data_lengkap
-1122,1123.0,Selada,selada,15.0,1.2,0.2,2.9,1.8,,,,19.0,tkpi,DR145,,nama_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (DR145)",data_lengkap
+1122,1123.0,Selada,selada,15.0,1.2,0.2,2.9,1.8,0.78,0.02,0,19.0,tkpi,DR145,169249,nama_sama,,,,,,,,,,,,,,,,,,,,,,TKPI 2017 (DR145) & USDA SR Legacy (169249),data_lengkap
 1123,1124.0,"Selada Air","selada air",17.0,1.7,0.3,3.0,0.7,,,,65.0,tkpi,DR146,,nama_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (DR146)",data_lengkap
 1124,1125.0,"Selada Air rebus","selada air rebus",19.0,2.7,0.2,2.9,0.7,,,,24.0,tkpi,DP016,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (DP016)",data_lengkap
-1125,1126.0,Seledri,seledri,20.0,1.0,0.1,4.6,2.0,,,,64.0,tkpi,DR147,,nama_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (DR147)",data_lengkap
+1125,1126.0,Seledri,seledri,20.0,1.0,0.1,4.6,2.0,1.34,0.042,0,64.0,tkpi,DR147,169988,nama_sama,,,,,,,,,,,,,,,,,,,,,,TKPI 2017 (DR147) & USDA SR Legacy (169988),data_lengkap
 1126,1127.0,Semangka,semangka,28.0,0.5,0.2,6.9,0.4,,,,7.0,tkpi,ER105,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (ER105)",data_lengkap
 1127,1128.0,"Semur Jengkol","semur jengkol",192.5,4.5,6.0,30.3,,,,,,,DP057,,nama_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (DP057)",data_sebagian
 1128,1129.0,Sente,sente,64.0,0.6,0.3,14.8,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 Kemenkes RI",data_sebagian
@@ -1174,7 +1174,7 @@ id,id_asli,nama,nama_kunci,energi_kkal,protein_g,lemak_g,karbohidrat_g,serat_g,g
 1173,1174.0,"Susu Kental Manis","susu kental manis",336.0,8.2,10.0,55.0,0.0,54.4,5.486,34.0,150.0,tkpi,JP007,171275.0,nama_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 & USDA SR Legacy",data_lengkap
 1174,1175.0,"Susu Kental Tak Manis","susu kental tak manis",138.0,7.0,7.9,9.9,,,,,140.0,tkpi,JP008,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (JP008)",data_sebagian
 1175,1176.0,"Susu Kerbau","susu kerbau",160.0,6.3,12.0,7.1,,,,,82.0,tkpi,JR004,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (JR004)",data_sebagian
-1176,1177.0,"Susu Sapi","susu sapi",61.0,3.2,3.5,4.3,0.0,,,,36.0,tkpi,JR006,,nilai_sama,,,0.0,"tepat: Milk",rendah,,,,,,,,,,,,,,,,,"TKPI 2017 (JR006)",data_lengkap
+1176,1177.0,Susu Sapi,susu sapi,61.0,3.2,3.5,4.3,0.0,5.05,1.865,10,36.0,tkpi,JR006,172217,nilai_sama,,,0.0,tepat: Milk,rendah,,,,,,,,,,,,,,,,,TKPI 2017 (JR006) & USDA SR Legacy (172217),data_lengkap
 1177,1178.0,"Susu Skim (tak berlemak)","susu skim (tak berlemak)",36.0,3.5,0.1,5.1,,,,,38.0,tkpi,JP010,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (JP010)",data_sebagian
 1178,1179.0,"Susu skim bubuk","susu skim bubuk",359.0,35.6,1.0,52.0,0.0,,,,470.0,tkpi,JP009,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (JP009)",data_lengkap
 1179,1180.0,"Susu skim segar","susu skim segar",36.0,3.5,0.1,5.1,,,,,38.0,tkpi,JP010,,nilai_sama,,,0.0,"padanan: Milk",rendah,,,,,,,,,,,,,,,,,"TKPI 2017 (JP010)",data_sebagian
@@ -1196,7 +1196,7 @@ id,id_asli,nama,nama_kunci,energi_kkal,protein_g,lemak_g,karbohidrat_g,serat_g,g
 1195,1196.0,"Taoge goreng","taoge goreng",88.0,3.2,2.1,14.0,0.7,,,,,,DP017,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (DP017)",data_sebagian
 1196,1197.0,"Taoge kacang kedelai segar","taoge kacang kedelai segar",76.0,9.0,2.6,6.4,0.7,,,,5.0,tkpi,DR149,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (DR149)",data_lengkap
 1197,1198.0,"Taoge seduh","taoge seduh",28.0,3.0,0.8,4.0,1.0,,,,18.0,tkpi,DP018,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (DP018)",data_lengkap
-1198,1199.0,"Taoge segar","taoge segar",34.0,3.7,1.2,4.3,1.1,,,,19.0,tkpi,DR148,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (DR148)",data_lengkap
+1198,1199.0,Taoge segar,taoge segar,34.0,3.7,1.2,4.3,1.1,4.13,0.046,0,19.0,tkpi,DR148,169957,nilai_sama,,,35,tepat: Bean sprouts (Kaneko 2014),rendah,,,,,,,,,,,,,,,,,TKPI 2017 (DR148) & USDA SR Legacy (169957),data_lengkap
 1199,1200.0,Taokoa,taokoa,104.0,12.9,6.8,1.2,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 Kemenkes RI",data_sebagian
 1200,1201.0,"Tapai beras","tapai beras",99.0,1.7,0.3,22.4,0.0,,,,26.0,tkpi,AP003,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (AP003)",data_lengkap
 1201,1202.0,"Tapai ketan hitam","tapai ketan hitam",166.0,3.8,1.0,34.4,0.3,,,,5.0,tkpi,AP016,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (AP016)",data_lengkap
@@ -1268,7 +1268,7 @@ id,id_asli,nama,nama_kunci,energi_kkal,protein_g,lemak_g,karbohidrat_g,serat_g,g
 1267,1268.0,"Tepung Susu Asam untuk bayi","tepung susu asam untuk bayi",418.0,19.0,9.0,65.5,0.0,,,,188.0,tkpi,JP005,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (JP005)",data_lengkap
 1268,1269.0,"Tepung Susu Skim","tepung susu skim",362.0,35.6,1.0,52.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 Kemenkes RI",data_sebagian
 1269,1270.0,"Tepung Tales Beneng","tepung tales beneng",332.0,5.7,0.6,76.1,12.2,,,,7.0,tkpi,BP071,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (BP071)",data_lengkap
-1270,1271.0,"Tepung Terigu","tepung terigu",365.0,8.9,1.3,77.3,0.3,,,,2.0,tkpi,AP025,,nama_sama,,,22.4,"padanan: rata-rata 3 jenis tepung terigu",rendah,,,,,,,,,,,,,,,,,"TKPI 2017 (AP025)",data_lengkap
+1270,1271.0,Tepung Terigu,tepung terigu,365.0,8.9,1.3,77.3,0.3,0.27,0.155,0,2.0,tkpi,AP025,168894,nama_sama,,,22.4,padanan: rata-rata 3 jenis tepung terigu,rendah,,,,,,,,,,,,,,,,,TKPI 2017 (AP025) & USDA SR Legacy (168894),data_lengkap
 1271,1272.0,"Tepung Ubi Ungu","tepung ubi ungu",354.0,2.8,0.6,84.4,12.9,,,,42.0,tkpi,BP072,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (BP072)",data_lengkap
 1272,1273.0,Terasi,terasi,155.0,22.3,2.9,9.9,2.7,,,,1664.0,tkpi,NP011,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (NP011)",data_lengkap
 1273,1274.0,"Terasi dobo","terasi dobo",191.0,33.1,3.6,6.6,1.6,,,,650.0,tkpi,NP012,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (NP012)",data_lengkap
@@ -1301,7 +1301,7 @@ id,id_asli,nama,nama_kunci,energi_kkal,protein_g,lemak_g,karbohidrat_g,serat_g,g
 1300,1302.0,"Toge seduh","toge seduh",28.0,3.0,0.8,4.0,1.0,,,,18.0,tkpi,DP018,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (DP018)",data_lengkap
 1301,1303.0,"Tomat air (juice) segar","tomat air (juice) segar",20.0,1.0,0.2,3.5,0.4,,,,10.0,tkpi,DR160,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (DR160)",data_lengkap
 1302,1304.0,"Tomat Masak","tomat masak",20.0,1.0,0.3,4.2,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 Kemenkes RI",data_sebagian
-1303,1305.0,"Tomat merah segar","tomat merah segar",24.0,1.3,0.5,4.7,1.5,,,,10.0,tkpi,DR161,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (DR161)",data_lengkap
+1303,1305.0,Tomat merah segar,tomat merah segar,24.0,1.3,0.5,4.7,1.5,2.63,0.028,0,10.0,tkpi,DR161,170457,nilai_sama,,,3.1,padanan: Cherry tomato (Kaneko 2014),rendah,,,,,,,,,,,,,,,,,TKPI 2017 (DR161) & USDA SR Legacy (170457),data_lengkap
 1304,1306.0,"Tomat muda segar","tomat muda segar",24.0,2.0,0.7,3.3,1.8,,,,10.0,tkpi,DR162,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (DR162)",data_lengkap
 1305,1307.0,"Tumis bandeng","tumis bandeng",189.0,11.3,15.7,0.6,,,,,314.0,tkpi,GP094,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (GP094)",data_sebagian
 1306,1308.0,"Tumis bayam bersantan","tumis bayam bersantan",48.0,1.4,4.2,2.6,0.5,,,,,,DP059,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (DP059)",data_sebagian
@@ -1323,7 +1323,7 @@ id,id_asli,nama,nama_kunci,energi_kkal,protein_g,lemak_g,karbohidrat_g,serat_g,g
 1322,1324.0,"Udang kering","udang kering",295.0,62.4,2.3,1.8,,,,,540.0,tkpi,GP051,,nama_sama,,,749.1,"padanan: Sakura shrimp (dried)",tinggi,,,,,,,,,,,,,,,,,"TKPI 2017 (GP051)",data_sebagian
 1323,1325.0,"Udang kering mentah","udang kering mentah",278.0,62.6,4.1,2.2,,,,,540.0,tkpi,GP051,,nilai_sama,,,749.1,"padanan: Sakura shrimp (dried)",tinggi,,,,,,,,,,,,,,,,,"TKPI 2017 (GP051)",data_sebagian
 1324,1326.0,"Udang papay mentah","udang papay mentah",273.0,47.8,3.8,12.5,,,,,651.0,tkpi,GP052,,nilai_sama,,,204.2,"padanan: rata-rata 3 jenis udang",tinggi,,,,,,,,,,,,,,,,,"TKPI 2017 (GP052)",data_sebagian
-1325,1327.0,"Udang segar","udang segar",91.0,21.0,0.2,0.1,0.0,,,,178.0,tkpi,GR084,,nilai_sama,,,204.2,"padanan: rata-rata 3 jenis udang",tinggi,,,,,,,,,,,,,,,,,"TKPI 2017 (GR084)",data_lengkap
+1325,1327.0,Udang segar,udang segar,91.0,21.0,0.2,0.1,0.0,,0.101,161,178.0,tkpi,GR084,175179,nilai_sama,,,204.2,padanan: rata-rata 3 jenis udang,tinggi,,,,,,,,,,,,,,,,,TKPI 2017 (GR084) & USDA SR Legacy (175179),data_lengkap
 1326,1328.0,"Ulat sagu panggang","ulat sagu panggang",380.0,11.9,30.3,14.9,4.8,,,,260.0,tkpi,FP020,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (FP020)",data_lengkap
 1327,1329.0,"Ulat sagu segar","ulat sagu segar",241.0,5.8,21.6,5.8,2.8,,,,210.0,tkpi,FR034,,nilai_sama,,,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (FR034)",data_lengkap
 1328,1330.0,"Umbi Uwi segar","umbi uwi segar",120.0,2.8,0.5,82.3,2.6,,,,12.0,tkpi,BR033,,nilai_sama,"sesuai_tkpi_2017 (BR033); selisih_energi_ada_di_sumber",,,,,,,,,,,,,,,,,,,,,"TKPI 2017 (BR033)",data_lengkap
@@ -1349,3 +1349,12 @@ id,id_asli,nama,nama_kunci,energi_kkal,protein_g,lemak_g,karbohidrat_g,serat_g,g
 1348,,"Terong Bakar","terong bakar",33.0,1.4,0.3,6.8,2.5,3.2,0.05,0.0,10.0,tkpi,DR154_BAKAR,,olahan_tkpi,"Terong panggang/bakar tanpa minyak dengan faktor reduksi air 12%","Data olahan bakar terverifikasi",50.7,"tepat: Eggplant bakar",sedang,0.15,230.0,28.0,37.0,0.6,14.0,0.2,5.0,0.08,0.04,0.6,0.1,0.0,4.5,0.0,0.3,"TKPI 2017 (DR154 Bakar)",data_lengkap
 1349,,"Petai Segar","petai segar",92.0,5.4,1.1,15.2,2.0,2.5,0.2,0.0,55.0,tkpi,DR134,,tkpi_2017,"TKPI 2017 hal. 73 DR134 Petai segar","Penambahan bahan baku resmi TKPI 2017",60.0,"padanan: Legume/biji-bijian",sedang,0.6,221.0,14.0,170.0,1.6,29.0,0.8,0.0,0.80,0.10,6.10,0.3,0.0,34.0,0.0,0.5,"TKPI 2017 Kemenkes RI (DR134)",data_lengkap
 1350,,"Sambal Terasi","sambal terasi",134.0,4.1,7.2,13.5,3.2,4.5,1.2,6.5,680.0,tkpi_resep,KOMPOSIT_SAMBAL,,komposit_tkpi,"Komposisi: Cabai merah 60%, Tomat 20%, Terasi TKPI NP011 10%, Minyak/Gula 10%","Analisis komposit bahan baku terverifikasi TKPI",45.0,"padanan: Terasi dan cabai",rendah,4.8,280.0,48.0,58.0,1.8,18.0,0.6,180.0,0.12,0.08,1.4,0.3,0.3,42.0,0.0,1.2,"TKPI 2017 & Panganku (Komposit Terverifikasi)",data_lengkap
+1351,,Air,air,0,0,0,0,0,0,0,0,4,usda,,173647,usda,,"USDA SR Legacy 173647 Beverages, water, tap, drinking",0,tepat: air tidak mengandung purin,rendah,,,,,,,,,,,,,,,,,USDA SR Legacy (173647),data_lengkap
+1352,,Kol (kubis) segar,kol kubis segar,25,1.28,0.1,5.8,2.5,3.2,0.034,0,18,usda,,169975,usda,,"USDA SR Legacy 169975 Cabbage, raw. TKPI 2017 tidak memuat kol utuh (hanya daun kubis DR044).",3.2,tepat: Cabbage (Kaneko 2014),rendah,,,,,,,,,,,,,,,,,USDA SR Legacy (169975),data_lengkap
+1353,,Serai,serai,99,1.82,0.49,25.31,,,0.119,0,6,usda,,168573,usda,,"USDA SR Legacy 168573 Lemon grass (citronella), raw. TKPI 2017 tidak memuat serai.",,,,,,,,,,,,,,,,,,,,USDA SR Legacy (168573),data_sebagian
+1354,,Asam jawa,asam jawa,239,2.8,0.6,62.5,5.1,38.8,0.272,0,28,usda,,167763,usda,,"USDA SR Legacy 167763 Tamarinds, raw. TKPI 2017 tidak memuat asam jawa.",,,,,,,,,,,,,,,,,,,,USDA SR Legacy (167763),data_lengkap
+1355,,Saus tiram,saus tiram,51,1.35,0.25,10.92,0.3,0,0.043,0,2733,usda,,174529,usda,,"USDA SR Legacy 174529 Sauce, oyster, ready-to-serve.",134.4,tepat: Oyster sauce (Kaneko 2014),sedang,,,,,,,,,,,,,,,,,USDA SR Legacy (174529),data_lengkap
+1356,,Kecap ikan,kecap ikan,35,5.06,0.01,3.64,0,3.64,0.003,0,7851,usda,,174531,usda,,"USDA SR Legacy 174531 Sauce, fish, ready-to-serve.",93.1,tepat: Nampla (Kaneko 2014),sedang,,,,,,,,,,,,,,,,,USDA SR Legacy (174531),data_lengkap
+1357,,Kaldu bubuk ayam,kaldu bubuk ayam,267,16.66,13.88,18.01,0,17.36,3.43,13,23875,usda,,171562,usda,,"USDA SR Legacy 171562 Soup, chicken broth or bouillon, dry. Kaldu instan sangat asin, pakai takaran kecil.",,,,,,,,,,,,,,,,,,,,USDA SR Legacy (171562),data_lengkap
+1358,,Jintan,jintan,375,17.81,22.27,44.24,10.5,2.25,1.535,0,168,usda,,170923,usda,,"USDA SR Legacy 170923 Spices, cumin seed.",,,,,,,,,,,,,,,,,,,,USDA SR Legacy (170923),data_lengkap
+1359,,Dada ayam tanpa kulit,dada ayam tanpa kulit,120,22.5,2.62,0,0,0,0.563,73,45,usda,,171077,usda,,"USDA SR Legacy 171077 Chicken, breast, skinless, boneless, meat only, raw.",141.2,tepat: Chicken breast (Kaneko 2014),sedang,,,,,,,,,,,,,,,,,USDA SR Legacy (171077),data_lengkap

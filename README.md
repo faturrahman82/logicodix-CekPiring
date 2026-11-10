@@ -19,6 +19,29 @@ Data kosong berarti tidak tersedia, bukan nol. Aplikasi menampilkan "data belum 
 
 Gula dan lemak jenuh masakan lokal (rawon, soto, rendang, nasi goreng) belum ada di sumber terbuka yang sudah diperiksa.
 
+### Target kalori dan batas harian
+
+| Hal | Umum (kondisi tidak dicentang) | Kondisi dicentang | Sumber |
+|---|---|---|---|
+| Target kalori | AKG per umur dan jenis kelamin; cutting -15%, bulking +15% (aturan tim) | sama | Permenkes 28/2019 (`data/akg_2019.csv`); rumus Mifflin-St Jeor hanya pembanding |
+| Natrium | 2.000 mg | 1.500 mg (hipertensi) | Permenkes 30/2013; AHA |
+| Gula | 50 g | 5% energi (diabetes) | Permenkes 30/2013; Persagi/PERKENI |
+| Lemak jenuh | di bawah 10% energi | di bawah 7% energi (kolesterol tinggi) | WHO; PERKI 2022 |
+| Purin | tidak dinilai (informasi) | 400 mg (asam urat) | pedoman gout Jepang (Kaneko 2014) |
+
+Level per waktu makan: Rendah di bawah 20%, Sedang 20-33%, Tinggi di atas 33% batas harian (sepertiga batas untuk sekali makan). Sebagian angka dikutip dari sumber sekunder dan perlu dicocokkan ke dokumen pedoman aslinya.
+
+### Cara aplikasi membaca data
+
+Versi MVP membaca data gizi langsung dari `data/nutrition_bersih.csv` (lewat `App\Models\NutritionFact`). Tabel MySQL `nutrition_facts` di `database/schema.sql` disiapkan untuk pengembangan berikutnya. Bila tabel itu sudah diisi, aplikasi memakainya lebih dulu dan CSV menjadi cadangan.
+
+### Peran AI dan kode
+
+- **AI (Google Gemini):** mengenali hidangan dari foto dan nama, menebak ukuran piring (kecil/sedang/besar), dan mengusulkan daftar bahan beserta gramnya. AI tidak diminta menyebut angka gizi.
+- **Kode PHP (deterministik):** semua angka gizi, persen batas harian, verdict, porsi disarankan, dan saran perbaikan dihitung dari data CSV. Rumusnya: nilai per 100 g × gram ÷ 100 × jumlah piring.
+- **Perbaiki piringmu (kode, bukan AI):** untuk setiap zat yang tinggi, aplikasi mencoba dua aksi, yaitu mengurangi setengah bahan penyumbang terbesar atau mengganti bahan dengan pengganti yang lebih ringan dari daftar tetap (minyak sawit ke minyak kedelai, mentega ke margarin, susu kental manis ke susu sapi, ayam berkulit ke dada ayam tanpa kulit). Setiap aksi dihitung ulang dengan rumus yang sama, lalu dipilih yang paling menurunkan zat itu. Pengganti hanya dipakai bila datanya tersedia.
+- Tanpa kunci API, aplikasi memakai resep contoh dan memberi label "Resep contoh, belum dari foto".
+
 
 ### Alias bahan makanan (pencocokan nama)
 

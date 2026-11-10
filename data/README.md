@@ -6,6 +6,7 @@
 |---|---|
 | `nutrition_bersih.csv` | Versi yang dipakai tim. 1.346 baris (pangan Indonesia, garam dapur, kecap manis). |
 | `periksa_ke_sumber.csv` | 28 baris yang tidak ditemukan di TKPI 2017 dan angkanya masih meragukan. |
+| `akg_2019.csv` | Angka Kecukupan Gizi Permenkes 28/2019 (energi dan protein per umur dan jenis kelamin), dipakai untuk target kalori. |
 | `pemetaan_usda.csv` | Daftar 27 bahan kita yang dipetakan ke baris USDA (`kode_usda`), untuk penelusuran. |
 | `raw/nutrition_asli.csv` | File asli (1.346 baris), tidak boleh diubah. Dipakai sebagai pembanding. |
 
@@ -111,6 +112,50 @@ Sumber: Kaneko K. dkk., "Total purine and purine base content of common foodstuf
 ## Kecap manis
 
 Baris baru id 1346 "Kecap manis (rata-rata label kemasan)": median dari 8 label kecap manis di Open Food Facts (lisensi ODbL, wajib atribusi): energi 317 kkal, karbohidrat 76,5 g, **gula 62,9 g**, natrium 2.240 mg per 100 g. Kisaran gula antar merek 45 sampai 79 g, jadi angka ini perkiraan, bukan satu merek. Protein dan lemak tidak ada di label. Baris "Kecap" lama (TKPI) tetap ada dan merupakan kecap umum, bukan kecap manis.
+
+## Air dan kol (USDA)
+
+Dua baris ditambahkan karena sering muncul dari pengenalan foto tetapi tidak ada di TKPI 2017:
+
+| id | Nama | Sumber | Catatan |
+|---|---|---|---|
+| 1351 | Air | USDA SR Legacy 173647 (*Beverages, water, tap, drinking*) | 0 kkal, natrium 4 mg per 100 g. Dipakai untuk kuah bening. |
+| 1352 | Kol (kubis) segar | USDA SR Legacy 169975 (*Cabbage, raw*) | TKPI 2017 hanya memuat daun kubis (DR044). Purin 3,2 mg dari Kaneko 2014 (*Cabbage*). |
+
+Alias `kol` di `ingredient_aliases.csv` sebelumnya menunjuk ke `kol krop segar` yang tidak ada di data (kode DR113 di TKPI adalah kembang kol). Sekarang menunjuk ke baris 1352.
+
+## Penambahan USDA tahap 2 (10 November 2026)
+
+Untuk bahan yang paling sering dikenali dari foto, kolom yang masih kosong (gula, lemak jenuh, kolesterol, natrium, serat) diisi dari USDA FoodData Central SR Legacy. **Angka TKPI yang sudah ada tidak ditimpa.**
+
+- 32 bahan: bihun, tepung terigu, makaroni, daging sapi, daging kambing, ayam, hati sapi, udang, cumi-cumi, bandeng, sawi, bayam, kangkung, buncis, kacang panjang, labu siam, tomat, ketimun, selada, taoge, jamur tiram, daun bawang, seledri, jeruk nipis, margarin, keju, susu sapi, gula aren, kacang tanah goreng, kacang merah, dan sebagian lagi.
+- `pemetaan_usda.csv` mencatat kode USDA tiap bahan. Kolom `dasar`: `tepat` (jenis sama) atau `padanan` (jenis terdekat atau potongan dengan profil lemak paling mirip, mis. ayam dipetakan ke leher dengan kulit karena kadar lemaknya paling dekat dengan baris Ayam TKPI).
+- Natrium USDA tidak dipakai untuk kacang tanah goreng karena biasanya diberi garam.
+- Purin ditambah dari Kaneko 2014 untuk bawang merah, tomat, jagung muda, taoge, jahe, dan kacang tanah goreng.
+- Ditolak karena profil gizinya terlalu beda dengan baris kita (kadar air atau bentuk olahan): nasi masak, mi basah, mi kering, ikan tongkol, ikan mas, lele goreng, tempe goreng, bakso, jagung muda, nangka muda, bawang putih, jahe, santan, daun singkong.
+
+Cakupan 71 bahan yang diusulkan ke Gemini setelah tahap ini (kosong): gula 25, lemak jenuh 20, kolesterol 19, natrium 9, purin 35. Bahan yang kosong tetap ditandai "data belum tersedia" di aplikasi.
+
+## Bumbu dan saus (USDA, 10 November 2026)
+
+Dari foto masakan seperti tinoransak, Gemini sering menyebut bumbu yang tidak ada di TKPI 2017. Enam baris ditambahkan dari USDA SR Legacy (id 1353-1358):
+
+| id | Nama | Sumber USDA | Catatan |
+|---|---|---|---|
+| 1353 | Serai | 168573 Lemon grass, raw | |
+| 1354 | Asam jawa | 167763 Tamarinds, raw | |
+| 1355 | Saus tiram | 174529 | Purin 134,4 mg (Kaneko 2014, Oyster sauce) |
+| 1356 | Kecap ikan | 174531 | Purin 93,1 mg (Kaneko 2014, Nampla). Natrium 7.851 mg per 100 g |
+| 1357 | Kaldu bubuk ayam | 171562 | Natrium 23.875 mg per 100 g, pakai takaran 1-3 g |
+| 1358 | Jintan | 170923 | |
+
+Alias ditambah untuk serai/sereh, lengkuas/laos (menuju `boros laja (lengkuas)`), ketumbar, asam jawa, saus tiram, kecap ikan, kaldu/penyedap, dan jintan.
+
+**Tanpa data resmi, sengaja dikosongkan:** daun jeruk, daun pandan, kencur. Ketiganya tidak ada di TKPI 2017 maupun USDA SR Legacy. Gemini diminta tidak menuliskannya sebagai bahan (takarannya hanya 1-3 g dan tidak dimakan). Bila tetap muncul, aplikasi menandainya "data belum tersedia".
+
+## AKG 2019 (`akg_2019.csv`)
+
+Tabel 1 Angka Kecukupan Gizi, Permenkes No. 28 Tahun 2019 (lampiran halaman 7-8), untuk umur 10 tahun ke atas: berat dan tinggi acuan, energi, protein, lemak, karbohidrat, dan serat per orang per hari. Dibaca manual dari PDF resmi (peraturan.bpk.go.id, halaman tabelnya berupa gambar). Kelompok "80+ tahun" ditulis `umur_min=81`, `umur_maks=200`. Aplikasi memakai energinya sebagai target kalori utama (`TargetCalculator`).
 
 ## Yang belum ada
 
