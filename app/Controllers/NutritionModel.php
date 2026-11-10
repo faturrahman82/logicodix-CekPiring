@@ -11,16 +11,12 @@ class NutritionModel extends Model
     public function __construct()
     {
         parent::__construct();
-        // Path CSV di public atau root proyek
         $this->csvPath = FCPATH . 'nutrition_bersih.csv';
         if (!file_exists($this->csvPath)) {
             $this->csvPath = ROOTPATH . 'nutrition_bersih.csv';
         }
     }
 
-    /**
-     * Membaca seluruh data dari nutrition_bersih.csv
-     */
     public function getAllNutrition(): array
     {
         if (!file_exists($this->csvPath)) {
@@ -31,7 +27,6 @@ class NutritionModel extends Model
         if (($handle = fopen($this->csvPath, 'r')) !== false) {
             $header = fgetcsv($handle, 1000, ',');
             if ($header) {
-                // Hapus BOM UTF-8 jika ada pada kolom pertama
                 $header[0] = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $header[0]);
                 $header = array_map('trim', $header);
             }
@@ -59,14 +54,10 @@ class NutritionModel extends Model
         return $data;
     }
 
-    /**
-     * Mencari bahan terbaik di CSV berdasarkan kata kunci
-     */
     public function cariBahanDiCsv(array $allBahan, string $keyword): ?array
     {
         $keyword = strtolower(trim($keyword));
         
-        // 1. Pencarian kecocokan persis / awalan
         foreach ($allBahan as $b) {
             $nama = strtolower($b['name'] ?? $b['nama'] ?? $b['nama_bahan'] ?? '');
             if ($nama === $keyword || strpos($nama, $keyword) === 0) {
@@ -74,7 +65,6 @@ class NutritionModel extends Model
             }
         }
         
-        // 2. Pencarian mengandung kata (contains)
         foreach ($allBahan as $b) {
             $nama = strtolower($b['name'] ?? $b['nama'] ?? $b['nama_bahan'] ?? '');
             if (strpos($nama, $keyword) !== false) {
@@ -85,16 +75,12 @@ class NutritionModel extends Model
         return null;
     }
 
-    /**
-     * Otomatis memecah menu makanan menjadi bahan-bahan + porsi default (gr)
-     */
     public function deteksiBahanDariMenu(string $menu): array
     {
         $allBahan = $this->getAllNutrition();
         $menuLower = strtolower(trim($menu));
         $hasilDeteksi = [];
 
-        // Template menu umum jika user mengisi masakan campuran
         $komposisiMenu = [
             'nasi goreng' => [
                 ['keyword' => 'nasi', 'default_gr' => 150],
@@ -130,7 +116,6 @@ class NutritionModel extends Model
             ],
         ];
 
-        // 1. Cek apakah cocok dengan preset komposisi
         $matchedPreset = null;
         foreach ($komposisiMenu as $presetKey => $listPreset) {
             if (strpos($menuLower, $presetKey) !== false) {
@@ -153,20 +138,18 @@ class NutritionModel extends Model
                 ];
             }
         } else {
-            // 2. Jika bukan menu komposit, cari langsung bahan yang paling cocok di CSV
             $match = $this->cariBahanDiCsv($allBahan, $menuLower);
             if ($match) {
                 $nama = $match['name'] ?? $match['nama'] ?? $match['nama_bahan'] ?? ucfirst($menu);
                 $hasilDeteksi[] = [
                     'nama'     => $nama,
-                    'porsi_gr' => 100, // default 100 gram
+                    'porsi_gr' => 100,
                     'kalori_per_100g'  => (float)($match['calories'] ?? $match['kalori'] ?? 0),
                     'protein_per_100g' => (float)($match['proteins'] ?? $match['protein'] ?? 0),
                     'lemak_per_100g'   => (float)($match['fat'] ?? $match['lemak'] ?? 0),
                     'karbo_per_100g'   => (float)($match['carbohydrate'] ?? $match['karbo'] ?? 0),
                 ];
             } else {
-                // Fallback jika tidak ditemukan
                 $hasilDeteksi[] = [
                     'nama'     => ucfirst($menu),
                     'porsi_gr' => 100,

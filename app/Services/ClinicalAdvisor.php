@@ -3,10 +3,6 @@
 namespace App\Services;
 
 class ClinicalAdvisor {
-    /**
-     * Menghasilkan analisis klinis terpersonalisasi berdasarkan profil kesehatan,
-     * tujuan diet, total kandungan gizi porsi makanan, dan bahan-bahan yang terdeteksi.
-     */
     public static function generate(
         array $totalGizi,
         array $risiko,
@@ -27,7 +23,6 @@ class ClinicalAdvisor {
         $namaMakanan = $analysis['nama_makanan'] ?? 'Makanan ini';
         $bahanList = $analysis['bahan'] ?? [];
 
-        // Deteksi karakteristik bahan makanan (kuliner Indonesia)
         $adaGorengan = false;
         $adaKulitAtauTepung = false;
         $adaKecapManis = false;
@@ -53,7 +48,6 @@ class ClinicalAdvisor {
             }
         }
 
-        // Susun Label Profil
         $kondisiLabels = [];
         if ($isKolesterol) $kondisiLabels[] = 'Kolesterol Tinggi';
         if ($isDiabetes) $kondisiLabels[] = 'Diabetes';
@@ -66,9 +60,6 @@ class ClinicalAdvisor {
             $profilLabel = "Kebugaran Umum (Target {$tujuanLabel})";
         }
 
-        // ==========================================
-        // 1. RINGKASAN MEDIS (Summary)
-        // ==========================================
         $ringkasanMedis = '';
         if ($isKolesterol && ($risiko['lemak_jenuh']['persen'] ?? 0) > 30) {
             $ringkasanMedis = "Porsi ini memiliki beban lemak jenuh sebesar {$totalGizi['lemak_jenuh_g']} g (" . ($risiko['lemak_jenuh']['persen'] ?? 0) . "% batas harian). Untuk profil kolesterol tinggi, fokus utama adalah meminimalkan lemak jenuh dan meningkatkan asupan serat larut pengikat kolesterol.";
@@ -83,9 +74,6 @@ class ClinicalAdvisor {
             $ringkasanMedis = "Porsi ini menyumbang {$totalGizi['energi_kkal']} kkal ({$persenKalori}% dari target harian {$targetKalori} kkal). Komposisi makro didominasi oleh " . ($totalGizi['makro_persen']['karbohidrat'] > 45 ? 'karbohidrat' : 'lemak') . ", dengan kadar serat yang perlu diimbangi.";
         }
 
-        // ==========================================
-        // 2. PERINGATAN & BATASAN SPESIFIK (Cautions)
-        // ==========================================
         $cautionsJudul = 'Hal yang Perlu Dibatasi & Diwaspadai';
         $cautionsTeks = '';
 
@@ -118,9 +106,6 @@ class ClinicalAdvisor {
             }
         }
 
-        // ==========================================
-        // 3. SMART SWAPS / TRIK SEHAT PRAKTIS (Swaps)
-        // ==========================================
         $swapsJudul = 'Trik Sehat di Meja Makan (Aksi Nyata)';
         $tips = [];
 
@@ -139,15 +124,11 @@ class ClinicalAdvisor {
             $tips[] = "<strong>Alternatif Cita Rasa Gurih:</strong> Gunakan perasan jeruk nipis, irisan bawang merah, dan cabai rawit segar untuk rasa gurih segar tanpa tambahan natrium atau gula rafinasi.";
         }
 
-        // Tip default jika list tips masih sedikit
         if (count($tips) < 2) {
             $tips[] = "<strong>Teknik Masak Mendatang:</strong> Prioritaskan olahan ayam/ikan panggang, kukus, sup kuah bening, atau pepes sebagai variasi menu rendah minyak jenuh.";
             $tips[] = "<strong>Cukupkan Hidrasi:</strong> Minum 1 gelas air putih 15–20 menit sebelum makan untuk membantu regulasi rasa kenyang dan laju metabolisme alami.";
         }
 
-        // ==========================================
-        // 4. PANDUAN "ISI PIRINGKU" KEMENKES (Plate)
-        // ==========================================
         $plateJudul = 'Panduan Isi Piringku & Penyeimbang Nutrisi';
         $seratPorsi = (float)$totalGizi['serat_g'];
         $persenSerat = round(($seratPorsi / 30.0) * 100);

@@ -1,12 +1,6 @@
--- =============================================================================
--- Skema Basis Data CekPiring
--- LOGICODIX 2026 Hackathon Competition (Subtema: Inclusive Health & Well-being)
--- =============================================================================
-
 CREATE DATABASE IF NOT EXISTS `cekpiring` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE `cekpiring`;
 
--- 1. Tabel Master Bahan & Nutrisi (Merujuk TKPI 2017 & USDA SR Legacy)
 CREATE TABLE IF NOT EXISTS `nutrition_facts` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `id_asli` INT NULL,
@@ -51,7 +45,6 @@ CREATE TABLE IF NOT EXISTS `nutrition_facts` (
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 2. Tabel Aturan Kesehatan & Batas Nutrisi (Health Rules WHO/Kemenkes)
 CREATE TABLE IF NOT EXISTS `health_rules` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `kondisi` VARCHAR(50) NOT NULL,
@@ -63,7 +56,6 @@ CREATE TABLE IF NOT EXISTS `health_rules` (
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 3. Tabel Sesi Analisis (Untuk Riwayat atau Cache Sementara)
 CREATE TABLE IF NOT EXISTS `analysis_sessions` (
     `id` VARCHAR(64) PRIMARY KEY,
     `nama_makanan` VARCHAR(150) NOT NULL,

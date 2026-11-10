@@ -27,7 +27,6 @@ class Router {
         $requestMethod = $_SERVER['REQUEST_METHOD'] ?? 'GET';
         $requestUri = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
 
-        // Remove base directory if inside subfolder
         $scriptDir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? ''));
         if ($scriptDir !== '/' && strpos($requestUri, $scriptDir) === 0) {
             $requestUri = substr($requestUri, strlen($scriptDir));
@@ -56,7 +55,6 @@ class Router {
             }
         }
 
-        // 404 Not Found
         http_response_code(404);
         view('galat', [
             'pesan_judul' => 'Halaman tidak ditemukan',

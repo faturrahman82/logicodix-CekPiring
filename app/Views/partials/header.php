@@ -1,9 +1,4 @@
 <?php
-/**
- * Header & Stepper Reusable Partial
- * @var int $step Langkah aktif (1-4)
- * @var string $step_title Nama langkah aktif
- */
 $step = $step ?? 1;
 $step_title = $step_title ?? 'Profil';
 ?>

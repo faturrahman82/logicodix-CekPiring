@@ -5,7 +5,6 @@ if (!function_exists('base_url')) {
         $scheme = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? 'https' : 'http';
         $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
         
-        // Detect script subfolder if running in subfolder like /logicodix-CekPiring/public
         $scriptName = $_SERVER['SCRIPT_NAME'] ?? '';
         $baseDir = rtrim(str_replace('\\', '/', dirname($scriptName)), '/');
         

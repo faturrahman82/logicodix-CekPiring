@@ -7,15 +7,11 @@ use App\Models\NutritionFact;
 class NutritionCalculator {
     public static function hitung(array $ingredients, float $porsi = 1.0): array {
         $nutrientKeys = [
-            // Makronutrisi
             'energi_kkal', 'protein_g', 'lemak_g', 'karbohidrat_g', 'serat_g',
             'gula_g', 'lemak_jenuh_g', 'lemak_tak_jenuh_g', 'kolesterol_mg', 'natrium_mg',
-            // Mineral & Elektrolit
             'kalium_mg', 'kalsium_mg', 'fosfor_mg', 'zat_besi_mg', 'magnesium_mg', 'seng_mg',
-            // Vitamin
             'vit_a_mcg', 'vit_b1_mg', 'vit_b2_mg', 'vit_b3_mg', 'vit_b6_mg',
             'vit_b12_mcg', 'vit_c_mg', 'vit_d_mcg', 'vit_e_mg',
-            // Indikator Klinis
             'purin_mg'
         ];
 
@@ -46,7 +42,6 @@ class NutritionCalculator {
             $fact = $item['gizi'] ?? NutritionFact::findByName($nama);
 
             if ($fact === null || ($fact['energi_kkal'] === null && $fact['protein_g'] === null)) {
-                // Bahan tanpa data sama sekali dicatat statusnya
                 $rincianBahan[] = [
                     'nama' => $nama,
                     'berat_g' => $berat,
@@ -76,7 +71,6 @@ class NutritionCalculator {
                 }
             }
 
-            // Catat kontributor risiko
             if (!empty($nutrisiBahan['natrium_mg']) && $nutrisiBahan['natrium_mg'] > 0) {
                 $kontributor['natrium'][$nama] = ($kontributor['natrium'][$nama] ?? 0) + $nutrisiBahan['natrium_mg'];
             }
@@ -114,7 +108,6 @@ class NutritionCalculator {
             ];
         }
 
-        // Hitung status ketersediaan setiap nutrisi
         $statusNutrisi = [];
         $validIngredientsCount = count(array_filter($rincianBahan, fn($b) => $b['ada_data']));
 
@@ -150,7 +143,6 @@ class NutritionCalculator {
             }
         }
 
-        // Konversi energi makronutrien: karbohidrat 4 kkal/g, protein 4 kkal/g, lemak 9 kkal/g
         $kkalKarbo = $totals['karbohidrat_g'] * 4;
         $kkalProtein = $totals['protein_g'] * 4;
         $kkalLemak = $totals['lemak_g'] * 9;
@@ -166,7 +158,6 @@ class NutritionCalculator {
         $penyumbangPurin = self::formatPenyumbang($kontributor['purin']);
         $penyumbangKolesterol = self::formatPenyumbang($kontributor['kolesterol']);
 
-        // Kategori Purin keseluruhan
         $purinVal = $totals['purin_mg'];
         $purinKategori = 'rendah';
         if ($purinVal >= 200) {
@@ -179,7 +170,6 @@ class NutritionCalculator {
             'sukses' => true,
             'porsi' => $porsi,
             'berat_total_g' => round($beratTotal),
-            // Makronutrisi Utama
             'energi_kkal' => round($totals['energi_kkal']),
             'protein_g' => round($totals['protein_g']),
             'lemak_g' => round($totals['lemak_g']),
@@ -190,14 +180,12 @@ class NutritionCalculator {
             'lemak_jenuh_g' => round($totals['lemak_jenuh_g'], 1),
             'lemak_tak_jenuh_g' => round($totals['lemak_tak_jenuh_g'], 1),
             'kolesterol_mg' => round($totals['kolesterol_mg']),
-            // Mineral
             'kalium_mg' => round($totals['kalium_mg']),
             'kalsium_mg' => round($totals['kalsium_mg']),
             'fosfor_mg' => round($totals['fosfor_mg']),
             'zat_besi_mg' => round($totals['zat_besi_mg'], 1),
             'magnesium_mg' => round($totals['magnesium_mg']),
             'seng_mg' => round($totals['seng_mg'], 1),
-            // Vitamin
             'vit_a_mcg' => round($totals['vit_a_mcg']),
             'vit_b1_mg' => round($totals['vit_b1_mg'], 2),
             'vit_b2_mg' => round($totals['vit_b2_mg'], 2),
@@ -207,10 +195,8 @@ class NutritionCalculator {
             'vit_c_mg' => round($totals['vit_c_mg'], 1),
             'vit_d_mcg' => round($totals['vit_d_mcg'], 1),
             'vit_e_mg' => round($totals['vit_e_mg'], 1),
-            // Purin
             'purin_mg' => round($totals['purin_mg']),
             'purin_kategori' => $purinKategori,
-            // Struktur Pendukung & Metadata
             'status_nutrisi' => $statusNutrisi,
             'rincian_bahan' => $rincianBahan,
             'makro_persen' => [
