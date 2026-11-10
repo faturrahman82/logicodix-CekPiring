@@ -1722,7 +1722,6 @@ input:checked + .slider:before {
     }
 }
 
-/* Aksi edit dan hapus bahan */
 .bahan-actions{display:flex;align-items:center;gap:10px;margin-left:auto;flex-shrink:0}
 .btn-edit-item,.btn-delete-item{border:0;background:transparent;cursor:pointer;font:inherit;font-weight:600;padding:8px 5px}
 .btn-edit-item{color:var(--primary);border-radius:8px;padding:6px 10px;transition:background-color .15s ease}
@@ -1743,7 +1742,6 @@ input:checked + .slider:before {
 .modal-edit-footer{display:flex;justify-content:flex-end;gap:10px;padding:16px 24px 22px}
 @media(max-width:600px){.modal-edit-card{border-radius:14px}.modal-edit-header,.modal-edit-body{padding-left:18px;padding-right:18px}.modal-edit-footer{padding:14px 18px 18px}.bahan-actions{gap:4px}}
 
-/* Modul Analisis Klinis & Panduan Piring Sehat */
 .card-analisis-klinis {
     border-top: 4px solid var(--primary);
 }
@@ -1861,7 +1859,6 @@ input:checked + .slider:before {
     box-shadow: 0 1px 3px rgba(0,0,0,0.03);
 }
 
-/* Modul Kelengkapan Data & Spektrum Mikronutrisi (Audit & Peningkatan) */
 .bahan-header-line {
     display: flex;
     align-items: center;
@@ -1916,7 +1913,6 @@ input:checked + .slider:before {
     border-radius: 6px;
 }
 
-/* Spektrum Nutrisi Lengkap di Halaman Hasil */
 .card-spektrum-nutrisi {
     border-top: 4px solid #0284c7;
     display: flex;
@@ -2001,7 +1997,6 @@ input:checked + .slider:before {
     line-height: 1.35;
 }
 
-/* Tabel Kontribusi Bahan */
 .table-bahan-wrapper {
     overflow-x: auto;
     border: 1px solid var(--border);
@@ -2064,4 +2059,179 @@ input:checked + .slider:before {
     color: #991b1b;
 }
 
+.ukuran-porsi {
+    margin-top: 16px;
+    padding: 14px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: var(--surface);
+}
+.ukuran-judul {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--foreground);
+    margin: 0 0 10px;
+}
+.chip-group {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.chip-ukuran {
+    flex: 1 1 0;
+    min-width: 80px;
+    min-height: 44px;
+    padding: 8px 12px;
+    border: 1.5px solid var(--inputborder);
+    border-radius: 999px;
+    background: var(--background);
+    color: var(--foreground);
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+.chip-ukuran:hover { border-color: var(--primary); }
+.chip-ukuran:focus-visible { outline: 3px solid var(--light-green); outline-offset: 2px; }
+.chip-ukuran.aktif {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: var(--onprimary);
+}
+.ukuran-alasan {
+    margin: 10px 0 0;
+    font-size: 13px;
+    color: var(--muted);
+}
+.bahan-gram {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--muted);
+    white-space: nowrap;
+}
+.total-porsi {
+    margin: 14px 0 4px;
+    font-size: 16px;
+    color: var(--foreground);
+    border-radius: 10px;
+    padding: 6px 10px;
+    background: var(--surface);
+}
+.total-porsi strong { font-size: 18px; }
+.total-porsi.kedip { animation: kedipTotal 0.6s ease; }
+@keyframes kedipTotal {
+    0% { background: var(--light-green); }
+    100% { background: var(--surface); }
+}
+@media (prefers-reduced-motion: reduce) {
+    .total-porsi.kedip { animation: none; }
+}
 
+.kondisi-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.chip-kondisi {
+    font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 999px;
+    background: var(--infobg); color: var(--infotext); border: 1px solid var(--infoborder);
+}
+.verdict-catatan {
+    margin-top: 8px; font-size: 13px; color: var(--medtext);
+    background: var(--medbg); border: 1px solid var(--medborder);
+    padding: 6px 10px; border-radius: 8px;
+}
+.btn-pakai-saran {
+    margin-top: 10px; width: 100%; min-height: 44px; padding: 8px 12px;
+    border-radius: 10px; border: 1.5px solid var(--primary);
+    background: var(--background); color: var(--primary); font: inherit; font-weight: 600; cursor: pointer;
+}
+.btn-pakai-saran:hover { background: var(--light-green); }
+.porsi-banding { margin-top: 8px; font-size: 13px; color: var(--muted); }
+.level-none, .badge-level.level-none {
+    background: var(--surface); color: var(--muted); border: 1px dashed var(--inputborder);
+}
+.fill-none { background: transparent; }
+.risiko-kosong .risiko-angka { color: var(--muted); font-style: italic; }
+.lipatan { margin-top: 12px; }
+.lipatan summary, .lipatan-rincian summary {
+    cursor: pointer; font-weight: 600; color: var(--primary); min-height: 32px;
+    display: flex; align-items: center;
+}
+.lipatan-rincian table { width: 100%; margin-top: 12px; }
+.lipatan-rincian .sumber-text { margin-top: 10px; font-size: 12px; color: var(--muted); }
+.makro-ringkas {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 12px;
+}
+.makro-ringkas > div {
+    background: var(--surface); border-radius: 10px; padding: 8px; text-align: center;
+}
+.makro-ringkas-angka { display: block; font-size: 18px; font-weight: 700; color: var(--foreground); }
+.makro-ringkas-label { display: block; font-size: 12px; color: var(--muted); }
+.card-saran { border: 1.5px solid var(--lowborder); background: var(--lowbg); }
+.saran-aksi { font-size: 17px; font-weight: 700; color: var(--foreground); margin: 6px 0 4px; }
+.saran-efek { font-size: 14px; color: var(--lowtext); font-weight: 600; margin: 0 0 12px; }
+.btn-saran { width: 100%; }
+.saran-diterapkan { font-size: 14px; color: var(--lowtext); font-weight: 600; margin: 4px 0; }
+.btn-link {
+    background: none; border: none; padding: 4px 0; color: var(--muted);
+    text-decoration: underline; font: inherit; cursor: pointer; min-height: 32px;
+}
+.sedang-hitung .card-verdict, .sedang-hitung .card-perhatian, .sedang-hitung .card-energi { opacity: 0.6; transition: opacity 0.15s; }
+.card-verdict.kedip { animation: kedipKartu 0.5s ease; }
+@keyframes kedipKartu { 0% { transform: scale(0.99); } 100% { transform: scale(1); } }
+@media (prefers-reduced-motion: reduce) { .card-verdict.kedip { animation: none; } }
+[hidden] { display: none !important; }
+
+.bahan-header-line { flex-wrap: wrap; justify-content: flex-start; row-gap: 4px; }
+.bahan-header-line .bahan-nama { flex: 1 1 100%; margin: 0; }
+
+.badge-nodata {
+    background: var(--surface); color: var(--muted); border: 1px solid var(--inputborder);
+    font-weight: 600;
+}
+.item-tanpa-data .bahan-warn-label { color: var(--muted); font-weight: 500; }
+
+.saran-list, .saran-diterapkan-list { list-style: none; margin: 0; padding: 0; }
+.saran-item {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding: 12px 0; border-top: 1px solid var(--lowborder);
+}
+.saran-item:first-child { border-top: none; padding-top: 4px; }
+.saran-teks { flex: 1; min-width: 0; }
+.saran-item .saran-aksi { font-size: 15px; margin: 0 0 2px; }
+.saran-item .saran-efek { margin: 0; font-size: 13px; }
+.btn-terapkan {
+    flex: none; min-height: 44px; padding: 8px 16px; border-radius: 10px; border: none;
+    background: var(--primary); color: var(--onprimary); font: inherit; font-weight: 600; cursor: pointer;
+}
+.btn-terapkan:hover { background: var(--primary-hover); }
+.btn-terapkan:focus-visible { outline: 3px solid var(--light-green); outline-offset: 2px; }
+.saran-diterapkan-list li { font-size: 14px; color: var(--lowtext); font-weight: 600; padding: 4px 0; }
+
+.card-perhatian .progress-fill, .card-energi .progress-fill {
+    transition: width 0.7s cubic-bezier(0.2, 0.8, 0.2, 1), background-color 0.4s ease;
+}
+#circle-energy-fill { transition: stroke-dashoffset 0.7s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.risiko-item.berubah-turun { animation: sorotTurun 1.4s ease; }
+.risiko-item.berubah-naik { animation: sorotNaik 1.4s ease; }
+@keyframes sorotTurun {
+    0% { box-shadow: 0 0 0 0 rgba(4, 120, 87, 0); background-color: var(--lowbg); }
+    100% { box-shadow: none; }
+}
+@keyframes sorotNaik {
+    0% { background-color: var(--medbg); }
+    100% { }
+}
+.toast-hasil {
+    position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%);
+    max-width: min(560px, calc(100vw - 32px)); z-index: 50;
+    background: var(--foreground); color: var(--background);
+    padding: 12px 18px; border-radius: 12px; font-size: 14px; font-weight: 600;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.25); text-align: center;
+}
+.toast-hasil.muncul { animation: toastMasuk 0.35s ease; }
+@keyframes toastMasuk {
+    from { opacity: 0; transform: translate(-50%, 12px); }
+    to { opacity: 1; transform: translate(-50%, 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+    .card-perhatian .progress-fill, #circle-energy-fill { transition: none; }
+    .risiko-item.berubah-turun, .risiko-item.berubah-naik, .toast-hasil.muncul { animation: none; }
+}

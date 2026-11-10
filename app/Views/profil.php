@@ -85,7 +85,6 @@
                             </div>
                         </div>
 
-                        <!-- Alert Inputan Data Fisik -->
                         <div id="alert-data-fisik" class="alert-box alert-sm <?= !empty($error) ? 'alert-error' : '' ?>" style="<?= !empty($error) ? 'display: flex;' : 'display: none;' ?>">
                             <div class="alert-icon" id="alert-data-fisik-icon"><?= !empty($error) ? '!' : '' ?></div>
                             <div class="alert-content">
@@ -157,8 +156,9 @@
                             <span class="unit">kkal per hari</span>
                         </div>
                         <p class="target-desc" id="target-deskripsi">
-                            Rumus Mifflin-St Jeor, aktivitas ringan, disesuaikan untuk <?= ucfirst($profile['tujuan'] ?? 'Cutting') ?>. Estimasi edukatif, bukan resep diet.
+                            <?= e($profile['rumus'] ?? 'Berdasarkan Angka Kecukupan Gizi (AKG) Kemenkes 2019 sesuai umur dan jenis kelamin.') ?> Estimasi edukatif, bukan resep diet.
                         </p>
+                        <script type="application/json" id="data-akg"><?= json_encode(\App\Services\TargetCalculator::tabelAkg(), JSON_HEX_TAG | JSON_HEX_AMP) ?></script>
                     </div>
                 </div>
             </main>

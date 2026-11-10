@@ -52,11 +52,41 @@
                         <div class="makanan-meta">
                             <h2 class="nama-makanan-title"><?= e($analysis['nama_makanan'] ?? 'Makanan') ?></h2>
                             <div class="badge-source">
-                                <span>Dikenali dari nama dan foto</span>
+                                <span><?= ($analysis['sumber_analisis'] ?? '') === 'ai' ? 'Dikenali AI dari foto dan nama' : 'Resep contoh, belum dari foto' ?></span>
                             </div>
                         </div>
 
-                        <p class="disclaimer-foto">Foto hanya membantu mengenali makanan, bukan mengukur gizi.</p>
+                        <?php
+                            $ukuranInfo = $ukuran_porsi ?? \App\Services\PortionSize::bawaan();
+                            $ukuranAktif = \App\Services\PortionSize::valid($ukuranInfo['ukuran'] ?? 'sedang');
+                        ?>
+                        <div class="ukuran-porsi" id="ukuran-porsi" data-ukuran="<?= e($ukuranAktif) ?>">
+                            <p class="ukuran-judul">Ukuran piring</p>
+                            <div class="chip-group" role="radiogroup" aria-label="Ukuran piring">
+                                <?php foreach (\App\Services\PortionSize::FAKTOR as $kode => $faktor): ?>
+                                    <button type="button"
+                                        class="chip-ukuran<?= $kode === $ukuranAktif ? ' aktif' : '' ?>"
+                                        role="radio"
+                                        aria-checked="<?= $kode === $ukuranAktif ? 'true' : 'false' ?>"
+                                        data-ukuran="<?= e($kode) ?>"
+                                        data-faktor="<?= e((string)$faktor) ?>">
+                                        <?= e(\App\Services\PortionSize::label($kode)) ?>
+                                    </button>
+                                <?php endforeach; ?>
+                            </div>
+                            <p class="ukuran-alasan" id="ukuran-alasan">
+                                <?php if (($ukuranInfo['sumber'] ?? '') === 'foto'): ?>
+                                    Ditebak AI dari foto<?= !empty($ukuranInfo['alasan']) ? ': ' . e(rtrim($ukuranInfo['alasan'], '. ')) : '' ?>.
+                                <?php elseif (($ukuranInfo['sumber'] ?? '') === 'pengguna'): ?>
+                                    Ukuran dipilih sendiri.
+                                <?php else: ?>
+                                    Ukuran standar, belum ditebak dari foto.
+                                <?php endif; ?>
+                            </p>
+                            <input type="hidden" name="ukuran_porsi" id="input-ukuran-porsi" value="<?= e($ukuranAktif) ?>">
+                        </div>
+
+                        <p class="disclaimer-foto">Ganti ukuran piring, gram semua bahan ikut berubah.</p>
                     </div>
                 </div>
 
@@ -67,14 +97,13 @@
                         <div class="list-bahan" id="list-bahan-container">
                             <?php foreach ($bahan as $index => $item): ?>
                                 <?php if ($item['ada_data_gizi']): ?>
-                                    <div class="item-bahan" data-id="<?= $index ?>">
+                                    <div class="item-bahan" data-id="<?= $index ?>" data-kkal100="<?= e((string)($item['kkal100'] ?? '')) ?>">
                                         <div class="badge-check">✓</div>
                                         <div class="bahan-info">
                                             <div class="bahan-header-line">
                                                 <p class="bahan-nama"><?= e($item['nama']) ?></p>
-                                                <?php if (!empty($item['kalori_estimasi'])): ?>
-                                                    <span class="badge-cal-inline">±<?= $item['kalori_estimasi'] ?> kkal</span>
-                                                <?php endif; ?>
+                                                <span class="bahan-gram js-gram"><?= round($item['berat_g']) ?> g</span>
+                                                <span class="badge-cal-inline js-kkal"><?= $item['kalori_estimasi'] !== null ? '±' . $item['kalori_estimasi'] . ' kkal' : '' ?></span>
                                             </div>
                                             <p class="bahan-ket"><?= e($item['keterangan']) ?></p>
                                             <div class="bahan-meta-tags">
@@ -95,14 +124,18 @@
                                         </div>
                                     </div>
                                 <?php else: ?>
-                                    <div class="item-bahan item-tanpa-data" data-id="<?= $index ?>">
+                                    <div class="item-bahan item-tanpa-data" data-id="<?= $index ?>" data-kkal100="">
                                         <div class="badge-warn">!</div>
                                         <div class="bahan-info">
-                                            <p class="bahan-nama"><?= e($item['nama']) ?></p>
+                                            <div class="bahan-header-line">
+                                                <p class="bahan-nama"><?= e($item['nama']) ?></p>
+                                                <span class="bahan-gram js-gram"><?= round($item['berat_g']) ?> g</span>
+                                                <span class="badge-cal-inline js-kkal"></span>
+                                            </div>
                                             <p class="bahan-ket"><?= e($item['keterangan']) ?></p>
                                             <div class="bahan-meta-tags">
-                                                <span class="badge-completeness completeness-perlu_verifikasi">Perlu Verifikasi</span>
-                                                <span class="bahan-warn-label">Data gizi belum tersedia, tidak ikut dihitung.</span>
+                                                <span class="badge-completeness badge-nodata">Belum ada data</span>
+                                                <span class="bahan-warn-label"><?= ((float)$item['berat_g'] <= 3) ? 'Takaran kecil, tidak memengaruhi hasil.' : 'Tidak ikut dihitung. Hapus atau ganti dengan bahan yang mirip.' ?></span>
                                             </div>
                                         </div>
                                         <input type="hidden" name="bahan_nama[]" value="<?= e($item['nama']) ?>">
@@ -131,16 +164,23 @@
                     </div>
 
                     <div class="card card-porsi">
-                        <h2 class="card-title">Porsi yang dimakan</h2>
-                        
+                        <h2 class="card-title">Berapa piring kamu makan?</h2>
+
                         <div class="pengatur-porsi">
-                            <button type="button" class="btn-porsi-step" id="btn-porsi-minus">−</button>
-                            <span class="porsi-angka" id="porsi-display"><?= str_replace('.', ',', (string)$porsi) ?></span>
-                            <span class="porsi-satuan">porsi</span>
-                            <button type="button" class="btn-porsi-step" id="btn-porsi-plus">+</button>
-                            <input type="hidden" name="porsi" id="input-porsi-val" value="<?= $porsi ?>">
+                            <button type="button" class="btn-porsi-step" id="btn-porsi-minus" aria-label="Kurangi porsi">−</button>
+                            <span class="porsi-angka" id="porsi-display"><?= e(\App\Services\PortionSize::formatPorsi((float)$porsi)) ?></span>
+                            <span class="porsi-satuan">piring</span>
+                            <button type="button" class="btn-porsi-step" id="btn-porsi-plus" aria-label="Tambah porsi">+</button>
+                            <input type="hidden" name="porsi" id="input-porsi-val" value="<?= e((string)$porsi) ?>">
                         </div>
-                        <p class="helper-text">Satu porsi sedang sekitar 350 g.</p>
+                        <p class="total-porsi" id="total-porsi" aria-live="polite">
+                            <?php
+                                $totalGramAwal = array_sum(array_map(fn($b) => (float)$b['berat_g'], $bahan)) * (float)$porsi;
+                                $totalKkalAwal = array_sum(array_map(fn($b) => (float)($b['kalori_estimasi'] ?? 0), $bahan)) * (float)$porsi;
+                            ?>
+                            Total <strong id="total-gram"><?= number_format($totalGramAwal, 0, ',', '.') ?></strong> g · <strong id="total-kkal"><?= number_format($totalKkalAwal, 0, ',', '.') ?></strong> kkal
+                        </p>
+                        <p class="helper-text" id="total-catatan"></p>
                     </div>
                 </div>
             </div>
