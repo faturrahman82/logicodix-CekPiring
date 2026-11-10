@@ -1,7 +1,5 @@
 <?php
 
-/** @var \Core\Router $router */
-
 $router->get('/', [\App\Controllers\ProfilController::class, 'index']);
 $router->get('/profil', [\App\Controllers\ProfilController::class, 'index']);
 $router->get('/profil/reset', [\App\Controllers\ProfilController::class, 'reset']);
@@ -22,4 +20,6 @@ $router->get('/hasil', [\App\Controllers\HasilController::class, 'index']);
 $router->get('/galat', [\App\Controllers\HasilController::class, 'galat']);
 
 $router->post('/api/recalculate', [\App\Controllers\ApiController::class, 'recalculate']);
+$router->post('/api/terapkan-saran', [\App\Controllers\ApiController::class, 'terapkanSaran']);
+$router->post('/api/batalkan-saran', [\App\Controllers\ApiController::class, 'batalkanSaran']);
 $router->get('/api/search-ingredient', [\App\Controllers\ApiController::class, 'searchIngredient']);
