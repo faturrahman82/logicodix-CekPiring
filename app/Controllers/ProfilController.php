@@ -31,9 +31,6 @@ class ProfilController extends Controller {
         ]);
     }
 
-    /**
-     * Reset semua data (Langkah 1 profil & Langkah 2 makanan) saat klik "Analisis makanan lain"
-     */
     public function reset(): void {
         session_set('user_profile', null);
         session_set('analysis_data', null);
@@ -42,13 +39,20 @@ class ProfilController extends Controller {
     }
 
     public function save(): void {
-        $tujuan = $_POST['tujuan'] ?? 'seimbang';
-        $gender = $_POST['gender'] ?? 'perempuan';
+        $tujuan = in_array($_POST['tujuan'] ?? '', ['cutting', 'bulking', 'seimbang'], true) ? $_POST['tujuan'] : 'seimbang';
+        $gender = ($_POST['gender'] ?? '') === 'laki-laki' ? 'laki-laki' : 'perempuan';
+
+        $kondisi = [
+            'diabetes' => !empty($_POST['diabetes']),
+            'hipertensi' => !empty($_POST['hipertensi']),
+            'kolesterol' => !empty($_POST['kolesterol']),
+            'asam_urat' => !empty($_POST['asam_urat']),
+        ];
+
         $umurRaw = trim($_POST['umur'] ?? '');
         $tinggiRaw = trim($_POST['tinggi'] ?? '');
         $beratRaw = trim($_POST['berat'] ?? '');
 
-        // Validasi: Data fisik wajib diisi angka saat klik Simpan Profil
         if ($umurRaw === '' || $tinggiRaw === '' || $beratRaw === '') {
             $missing = [];
             if ($umurRaw === '') $missing[] = 'umur';
@@ -86,7 +90,6 @@ class ProfilController extends Controller {
         $tinggi = (float)$tinggiRaw;
         $berat = (float)$beratRaw;
 
-        // Validasi batas wajar data fisik
         if ($umur < 1 || $umur > 120 || $tinggi < 50 || $tinggi > 250 || $berat < 20 || $berat > 300) {
             session_set('flash_error', 'Mohon masukkan angka data fisik yang valid dan wajar (Umur: 1–120 thn, Tinggi: 50–250 cm, Berat: 20–300 kg).');
             session_set('user_profile', array_merge(session_get('user_profile', []), [
@@ -111,6 +114,10 @@ class ProfilController extends Controller {
             'berat' => $berat,
             'kondisi' => $kondisi,
             'target_kalori' => $target['target_kalori'],
+            'kalori_dasar' => $target['kalori_dasar'],
+            'kalori_rumus' => $target['kalori_rumus'],
+            'protein_harian' => $target['protein_harian'],
+            'akg_kelompok' => $target['akg_kelompok'],
             'rumus' => $target['rumus'],
             'is_custom' => $target['is_custom']
         ];
