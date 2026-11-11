@@ -45,12 +45,19 @@
     box-sizing: border-box;
 }
 
+html {
+    overflow-x: hidden;
+    width: 100%;
+}
+
 body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     background-color: var(--background);
     color: var(--foreground);
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    width: 100%;
 }
 
 a {
@@ -1261,15 +1268,67 @@ input:checked + .slider:before {
     margin-top: 8px;
 }
 
+/* --- Layout Langkah 4: Hasil Estimasi Gizi --- */
+.main-content-hasil {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(360px, 0.85fr);
+    gap: 28px;
+    align-items: start;
+    width: 100%;
+    margin-bottom: 36px;
+    box-sizing: border-box;
+}
+
+.main-content-hasil .column-left {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    min-width: 0;
+    width: 100%;
+    flex: none;
+}
+
+.main-content-hasil .column-right {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    min-width: 0;
+    width: 100%;
+    flex-shrink: 1;
+}
+
+.page-title-hasil {
+    margin-bottom: 24px;
+}
+
+.page-title-hasil h1 {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--foreground);
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
+    line-height: 1.25;
+    word-break: break-word;
+}
+
+.page-title-hasil p {
+    font-size: 16px;
+    color: var(--muted);
+    line-height: 1.5;
+    margin: 0;
+}
+
 .card-verdict {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 40px;
-    padding: 28px 32px;
+    gap: 32px;
+    padding: 26px 30px;
     border-radius: 20px;
     margin-bottom: 28px;
     width: 100%;
+    box-sizing: border-box;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
 }
 
 .verdict-high {
@@ -1289,6 +1348,7 @@ input:checked + .slider:before {
 
 .verdict-content {
     flex: 1;
+    min-width: 0;
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -1298,9 +1358,10 @@ input:checked + .slider:before {
     display: inline-flex;
     padding: 4px 12px;
     border-radius: 999px;
-    font-size: 14px;
-    font-weight: 600;
+    font-size: 13.5px;
+    font-weight: 700;
     align-self: flex-start;
+    letter-spacing: 0.2px;
 }
 
 .badge-high {
@@ -1319,33 +1380,41 @@ input:checked + .slider:before {
 }
 
 .verdict-title {
-    font-size: 28px;
+    font-size: 26px;
     font-weight: 700;
     color: var(--foreground);
-    line-height: 1.2;
+    line-height: 1.25;
+    margin: 0;
 }
 
 .verdict-desc {
-    font-size: 16px;
+    font-size: 15px;
     color: var(--muted);
-    line-height: 1.5;
+    line-height: 1.55;
+    margin: 0;
 }
 
 .verdict-porsi-box {
     background-color: #ffffff;
-    border: 1px solid var(--border);
+    border: 1.5px solid var(--border);
     border-radius: 16px;
-    padding: 20px 24px;
+    padding: 18px 22px;
     display: flex;
     flex-direction: column;
     gap: 10px;
     flex-shrink: 0;
+    min-width: 250px;
+    max-width: 290px;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+    box-sizing: border-box;
 }
 
 .porsi-box-label {
-    font-size: 14px;
-    font-weight: 600;
+    font-size: 13px;
+    font-weight: 700;
     color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
 }
 
 .porsi-box-hint {
@@ -1355,20 +1424,50 @@ input:checked + .slider:before {
 
 .card-energi {
     display: flex;
+    flex-direction: column;
+    gap: 18px;
+    padding: 24px 26px;
+    border-radius: 20px;
+    background-color: var(--raised);
+    border: 1px solid var(--border);
+    box-sizing: border-box;
+}
+
+.energi-header {
+    display: flex;
     align-items: center;
-    gap: 24px;
-    padding: 28px;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.energi-header .card-title {
+    margin-bottom: 0;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--foreground);
+}
+
+.energi-body-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
 }
 
 .cincin-energi-wrap {
     position: relative;
-    width: 180px;
-    height: 180px;
+    width: 130px;
+    height: 130px;
     flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .cincin-svg {
+    width: 100%;
+    height: 100%;
     transform: rotate(-90deg);
+    display: block;
 }
 
 .circle-track {
@@ -1382,7 +1481,7 @@ input:checked + .slider:before {
     stroke: var(--primary);
     stroke-width: 14;
     stroke-linecap: round;
-    transition: stroke-dashoffset 0.5s ease;
+    transition: stroke-dashoffset 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .cincin-teks {
@@ -1393,45 +1492,107 @@ input:checked + .slider:before {
     text-align: center;
     display: flex;
     flex-direction: column;
+    line-height: 1;
 }
 
 .cincin-angka {
-    font-size: 44px;
-    font-weight: 700;
+    font-size: 32px;
+    font-weight: 800;
     color: var(--foreground);
-    line-height: 1.1;
+    letter-spacing: -0.5px;
 }
 
 .cincin-satuan {
-    font-size: 16px;
-    font-weight: 500;
+    font-size: 13px;
+    font-weight: 600;
     color: var(--muted);
+    margin-top: 3px;
 }
 
 .energi-info {
     flex: 1;
+    min-width: 0;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 6px;
 }
 
 .energi-label {
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
     color: var(--muted);
 }
 
 .energi-headline {
-    font-size: 24px;
+    font-size: 22px;
     font-weight: 700;
     color: var(--foreground);
     line-height: 1.25;
 }
 
 .energi-desc {
-    font-size: 16px;
+    font-size: 14.5px;
+    color: var(--foreground);
+    line-height: 1.45;
+    margin: 0;
+}
+
+.energi-desc strong {
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.energi-subdesc {
+    font-size: 13px;
     color: var(--muted);
     line-height: 1.4;
+    margin: 0;
+}
+
+.energi-subdesc strong {
+    color: var(--foreground);
+}
+
+.makro-ringkas {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    width: 100%;
+    margin-top: 4px;
+    box-sizing: border-box;
+}
+
+.makro-pill {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 10px 8px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.makro-pill:hover {
+    border-color: #cbd5e1;
+    background-color: #f1f5f9;
+}
+
+.makro-ringkas-angka {
+    display: block;
+    font-size: 15.5px;
+    font-weight: 700;
+    color: var(--foreground);
+    line-height: 1.2;
+}
+
+.makro-ringkas-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--muted);
+    line-height: 1.2;
 }
 
 .makro-list {
@@ -1632,28 +1793,60 @@ input:checked + .slider:before {
         padding: 24px 20px 48px 20px;
     }
 
-    .main-content, .layout-konfirmasi, .card-input-makanan {
+    .main-content:not(.main-content-hasil), .layout-konfirmasi, .card-input-makanan {
         flex-direction: column;
         gap: 24px;
     }
 
-    .column-right, .col-makanan, .input-foto-col {
+    .main-content-hasil {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .main-content-hasil .column-left,
+    .main-content-hasil .column-right {
+        display: contents;
+    }
+
+    .main-content-hasil .card-energi {
+        order: 1;
+    }
+
+    .main-content-hasil .card-perhatian {
+        order: 2;
+    }
+
+    .main-content-hasil .card-saran {
+        order: 3;
+    }
+
+    .main-content-hasil .lipatan-rincian {
+        order: 4;
+    }
+
+    .main-content-hasil .sumber-disclaimer {
+        order: 5;
+    }
+
+    .column-right:not(.main-content-hasil .column-right), .col-makanan, .input-foto-col {
         width: 100%;
     }
 
     .card-verdict {
         flex-direction: column;
-        align-items: flex-start;
-        gap: 20px;
+        align-items: stretch;
+        gap: 18px;
+        padding: 22px 20px;
     }
 
     .verdict-porsi-box {
         width: 100%;
+        max-width: none;
     }
 
-    .card-energi {
-        flex-direction: column;
-        text-align: center;
+    .pengatur-porsi {
+        justify-content: center;
     }
 
     .banner-konflik {
@@ -1672,17 +1865,249 @@ input:checked + .slider:before {
 }
 
 @media (max-width: 600px) {
+    .container {
+        padding: 16px 14px 48px 14px;
+    }
+
+    .header {
+        margin-bottom: 20px;
+        gap: 8px;
+    }
+
+    .wordmark {
+        gap: 6px;
+    }
+
+    .nama-produk {
+        font-size: 18px;
+    }
+
+    .stepper {
+        gap: 4px;
+        align-items: flex-end;
+    }
+
+    .teks-langkah {
+        font-size: 12px;
+        white-space: nowrap;
+    }
+
+    .step-bars {
+        gap: 4px;
+    }
+
+    .bar {
+        width: 28px;
+        height: 5px;
+        border-radius: 3px;
+    }
+
     .page-title h1 {
-        font-size: 28px;
+        font-size: 26px;
     }
 
     .page-title p {
-        font-size: 15px;
+        font-size: 14px;
+    }
+
+    .page-title-hasil {
+        margin-bottom: 18px;
+    }
+
+    .page-title-hasil h1 {
+        font-size: 24px;
+        margin-bottom: 6px;
+    }
+
+    .page-title-hasil p {
+        font-size: 13.5px;
     }
 
     .card {
-        padding: 20px;
+        padding: 18px 16px;
         border-radius: 16px;
+    }
+
+    .card-verdict {
+        padding: 18px 16px;
+        border-radius: 16px;
+        gap: 14px;
+    }
+
+    .verdict-title {
+        font-size: 20px;
+        line-height: 1.3;
+    }
+
+    .verdict-desc {
+        font-size: 14px;
+        line-height: 1.45;
+    }
+
+    .verdict-porsi-box {
+        padding: 14px 16px;
+        border-radius: 14px;
+        gap: 8px;
+    }
+
+    .porsi-box-label {
+        font-size: 12px;
+    }
+
+    .btn-porsi-step {
+        width: 44px;
+        height: 44px;
+        font-size: 20px;
+        border-radius: 10px;
+    }
+
+    .porsi-angka {
+        font-size: 26px;
+    }
+
+    .porsi-satuan {
+        font-size: 14px;
+    }
+
+    .card-energi {
+        padding: 18px 16px;
+        border-radius: 16px;
+        gap: 14px;
+    }
+
+    .energi-header .card-title {
+        font-size: 16.5px;
+    }
+
+    .energi-body-row {
+        gap: 16px;
+    }
+
+    .cincin-energi-wrap {
+        width: 110px;
+        height: 110px;
+    }
+
+    .cincin-angka {
+        font-size: 26px;
+    }
+
+    .cincin-satuan {
+        font-size: 11.5px;
+    }
+
+    .energi-desc {
+        font-size: 13.5px;
+        line-height: 1.4;
+    }
+
+    .energi-subdesc {
+        font-size: 12px;
+        line-height: 1.35;
+    }
+
+    .makro-ringkas {
+        gap: 8px;
+        margin-top: 4px;
+    }
+
+    .makro-pill {
+        padding: 8px 6px;
+        border-radius: 10px;
+    }
+
+    .makro-ringkas-angka {
+        font-size: 15px;
+    }
+
+    .makro-ringkas-label {
+        font-size: 11px;
+    }
+
+    .card-perhatian {
+        padding: 18px 16px;
+        border-radius: 16px;
+    }
+
+    .card-perhatian .card-title {
+        font-size: 16.5px;
+        margin-bottom: 12px;
+    }
+
+    .risiko-list {
+        gap: 12px;
+    }
+
+    .risiko-item {
+        padding: 14px;
+        border-radius: 12px;
+        gap: 6px;
+    }
+
+    .risiko-label {
+        font-size: 15px;
+    }
+
+    .badge-level {
+        font-size: 11px;
+        padding: 3px 8px;
+    }
+
+    .risiko-angka {
+        font-size: 22px;
+    }
+
+    .risiko-pct {
+        font-size: 13px;
+    }
+
+    .penyumbang-text {
+        font-size: 12px;
+    }
+
+    .card-saran {
+        padding: 18px 16px;
+        border-radius: 16px;
+    }
+
+    .card-saran .card-title {
+        font-size: 16.5px;
+        margin-bottom: 12px;
+    }
+
+    .saran-item {
+        padding: 10px 0;
+        gap: 12px;
+    }
+
+    .saran-aksi {
+        font-size: 14px;
+    }
+
+    .saran-efek {
+        font-size: 12.5px;
+    }
+
+    .btn-terapkan {
+        padding: 7px 14px;
+        font-size: 13px;
+        min-height: 38px;
+    }
+
+    .lipatan-rincian {
+        padding: 14px 16px;
+        border-radius: 16px;
+    }
+
+    .lipatan-rincian summary {
+        font-size: 14px;
+        min-height: 32px;
+    }
+
+    .table-bahan-gizi th,
+    .table-bahan-gizi td {
+        padding: 8px 10px;
+        font-size: 12.5px;
     }
 
     .form-row {
@@ -1702,6 +2127,19 @@ input:checked + .slider:before {
         justify-content: center;
     }
 
+    .bottom-actions-hasil {
+        width: 100%;
+        margin-top: 24px;
+        gap: 10px;
+    }
+
+    .bottom-actions-hasil .btn-outline,
+    .bottom-actions-hasil .btn-primary {
+        min-height: 46px;
+        font-size: 15px;
+        border-radius: 12px;
+    }
+
     .submit-wrap {
         flex-direction: column;
         width: 100%;
@@ -1719,6 +2157,96 @@ input:checked + .slider:before {
 
     .tambah-bahan-row button {
         width: 100%;
+    }
+}
+
+@media (max-width: 440px) {
+    .energi-body-row {
+        gap: 12px;
+    }
+
+    .cincin-energi-wrap {
+        width: 95px;
+        height: 95px;
+    }
+
+    .cincin-angka {
+        font-size: 22px;
+    }
+
+    .cincin-satuan {
+        font-size: 11px;
+    }
+
+    .makro-ringkas {
+        gap: 6px;
+    }
+
+    .makro-pill {
+        padding: 8px 4px;
+    }
+
+    .makro-ringkas-angka {
+        font-size: 14px;
+    }
+
+    .makro-ringkas-label {
+        font-size: 10.5px;
+    }
+
+    .saran-item {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+
+    .btn-terapkan {
+        width: 100%;
+        text-align: center;
+        min-height: 38px;
+    }
+}
+
+@media (max-width: 360px) {
+    .container {
+        padding: 12px 10px 40px 10px;
+    }
+
+    .nama-produk {
+        font-size: 16px;
+    }
+
+    .teks-langkah {
+        font-size: 11px;
+    }
+
+    .bar {
+        width: 20px;
+    }
+
+    .step-bars {
+        gap: 3px;
+    }
+
+    .card-verdict, .card-energi, .card-perhatian, .card-saran, .lipatan-rincian {
+        padding: 14px 12px;
+    }
+
+    .verdict-title {
+        font-size: 18px;
+    }
+
+    .cincin-energi-wrap {
+        width: 85px;
+        height: 85px;
+    }
+
+    .cincin-angka {
+        font-size: 20px;
+    }
+
+    .cincin-satuan {
+        font-size: 10px;
     }
 }
 
@@ -2151,24 +2679,58 @@ input:checked + .slider:before {
 .risiko-kosong .risiko-angka { color: var(--muted); font-style: italic; }
 .lipatan { margin-top: 12px; }
 .lipatan summary, .lipatan-rincian summary {
-    cursor: pointer; font-weight: 600; color: var(--primary); min-height: 32px;
-    display: flex; align-items: center;
+    cursor: pointer; font-weight: 600; color: var(--primary); min-height: 36px;
+    display: flex; align-items: center; gap: 8px; user-select: none;
 }
-.lipatan-rincian table { width: 100%; margin-top: 12px; }
-.lipatan-rincian .sumber-text { margin-top: 10px; font-size: 12px; color: var(--muted); }
-.makro-ringkas {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 12px;
+.table-bahan-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    margin-top: 12px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    -webkit-overflow-scrolling: touch;
 }
-.makro-ringkas > div {
-    background: var(--surface); border-radius: 10px; padding: 8px; text-align: center;
+.table-bahan-gizi {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+    min-width: 280px;
 }
-.makro-ringkas-angka { display: block; font-size: 18px; font-weight: 700; color: var(--foreground); }
-.makro-ringkas-label { display: block; font-size: 12px; color: var(--muted); }
-.card-saran { border: 1.5px solid var(--lowborder); background: var(--lowbg); }
-.saran-aksi { font-size: 17px; font-weight: 700; color: var(--foreground); margin: 6px 0 4px; }
-.saran-efek { font-size: 14px; color: var(--lowtext); font-weight: 600; margin: 0 0 12px; }
+.table-bahan-gizi th {
+    background: #f8fafc;
+    padding: 10px 14px;
+    color: var(--muted);
+    font-weight: 600;
+    font-size: 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+}
+.table-bahan-gizi td {
+    padding: 10px 14px;
+    border-bottom: 1px solid #f1f5f9;
+    color: var(--foreground);
+    font-size: 13px;
+}
+.table-bahan-gizi tr:last-child td {
+    border-bottom: none;
+}
+.lipatan-rincian .sumber-text { margin-top: 12px; font-size: 12px; color: var(--muted); line-height: 1.5; }
+.card-saran {
+    border: 1.5px solid var(--lowborder);
+    background: var(--lowbg);
+    border-radius: 20px;
+    padding: 24px 26px;
+    box-sizing: border-box;
+}
+.card-saran .card-title {
+    margin-bottom: 14px;
+    color: var(--foreground);
+    font-size: 18px;
+}
+.saran-aksi { font-size: 15px; font-weight: 700; color: var(--foreground); margin: 0 0 3px; line-height: 1.35; }
+.saran-efek { font-size: 13px; color: var(--lowtext); font-weight: 600; margin: 0; line-height: 1.35; }
 .btn-saran { width: 100%; }
-.saran-diterapkan { font-size: 14px; color: var(--lowtext); font-weight: 600; margin: 4px 0; }
+.saran-diterapkan { font-size: 13.5px; color: var(--lowtext); font-weight: 600; margin: 4px 0; }
 .btn-link {
     background: none; border: none; padding: 4px 0; color: var(--muted);
     text-decoration: underline; font: inherit; cursor: pointer; min-height: 32px;
@@ -2190,20 +2752,22 @@ input:checked + .slider:before {
 
 .saran-list, .saran-diterapkan-list { list-style: none; margin: 0; padding: 0; }
 .saran-item {
-    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    display: flex; align-items: center; justify-content: space-between; gap: 14px;
     padding: 12px 0; border-top: 1px solid var(--lowborder);
 }
-.saran-item:first-child { border-top: none; padding-top: 4px; }
+.saran-item:first-child { border-top: none; padding-top: 2px; }
 .saran-teks { flex: 1; min-width: 0; }
-.saran-item .saran-aksi { font-size: 15px; margin: 0 0 2px; }
+.saran-item .saran-aksi { font-size: 15px; margin: 0 0 3px; }
 .saran-item .saran-efek { margin: 0; font-size: 13px; }
 .btn-terapkan {
-    flex: none; min-height: 44px; padding: 8px 16px; border-radius: 10px; border: none;
-    background: var(--primary); color: var(--onprimary); font: inherit; font-weight: 600; cursor: pointer;
+    flex-shrink: 0; min-height: 40px; padding: 8px 16px; border-radius: 10px; border: none;
+    background: var(--primary); color: var(--onprimary); font: inherit; font-size: 13.5px; font-weight: 600; cursor: pointer;
+    transition: background-color 0.15s ease, transform 0.1s ease;
 }
 .btn-terapkan:hover { background: var(--primary-hover); }
+.btn-terapkan:active { transform: scale(0.96); }
 .btn-terapkan:focus-visible { outline: 3px solid var(--light-green); outline-offset: 2px; }
-.saran-diterapkan-list li { font-size: 14px; color: var(--lowtext); font-weight: 600; padding: 4px 0; }
+.saran-diterapkan-list li { font-size: 13.5px; color: var(--lowtext); font-weight: 600; padding: 4px 0; }
 
 .card-perhatian .progress-fill, .card-energi .progress-fill {
     transition: width 0.7s cubic-bezier(0.2, 0.8, 0.2, 1), background-color 0.4s ease;

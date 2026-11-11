@@ -56,7 +56,7 @@
     <div class="container">
         <?php view('partials/header', ['step' => 4, 'step_title' => 'Hasil']); ?>
 
-        <div class="page-title">
+        <div class="page-title page-title-hasil">
             <h1 id="hasil-title"><?= e($analysis['nama_makanan']) ?></h1>
             <p id="hasil-subtitle">
                 Piring <?= e(mb_strtolower($ukuranLabel)) ?> (<?= e($sumberUkuran) ?>) ·
@@ -101,7 +101,7 @@
             </div>
         </div>
 
-        <main class="main-content">
+        <main class="main-content main-content-hasil">
             <div class="column-left">
                 <div class="card card-perhatian">
                     <h3 class="card-title"><?= !empty($risikoFokus) ? 'Untuk kondisimu' : 'Zat yang dipantau' ?></h3>
@@ -118,33 +118,50 @@
                     <?php endif; ?>
                     <p class="risiko-panduan">Rendah &lt;20%, Sedang 20–33%, Tinggi &gt;33% batas harian.</p>
                 </div>
-
-                <div class="card card-energi">
-                    <div class="cincin-energi-wrap">
-                        <svg class="cincin-svg" width="160" height="160" viewBox="0 0 180 180" aria-hidden="true">
-                            <circle cx="90" cy="90" r="76" class="circle-track" />
-                            <circle cx="90" cy="90" r="76" class="circle-fill" id="circle-energy-fill"
-                                    style="stroke-dasharray: <?= $circumference ?>; stroke-dashoffset: <?= $dashoffset ?>;" />
-                        </svg>
-                        <div class="cincin-teks">
-                            <span class="cincin-angka" id="energi-angka" data-nilai="<?= (int)$total_gizi['energi_kkal'] ?>"><?= e($fmt($total_gizi['energi_kkal'])) ?></span>
-                            <span class="cincin-satuan">kkal</span>
-                        </div>
-                    </div>
-                    <div class="energi-info">
-                        <p class="energi-desc">
-                            <strong id="persen-kalori-val"><?= (int)$persen_kalori ?>%</strong> target harian <?= e($fmt($target_kalori)) ?> kkal
-                        </p>
-                        <div class="makro-ringkas">
-                            <div><span class="makro-ringkas-angka" id="karbo-val"><?= e($fmt($total_gizi['karbohidrat_g'])) ?> g</span><span class="makro-ringkas-label">Karbo</span></div>
-                            <div><span class="makro-ringkas-angka" id="protein-val"><?= e($fmt($total_gizi['protein_g'])) ?> g</span><span class="makro-ringkas-label">Protein</span></div>
-                            <div><span class="makro-ringkas-angka" id="lemak-val"><?= e($fmt($total_gizi['lemak_g'])) ?> g</span><span class="makro-ringkas-label">Lemak</span></div>
-                        </div>
-                    </div>
-                </div>
             </div>
 
             <div class="column-right">
+                <div class="card card-energi">
+                    <div class="energi-header">
+                        <h3 class="card-title">Kalori &amp; Makronutrien</h3>
+                    </div>
+                    <div class="energi-body-row">
+                        <div class="cincin-energi-wrap">
+                            <svg class="cincin-svg" width="140" height="140" viewBox="0 0 180 180" aria-hidden="true">
+                                <circle cx="90" cy="90" r="76" class="circle-track" />
+                                <circle cx="90" cy="90" r="76" class="circle-fill" id="circle-energy-fill"
+                                        style="stroke-dasharray: <?= $circumference ?>; stroke-dashoffset: <?= $dashoffset ?>;" />
+                            </svg>
+                            <div class="cincin-teks">
+                                <span class="cincin-angka" id="energi-angka" data-nilai="<?= (int)$total_gizi['energi_kkal'] ?>"><?= e($fmt($total_gizi['energi_kkal'])) ?></span>
+                                <span class="cincin-satuan">kkal</span>
+                            </div>
+                        </div>
+                        <div class="energi-info">
+                            <p class="energi-desc">
+                                <strong id="persen-kalori-val"><?= (int)$persen_kalori ?>%</strong> dari target harian <?= e($fmt($target_kalori)) ?> kkal
+                            </p>
+                            <p class="energi-subdesc">
+                                Sisa kebutuhan hari ini: <strong><?= e($fmt($sisa_kalori)) ?> kkal</strong>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="makro-ringkas">
+                        <div class="makro-pill">
+                            <span class="makro-ringkas-angka" id="karbo-val"><?= e($fmt($total_gizi['karbohidrat_g'])) ?> g</span>
+                            <span class="makro-ringkas-label">Karbo</span>
+                        </div>
+                        <div class="makro-pill">
+                            <span class="makro-ringkas-angka" id="protein-val"><?= e($fmt($total_gizi['protein_g'])) ?> g</span>
+                            <span class="makro-ringkas-label">Protein</span>
+                        </div>
+                        <div class="makro-pill">
+                            <span class="makro-ringkas-angka" id="lemak-val"><?= e($fmt($total_gizi['lemak_g'])) ?> g</span>
+                            <span class="makro-ringkas-label">Lemak</span>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="card card-saran" id="card-saran"<?= (empty($saran_list) && empty($saran_diterapkan)) ? ' hidden' : '' ?>>
                     <h3 class="card-title">Perbaiki piringmu</h3>
                     <ul class="saran-list" id="saran-list"<?= empty($saran_list) ? ' hidden' : '' ?>>
@@ -170,20 +187,22 @@
 
                 <details class="card lipatan-rincian">
                     <summary>Lihat rincian bahan dan sumber</summary>
-                    <table class="table-bahan-gizi">
-                        <thead>
-                            <tr><th>Bahan</th><th>Gram</th><th>Kalori</th></tr>
-                        </thead>
-                        <tbody id="rincian-body">
-                            <?php foreach ($rincian as $rb): ?>
-                                <tr>
-                                    <td><?= e($rb['nama']) ?></td>
-                                    <td><?= e($fmt($rb['gram'])) ?> g</td>
-                                    <td><?= $rb['ada_data'] ? e($fmt($rb['kkal'])) . ' kkal' : 'data belum ada' ?></td>
-                                </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
+                    <div class="table-bahan-wrapper">
+                        <table class="table-bahan-gizi">
+                            <thead>
+                                <tr><th>Bahan</th><th>Gram</th><th>Kalori</th></tr>
+                            </thead>
+                            <tbody id="rincian-body">
+                                <?php foreach ($rincian as $rb): ?>
+                                    <tr>
+                                        <td><?= e($rb['nama']) ?></td>
+                                        <td><?= e($fmt($rb['gram'])) ?> g</td>
+                                        <td><?= $rb['ada_data'] ? e($fmt($rb['kkal'])) . ' kkal' : 'data belum ada' ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
                     <p class="sumber-text">Data gizi: TKPI 2017 Kemenkes RI, USDA FoodData Central, Kaneko dkk. 2014 (purin), Open Food Facts (kecap manis). Target kalori: AKG Permenkes 28/2019. Batas harian umum: natrium 2.000 mg dan gula 50 g (Permenkes 30/2013), lemak jenuh di bawah 10% energi (WHO). Batas untuk kondisi: natrium 1.500 mg (AHA, hipertensi), gula 5% energi (diabetes), lemak jenuh di bawah 7% energi (PERKI 2022), purin 400 mg (pedoman gout).</p>
                 </details>
 
@@ -197,7 +216,7 @@
             'risiko' => array_map(fn($r) => ['nama' => $r['nama'], 'persen' => $r['persen'], 'tersedia' => !empty($r['dinilai'])], $risiko),
         ], JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE) ?></script>
 
-        <div class="bottom-actions flex-end">
+        <div class="bottom-actions bottom-actions-hasil flex-end">
             <a href="<?= base_url('konfirmasi') ?>" class="btn-outline">Koreksi bahan</a>
             <a href="<?= base_url('profil/reset') ?>" class="btn-primary">Analisis makanan lain</a>
         </div>
