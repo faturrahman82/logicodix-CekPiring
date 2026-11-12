@@ -8,22 +8,59 @@ Pengguna memotret makanan dan mengetik namanya. Aplikasi menebak bahan di piring
 
 > Estimasi edukatif. CekPiring bukan alat diagnosis dan bukan pengganti saran dokter atau ahli gizi.
 
+## Informasi tim dan proyek
+
+| | |
+|---|---|
+| **Lomba** | LOGICODIX 2026 |
+| **Subtema** | Inclusive Health & Well-being |
+| **Kategori** | **Web** |
+| **Nama aplikasi** | **CekPiring** |
+| **Nama tim** | **apaaa ya linn** |
+| **Institusi** | Universitas Negeri Maulana Malik Ibrahim Malang |
+| **Repositori** | https://github.com/faturrahman82/logicodix-CekPiring |
+
+### Anggota tim
+
+| Nama | NIM | Program studi | Akun GitHub | Peran |
+|---|---|---|---|---|
+| **Maulvi Ilmullah Faturrahman Al Afghani** (ketua) | 240605110114 | S1 Teknik Informatika | `faturrahman82` | Project manager; data gizi, logika perhitungan, integrasi AI, dokumentasi |
+| **Ari Pratama** | 250605110199 | S1 Teknik Informatika | `aripratama1234ari-droid` | Perbaikan galat halaman cek bahan dan hasil |
+| **Ulinnuha Mahbubi** | 250605110178 | S1 Teknik Informatika | `B1bub0b` | Kerangka aplikasi PHP MVC dan integrasi awal Gemini |
+| **Devita Aulia Putri** | 250605110013 | S1 Teknik Informatika | `putxy1` | Tampilan antarmuka, loader, dan perbaikan responsif |
+
+Rincian kontribusi per orang ada di [Kontribusi tim](#kontribusi-tim).
+
+## Masalah, solusi, dan target pengguna
+
+**Masalah yang diangkat.** Orang dengan diabetes, hipertensi, kolesterol tinggi, atau asam urat harus memilih makanan setiap hari, tetapi sulit menebak isi masakan, terutama kuah, santan, bumbu, garam, dan gula. Aplikasi hitung kalori umum berhenti di angka kalori dan tidak menilai apakah makanan itu aman untuk kondisi tertentu. Dalam survei kebutuhan pengguna tim terhadap 32 responden, 72% sulit menebak komposisi kuah dan bumbu, dan 97% menginginkan fitur yang memperingatkan risiko.
+
+**Solusi.** CekPiring menjawab "apakah piring ini aman untukku dan apa yang bisa kuubah?" dalam empat langkah: profil kesehatan, foto dan nama makanan, konfirmasi bahan, lalu hasil. AI mengenali makanan dari foto, sedangkan semua angka gizi dan penilaian risiko dihitung kode dari data resmi sehingga bisa ditelusuri. Aplikasi juga menyarankan porsi dan perubahan bahan beserta efeknya pada angka.
+
+**Target pengguna.**
+- Penderita atau orang yang berisiko diabetes, hipertensi, kolesterol tinggi, dan asam urat.
+- Orang yang punya target kebugaran (cutting, bulking, atau menjaga berat) dan ingin tahu isi piringnya.
+- Keluarga atau pendamping yang menyiapkan makanan untuk orang dengan kondisi di atas.
+
 ## Daftar isi
 
-1. [Fitur utama](#fitur-utama)
-2. [Alur penggunaan](#alur-penggunaan)
-3. [Langkah 1: Profil](#langkah-1-profil)
-4. [Langkah 2: Makanan](#langkah-2-makanan)
-5. [Langkah 3: Cek bahan](#langkah-3-cek-bahan)
-6. [Langkah 4: Hasil](#langkah-4-hasil)
-7. [Cara perhitungan](#cara-perhitungan)
-8. [Peran AI dan kode](#peran-ai-dan-kode)
-9. [Data dan sumber](#data-dan-sumber)
-10. [Teknologi dan struktur proyek](#teknologi-dan-struktur-proyek)
-11. [Cara menjalankan](#cara-menjalankan)
-12. [Keamanan dan privasi](#keamanan-dan-privasi)
-13. [Keterbatasan yang diketahui](#keterbatasan-yang-diketahui)
-14. [Kontribusi tim](#kontribusi-tim)
+1. [Informasi tim dan proyek](#informasi-tim-dan-proyek)
+2. [Masalah, solusi, dan target pengguna](#masalah-solusi-dan-target-pengguna)
+3. [Fitur utama](#fitur-utama)
+4. [Alur penggunaan](#alur-penggunaan)
+5. [Langkah 1: Profil](#langkah-1-profil)
+6. [Langkah 2: Makanan](#langkah-2-makanan)
+7. [Langkah 3: Cek bahan](#langkah-3-cek-bahan)
+8. [Langkah 4: Hasil](#langkah-4-hasil)
+9. [Cara perhitungan](#cara-perhitungan)
+10. [Peran AI dan kode](#peran-ai-dan-kode)
+11. [Data dan sumber](#data-dan-sumber)
+12. [Teknologi, arsitektur, dan struktur proyek](#teknologi-yang-digunakan)
+13. [Cara menjalankan](#cara-menjalankan)
+14. [Keamanan dan privasi](#keamanan-dan-privasi)
+15. [Keterbatasan yang diketahui](#keterbatasan-yang-diketahui)
+16. [Kontribusi tim](#kontribusi-tim)
+17. [Sumber dan atribusi](#sumber-dan-atribusi)
 
 ## Fitur utama
 
@@ -211,6 +248,16 @@ Setiap aksi dihitung ulang dengan kalkulator dan batas yang sama, lalu dipilih y
 
 ## Peran AI dan kode
 
+### Layanan AI yang dipakai
+
+| Layanan | Model | Bagian produk yang memanfaatkannya |
+|---|---|---|
+| **Google Gemini API** (`generativelanguage.googleapis.com`, Google AI Studio) | `gemini-3-flash-preview` (bawaan, dapat diganti lewat `GEMINI_MODEL`). Model cadangan bila gagal: `gemini-3.1-flash-lite` | **Langkah 2 (Makanan)**: mengenali hidangan dari foto dan nama, menebak bahan beserta gramnya, menebak ukuran piring, dan mendeteksi nama yang tidak cocok dengan foto. Dipanggil dari `app/Services/AiClient.php` melalui `/api/cek/2` |
+
+AI hanya dipakai di bagian itu. Tidak ada AI lain di aplikasi.
+
+### Pembagian tugas
+
 | Tugas | Siapa |
 |---|---|
 | Mengenali hidangan dari foto dan nama | **AI (Google Gemini)** |
@@ -224,7 +271,7 @@ Setiap aksi dihitung ulang dengan kalkulator dan batas yang sama, lalu dipilih y
 AI **tidak diminta menyebut angka gizi**, dan angka gizi dari AI bila ada akan diabaikan. Jadi setiap angka di hasil bisa ditelusuri ke sumber data dan hasilnya sama untuk input yang sama.
 
 **Detail penggunaan Gemini**
-- Model dibaca dari `GEMINI_MODEL` (bawaan `gemini-3-flash-preview`), dengan model cadangan bila gagal.
+- Model dibaca dari `GEMINI_MODEL`. Urutan percobaan: model di `GEMINI_MODEL`, lalu `gemini-3-flash-preview`, lalu `gemini-3.1-flash-lite`.
 - Yang dikirim ke Gemini hanya **foto dan nama makanan**. Profil dan kondisi kesehatan pengguna tidak dikirim.
 - Jawaban diminta berupa JSON dan divalidasi: nama bahan wajib ada, berat 1 sampai 1.000 g, maksimal 15 bahan, ukuran piring salah satu dari kecil, sedang, atau besar.
 - Kunci API dikirim lewat header (bukan di URL), dan verifikasi SSL aktif.
@@ -259,7 +306,76 @@ Berkas data utama:
 
 ## Teknologi dan struktur proyek
 
-**Teknologi**: HTML5, CSS3, dan JavaScript (tanpa kerangka kerja) di sisi tampilan; PHP native dengan pola MVC di sisi server; data dari berkas CSV. Tabel MySQL (`database/schema.sql`) disiapkan untuk pengembangan berikutnya, dan bila terisi dipakai lebih dulu dengan CSV sebagai cadangan. Sesi pengguna memakai sesi PHP (`storage/sessions`).
+### Teknologi yang digunakan
+
+| Kategori | Yang dipakai |
+|---|---|
+| **Bahasa dan tampilan** | HTML5, CSS3, JavaScript modern (ES2020, termasuk `async`/`await` dan `fetch`) |
+| **Sisi server** | PHP 8.1 atau lebih baru, native, pola MVC buatan tim (`core/Router.php`, `core/Controller.php`) |
+| **Framework** | **Tidak ada** (PHP native dan JavaScript murni) |
+| **Library dan templat** | **Tidak ada** (tanpa `composer` dan `npm`) |
+| **Database** | **Data gizi dibaca dari berkas CSV** (`data/*.csv`). **MySQL** disiapkan (`database/schema.sql`, akses PDO di `core/Database.php`): bila terhubung dan tabel `nutrition_facts` terisi dipakai lebih dulu, selain itu CSV dipakai. Untuk saat ini MySQL tidak wajib |
+| **Penyimpanan sesi** | Sesi PHP di `storage/sessions` (tanpa akun dan tanpa riwayat) |
+| **API pihak ketiga** | Google Gemini API (pengenalan makanan dari foto) |
+| **Layanan pihak ketiga** | Google AI Studio (kunci dan kuota Gemini), Google Fonts (huruf Inter) |
+| **Ekstensi PHP** | `curl` (panggilan Gemini), `mbstring`, `fileinfo` (validasi foto), `pdo_mysql` (hanya bila MySQL dipakai) |
+| **Peladen** | Server bawaan PHP (`php -S`), atau Apache lewat Laragon dengan `.htaccess` |
+
+Kebutuhan teknologi pihak ketiga dan lisensinya tercantum di [Sumber dan atribusi](#sumber-dan-atribusi).
+
+### Diagram arsitektur sistem
+
+```mermaid
+flowchart LR
+    U[Pengguna<br/>peramban web] -->|HTTP| FC[public/index.php<br/>Router]
+    FC --> C[Controller<br/>Profil, Makanan, Konfirmasi, Hasil, Api]
+    C --> S[Services<br/>kalkulator gizi, penilai risiko,<br/>porsi, saran perbaikan]
+    C --> V[Views PHP<br/>HTML, CSS, JavaScript]
+    S --> M[Model<br/>NutritionFact, HealthRule]
+    M --> D[(Data gizi<br/>CSV, MySQL opsional)]
+    S -->|foto + nama| AI[Google Gemini API]
+    C --> SS[(Sesi PHP<br/>storage/sessions)]
+    C --> UP[(public/assets/uploads<br/>foto unggahan)]
+    V -->|fetch JSON| C
+```
+
+### Alur data
+
+```mermaid
+sequenceDiagram
+    actor P as Pengguna
+    participant B as Peramban
+    participant S as Server PHP
+    participant G as Gemini API
+    participant D as Data CSV
+
+    P->>B: 1. Isi profil (tujuan, umur, tinggi, berat, kondisi)
+    B->>S: POST /profil
+    S->>S: Hitung target kalori (AKG), simpan profil di sesi
+    P->>B: 2. Nama makanan + foto
+    B->>S: POST /api/cek/1 (simpan foto)
+    B->>S: POST /api/cek/2
+    S->>G: foto + nama makanan
+    G-->>S: JSON: hidangan, bahan, gram, ukuran piring
+    S->>S: Validasi jawaban, simpan analisis di sesi
+    B->>S: POST /api/cek/3
+    S->>D: Cocokkan tiap bahan ke data gizi
+    S-->>B: n dari m bahan punya data
+    P->>B: 3. Koreksi bahan, ukuran piring, jumlah porsi
+    B->>S: POST /api/hitung/1..3
+    S->>D: Hitung gizi, nilai risiko, verdict
+    P->>B: 4. Buka hasil
+    B->>S: GET /hasil
+    S-->>B: Verdict, zat, porsi, saran perbaikan
+    P->>B: Ubah porsi / terapkan saran
+    B->>S: POST /api/recalculate, /api/terapkan-saran
+    S->>D: Hitung ulang dengan rumus yang sama
+    S-->>B: Angka baru (JSON)
+```
+
+Data yang keluar dari server hanya **foto dan nama makanan** ke Gemini. Profil dan kondisi kesehatan tidak dikirim ke layanan mana pun.
+
+### Struktur folder
 
 ```
 app/
@@ -293,30 +409,71 @@ storage/         sesi dan unggahan
 
 ## Cara menjalankan
 
-**Kebutuhan**: PHP 8.1 atau lebih baru dengan ekstensi `curl`, `mbstring`, dan `fileinfo`. MySQL tidak wajib untuk saat ini.
+### Kebutuhan
 
-1. Salin `.env.example` menjadi `.env`, lalu isi nilainya sendiri.
+- **PHP 8.1 atau lebih baru** dengan ekstensi `curl`, `mbstring`, dan `fileinfo` (aktif bawaan di Laragon). Diuji dengan PHP 8.4.
+- **Git** untuk mengunduh proyek.
+- **Kunci API Google Gemini** (gratis dari [Google AI Studio](https://aistudio.google.com)), hanya bila ingin fitur pengenalan foto memakai AI.
+- MySQL **tidak wajib**.
 
-   | Variabel | Fungsi |
-   |---|---|
-   | `GEMINI_API_KEY` | Kunci API Gemini milik Anda. Kosongkan untuk memakai resep contoh |
-   | `GEMINI_MODEL` | Model Gemini (bawaan `gemini-3-flash-preview`) |
-   | `APP_DEBUG` | `true` menampilkan galat di layar, selain itu hanya masuk log |
-   | `DB_*` | Dipakai hanya bila MySQL diaktifkan |
+### Instalasi dan menjalankan
 
-   Jangan pernah meng-commit `.env` atau membagikan kunci API. Berkas `.env` sudah masuk `.gitignore`.
+1. Unduh proyek:
 
-2. Jalankan server (dari folder proyek):
+   ```
+   git clone https://github.com/faturrahman82/logicodix-CekPiring.git
+   cd logicodix-CekPiring
+   ```
+
+2. Salin berkas konfigurasi, lalu isi nilainya sendiri:
+
+   ```
+   copy .env.example .env
+   ```
+
+   (di Linux atau macOS: `cp .env.example .env`). Jangan pernah meng-commit `.env` atau membagikan kunci API. Berkas `.env` sudah masuk `.gitignore`.
+
+3. Jalankan server dari folder proyek:
 
    ```
    php -S localhost:8000 -t public
    ```
 
-   Buka `http://localhost:8000`.
+   Buka `http://localhost:8000`. Tidak ada langkah instalasi paket lain.
 
-3. Atau lewat Laragon/Apache: arahkan akar dokumen ke folder `public`, atau buka `http://localhost/<nama-folder>/public`.
+4. **Alternatif lewat Laragon atau Apache**: arahkan akar dokumen ke folder `public`, atau taruh proyek di `www` lalu buka `http://localhost/<nama-folder>/public`. `.htaccess` sudah disertakan untuk menulis ulang rute ke `index.php`.
 
-Folder `public/assets/uploads` harus bisa ditulis, karena foto yang diunggah disimpan di sana.
+### Konfigurasi tambahan untuk fitur tertentu
+
+| Fitur | Yang perlu disiapkan |
+|---|---|
+| **Pengenalan makanan dengan AI** | Isi `GEMINI_API_KEY` di `.env`. Tanpa kunci, aplikasi memakai resep contoh dan memberi label "Resep contoh, belum dari foto" |
+| **Unggah foto** | Folder `public/assets/uploads` harus bisa ditulis oleh server |
+| **Panggilan HTTPS ke Gemini di Windows** | Aplikasi memakai penyimpanan sertifikat Windows. Bila PHP Anda tetap melaporkan galat sertifikat, isi `CURL_CA_BUNDLE` dengan jalur berkas `cacert.pem` |
+| **MySQL (opsional)** | Buat basis data dari `database/schema.sql`, isi `DB_*` di `.env`. Tanpa ini aplikasi tetap berjalan dari CSV |
+
+### Variabel lingkungan (`.env.example`)
+
+| Variabel | Bawaan | Fungsi |
+|---|---|---|
+| `APP_NAME` | `CekPiring` | Nama aplikasi |
+| `APP_ENV` | `local` | Lingkungan (informasi) |
+| `APP_DEBUG` | `false` | `true` menampilkan galat PHP di layar; selain itu hanya dicatat di log |
+| `APP_URL` | `http://localhost/logicodix-CekPiring/public` | Alamat dasar aplikasi (informasi) |
+| `DB_HOST` | `127.0.0.1` | Host MySQL (opsional) |
+| `DB_PORT` | `3306` | Port MySQL (opsional) |
+| `DB_DATABASE` | `cekpiring` | Nama basis data (opsional) |
+| `DB_USERNAME` | `root` | Pengguna MySQL (opsional) |
+| `DB_PASSWORD` | kosong | Kata sandi MySQL (opsional) |
+| `GEMINI_API_KEY` | kosong | **Kunci API Gemini milik Anda.** Kosong berarti resep contoh dipakai |
+| `GEMINI_MODEL` | `gemini-3-flash-preview` | Model Gemini yang dicoba lebih dulu |
+| `CURL_CA_BUNDLE` | tidak diatur | Opsional, jalur `cacert.pem` bila ada galat sertifikat SSL |
+
+`CURL_CA_BUNDLE` tidak ada di `.env.example` karena hanya diperlukan pada konfigurasi PHP tertentu.
+
+### Akun demonstrasi
+
+CekPiring **tidak memakai autentikasi**: tidak ada pendaftaran, login, atau akun. Penilai bisa langsung membuka aplikasi dan mencobanya, sehingga tidak ada akun demonstrasi yang perlu disediakan. Data profil dan hasil hanya hidup di sesi peramban dan hilang setelah sesi berakhir.
 
 ## Keamanan dan privasi
 
@@ -342,13 +499,64 @@ Folder `public/assets/uploads` harus bisa ditulis, karena foto yang diunggah dis
 
 Berdasarkan riwayat commit di repositori ini:
 
-| Akun GitHub | Kontribusi |
+| Anggota (akun GitHub) | Kontribusi |
 |---|---|
-| `faturrahman82` | Struktur proyek; pembersihan dan pengayaan data gizi (TKPI, USDA, purin, AKG); batas harian per kondisi; ukuran piring dan porsi disarankan; saran perbaikan piring; integrasi dan pengarahan Gemini; perapian keamanan; dokumentasi |
-| `B1bub0b` | Kerangka aplikasi PHP MVC; halaman beranda, input makanan, dan hasil; integrasi awal Gemini |
-| `putxy1` | Peringatan di profil, pemeriksaan makanan, loader, dan perbaikan tampilan responsif (halaman hasil dan langkah 4) |
-| `aripratama1234ari-droid` | Perbaikan galat halaman cek bahan dan hasil |
+| Maulvi Ilmullah Faturrahman Al Afghani (`faturrahman82`) | Struktur proyek; pembersihan dan pengayaan data gizi (TKPI, USDA, purin, AKG); batas harian per kondisi; ukuran piring dan porsi disarankan; saran perbaikan piring; integrasi dan pengarahan Gemini; perapian keamanan; dokumentasi |
+| Ulinnuha Mahbubi (`B1bub0b`) | Kerangka aplikasi PHP MVC; halaman beranda, input makanan, dan hasil; integrasi awal Gemini |
+| Devita Aulia Putri (`putxy1`) | Peringatan di profil, pemeriksaan makanan, loader, dan perbaikan tampilan responsif (halaman hasil dan langkah 4) |
+| Ari Pratama (`aripratama1234ari-droid`) | Perbaikan galat halaman cek bahan dan hasil |
 
-## Atribusi
+## Sumber dan atribusi
 
-Data gizi berasal dari sumber yang tercantum di [Data dan sumber](#data-dan-sumber). Data Open Food Facts berlisensi ODbL, dan USDA FoodData Central berstatus domain publik. Penggunaan AI dalam aplikasi: Google Gemini untuk mengenali makanan dari foto, sebagaimana dijelaskan di [Peran AI dan kode](#peran-ai-dan-kode).
+Daftar lengkap sumber kode, aset, dataset, dan layanan pihak ketiga yang dipakai proyek ini.
+
+### Kode
+
+| Bagian | Asal |
+|---|---|
+| Seluruh kode aplikasi (PHP, HTML, CSS, JavaScript) di `app/`, `core/`, `config/`, `public/` | Ditulis oleh tim sendiri |
+| Kerangka kerja, pustaka, dan templat | **Tidak ada.** Proyek memakai PHP native dan JavaScript tanpa kerangka kerja, tanpa `composer` dan `npm` |
+| Spinner dan ikon | SVG sederhana yang ditulis langsung di berkas tampilan oleh tim; tanda level memakai karakter Unicode (●, ◆, ▲) |
+
+Perangkat pengembangan (tidak dikirim bersama proyek): PHP dan Laragon sebagai lingkungan lokal, Git dan GitHub untuk versi.
+
+### Layanan pihak ketiga
+
+| Layanan | Fungsi di aplikasi | Catatan |
+|---|---|---|
+| **Google Gemini API** | Mengenali makanan dari foto dan nama (lihat [Layanan AI yang dipakai](#layanan-ai-yang-dipakai)) | Dipanggil dengan kunci API milik tim dari `.env`. Pada tingkat gratis, isi permintaan dapat dipakai Google untuk peningkatan layanan |
+| **Google Fonts** | Memuat huruf **Inter** lewat `@import` di `public/assets/css/app.css` | Inter dilisensikan SIL Open Font License 1.1 |
+
+### Aset
+
+| Aset | Asal |
+|---|---|
+| Huruf **Inter** | Rasmus Andersson, SIL Open Font License 1.1, dimuat dari Google Fonts |
+| `public/assets/img/Isi.png` | Aset gambar bawaan proyek. Tidak dipakai oleh halaman mana pun saat ini |
+| Foto di `public/assets/uploads/` | Foto uji yang diunggah tim saat pengembangan. Foto yang diunggah pengguna saat aplikasi berjalan disimpan di folder yang sama dan tidak ikut repositori |
+| Logo dan nama CekPiring | Dibuat oleh tim |
+
+### Dataset
+
+| Dataset | Dipakai untuk | Sumber dan lisensi |
+|---|---|---|
+| Tabel Komposisi Pangan Indonesia (TKPI) 2017 | Energi, protein, lemak, karbohidrat, serat, natrium | Direktorat Gizi Masyarakat, Kemenkes RI, ISBN 978-602-416-407-2. [repository.kemkes.go.id/book/777](https://repository.kemkes.go.id/book/777). Publikasi pemerintah |
+| USDA FoodData Central, SR Legacy (April 2018) | Gula, lemak jenuh, kolesterol, natrium, dan serat untuk sebagian bahan, bumbu, dan saus | U.S. Department of Agriculture. [fdc.nal.usda.gov](https://fdc.nal.usda.gov). Domain publik |
+| Kaneko dkk., *Biological and Pharmaceutical Bulletin* 37(5):709-721, 2014 | Kandungan purin | [jstage.jst.go.jp](https://www.jstage.jst.go.jp/article/bpb/37/5/37_b13-00967/_html). Nilai dikutip dari tabel jurnal, bukan menyalin seluruh tabel |
+| Open Food Facts | Kecap manis (median 8 label kemasan) | [openfoodfacts.org](https://world.openfoodfacts.org). Lisensi ODbL, wajib atribusi dan berbagi dengan lisensi sama |
+| Angka Kecukupan Gizi, Permenkes No. 28 Tahun 2019 | Target kalori (`data/akg_2019.csv`) | [peraturan.bpk.go.id](https://peraturan.bpk.go.id). Peraturan pemerintah, tabel dibaca dari PDF resmi |
+| Berkas dasar `nutrition.csv` (folder `archive`) | Basis awal `data/nutrition_bersih.csv` (nama pangan, energi, protein, lemak, karbohidrat) | Berkas awal tim berisi 1.346 pangan Indonesia dan diduga berasal dari dataset publik di Kaggle yang menyusun TKPI. Nilainya dicocokkan ke TKPI 2017 (sekitar 72% baris sama persis), dibersihkan, dan dilengkapi. Berkas asli tersimpan di `data/raw/nutrition_asli.csv`. **Tim perlu mengonfirmasi tautan dan lisensi dataset aslinya dan menuliskannya di sini** |
+
+### Rujukan batas harian
+
+| Batas | Rujukan |
+|---|---|
+| Natrium dan gula umum | Permenkes No. 30 Tahun 2013 |
+| Natrium untuk hipertensi | American Heart Association |
+| Gula untuk diabetes | Persagi dan PERKENI |
+| Lemak jenuh | WHO (umum) dan PERKI 2022 (kolesterol tinggi) |
+| Purin untuk asam urat | Pedoman gout Jepang, dikutip dalam Kaneko dkk. 2014 |
+
+### Penggunaan AI
+
+Layanan dan model yang dipakai, serta bagian produk yang memanfaatkannya, tercantum di [Layanan AI yang dipakai](#layanan-ai-yang-dipakai): **Google Gemini** (`gemini-3-flash-preview`, cadangan `gemini-3.1-flash-lite`) untuk mengenali makanan dari foto di langkah Makanan. Perhitungan gizi, penilaian risiko, porsi disarankan, dan saran perbaikan dikerjakan kode PHP dari dataset di atas, bukan AI.
