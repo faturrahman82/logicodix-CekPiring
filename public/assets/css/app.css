@@ -1076,6 +1076,16 @@ input:checked + .slider:before {
     margin-bottom: 8px;
 }
 
+.tambah-bahan-row .form-group {
+    margin-bottom: 0;
+}
+
+.tambah-bahan-row .btn-outline {
+    height: 56px;
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
 .flex-1 {
     flex: 1;
 }

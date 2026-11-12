@@ -158,7 +158,7 @@
                                     <div id="autocomplete-list" class="autocomplete-dropdown"></div>
                                 </div>
                             </div>
-                            <button type="button" class="btn-outline" id="btn-tambah-bahan" style="height: 52px; align-self: flex-end;">Tambah bahan</button>
+                            <button type="button" class="btn-outline" id="btn-tambah-bahan">Tambah bahan</button>
                         </div>
                         <p class="helper-text">Hapus dan tambah bahan hanya mengubah perhitungan ini.</p>
                     </div>
