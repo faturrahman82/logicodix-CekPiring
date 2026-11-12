@@ -69,13 +69,17 @@ class NutritionFact {
         foreach ($aliases as $aliasRow) {
             foreach (explode('|', (string)($aliasRow['alias'] ?? '')) as $alias) {
                 $normAlias = self::normalize($alias);
-                if (mb_strlen($normAlias) >= 4 && (strpos($needle, $normAlias) !== false || strpos($normAlias, $needle) !== false)) {
+                if (mb_strlen($normAlias) >= 4 && (self::memuatKata($needle, $normAlias) || self::memuatKata($normAlias, $needle))) {
                     return self::normalize((string)$aliasRow['nama_kunci']);
                 }
             }
         }
 
         return $needle;
+    }
+
+    private static function memuatKata(string $teks, string $kata): bool {
+        return $kata !== '' && preg_match('/(?:^|\s)' . preg_quote($kata, '/') . '(?:\s|$)/u', $teks) === 1;
     }
 
     public static function canonicalName(string $name): string {
