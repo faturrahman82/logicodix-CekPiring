@@ -5,6 +5,7 @@ namespace App\Controllers;
 use Core\Controller;
 use App\Models\NutritionFact;
 use App\Services\AiClient;
+use App\Services\PortionSize;
 
 class KonfirmasiController extends Controller {
     public function index(): void {
@@ -14,7 +15,6 @@ class KonfirmasiController extends Controller {
             return;
         }
 
-        // Periksa status data gizi setiap bahan (State 3c jika ada bahan tanpa gizi)
         $bahanDivalidasi = [];
         $adaBahanTanpaData = false;
 
@@ -24,11 +24,30 @@ class KonfirmasiController extends Controller {
             if (!$adaGizi) {
                 $adaBahanTanpaData = true;
             }
+
+            $berat = (float)($b['berat_g'] ?? 50);
+            $ket = trim($b['keterangan'] ?? '');
+            if (empty($ket)) {
+                $ket = round($berat) . ' g';
+            } elseif (!preg_match('/\b\d+(\.\d+)?\s*(g|gram|ml)\b/i', $ket)) {
+                $ket = $ket . ' (sekitar ' . round($berat) . ' g)';
+            }
+
+            $namaTampil = !empty($b['nama']) ? $b['nama'] : ($fact['nama'] ?? 'Bahan');
+
+            $kelengkapan = $fact['tingkat_kelengkapan'] ?? ($adaGizi ? 'data_lengkap' : 'perlu_verifikasi');
+            $kelengkapanLabel = ($kelengkapan === 'data_lengkap') ? 'Data Lengkap' : (($kelengkapan === 'data_sebagian') ? 'Data Sebagian' : 'Perlu Verifikasi');
+
             $bahanDivalidasi[] = [
-                'nama' => $fact['nama'] ?? NutritionFact::canonicalName($b['nama']),
-                'berat_g' => (float)($b['berat_g'] ?? 50),
-                'keterangan' => $b['keterangan'] ?? '',
+                'nama' => $namaTampil,
+                'berat_g' => $berat,
+                'keterangan' => $ket,
                 'ada_data_gizi' => $adaGizi,
+                'sumber_data' => $fact['sumber_data'] ?? ($adaGizi ? 'TKPI 2017' : 'Data belum tersedia'),
+                'kelengkapan' => $kelengkapan,
+                'kelengkapan_label' => $kelengkapanLabel,
+                'kkal100' => ($adaGizi && $fact['energi_kkal'] !== null) ? (float)$fact['energi_kkal'] : null,
+                'kalori_estimasi' => ($adaGizi && $fact['energi_kkal'] !== null) ? round(($fact['energi_kkal'] / 100) * $berat) : null,
                 'gizi' => $fact
             ];
         }
@@ -39,27 +58,38 @@ class KonfirmasiController extends Controller {
             'ada_bahan_tanpa_data' => $adaBahanTanpaData,
             'konflik' => $analysis['konflik'] ?? false,
             'konflik_teks' => $analysis['konflik_teks'] ?? '',
-            'porsi' => (float)($analysis['porsi'] ?? 1.0)
+            'porsi' => (float)($analysis['porsi'] ?? 1.0),
+            'ukuran_porsi' => $analysis['ukuran_porsi'] ?? PortionSize::bawaan()
         ]);
     }
 
-    public function save(): void {
+    public static function simpanDariPost(): array {
         $analysis = session_get('analysis_data', []);
         $namaBahan = $_POST['bahan_nama'] ?? [];
         $beratBahan = $_POST['bahan_berat'] ?? [];
         $ketBahan = $_POST['bahan_ket'] ?? [];
         $porsi = (float)($_POST['porsi'] ?? 1.0);
+        $porsi = ($porsi > 0) ? max(0.3, min(3.0, round($porsi, 1))) : 1.0;
 
-        if ($porsi <= 0) {
-            $porsi = 1.0;
+        $ukuranLama = $analysis['ukuran_porsi'] ?? PortionSize::bawaan();
+        $ukuranBaru = PortionSize::valid($_POST['ukuran_porsi'] ?? ($ukuranLama['ukuran'] ?? 'sedang'));
+        if ($ukuranBaru !== PortionSize::valid($ukuranLama['ukuran'] ?? 'sedang')) {
+            $ukuranLama = ['ukuran' => $ukuranBaru, 'sumber' => 'pengguna', 'alasan' => ''];
         }
 
         $bahanBaru = [];
         for ($i = 0; $i < count($namaBahan); $i++) {
-            $nama = NutritionFact::canonicalName(trim($namaBahan[$i]));
+            $nama = trim($namaBahan[$i]);
             if (!empty($nama)) {
                 $berat = isset($beratBahan[$i]) ? (float)$beratBahan[$i] : 50;
-                $ket = $ketBahan[$i] ?? '';
+                $berat = max(1, min(2000, $berat));
+                $nama = mb_substr($nama, 0, 80);
+                $ket = trim($ketBahan[$i] ?? '');
+                if (empty($ket)) {
+                    $ket = round($berat) . ' g';
+                } elseif (!preg_match('/\b\d+(\.\d+)?\s*(g|gram|ml)\b/i', $ket)) {
+                    $ket = $ket . ' (sekitar ' . round($berat) . ' g)';
+                }
                 $bahanBaru[] = [
                     'nama' => $nama,
                     'berat_g' => $berat,
@@ -68,26 +98,36 @@ class KonfirmasiController extends Controller {
             }
         }
 
-        $analysis['bahan'] = $bahanBaru;
+        $analysis['bahan'] = array_slice($bahanBaru, 0, 20);
         $analysis['porsi'] = $porsi;
+        $analysis['ukuran_porsi'] = $ukuranLama;
+        $analysis['saran_diterapkan'] = [];
+        $analysis['bahan_sebelum_saran'] = null;
         session_set('analysis_data', $analysis);
 
-        $this->redirect('menghitung');
+        return $analysis;
+    }
+
+    public function save(): void {
+        self::simpanDariPost();
+        $this->redirect('hasil');
     }
 
     public function resolveConflict(): void {
-        $pilihan = $_POST['pilihan'] ?? 'nama'; // 'nama' atau 'foto'
+        $pilihan = $_POST['pilihan'] ?? 'nama';
         $analysis = session_get('analysis_data', []);
 
         if ($pilihan === 'foto' && !empty($analysis['nama_foto'])) {
-            $target = $analysis['nama_foto'];
+            $analysis['nama_makanan'] = $analysis['nama_foto'];
         } else {
-            $target = $analysis['nama_makanan'];
+            $hasilAi = AiClient::identify($analysis['nama_input'] ?? ($analysis['nama_makanan'] ?? ''), null);
+            if (!empty($hasilAi['sukses'])) {
+                $analysis['nama_makanan'] = $hasilAi['nama'];
+                $analysis['bahan'] = $hasilAi['bahan'];
+                $analysis['ukuran_porsi'] = $hasilAi['ukuran_porsi'] ?? PortionSize::bawaan();
+                $analysis['sumber_analisis'] = $hasilAi['sumber_analisis'] ?? 'contoh';
+            }
         }
-
-        $hasilAi = AiClient::identify($target, null);
-        $analysis['nama_makanan'] = $hasilAi['nama'];
-        $analysis['bahan'] = $hasilAi['bahan'];
         $analysis['konflik'] = false;
         $analysis['konflik_teks'] = '';
 

@@ -7,89 +7,113 @@ class VerdictBuilder {
         array $totalGizi,
         array $risiko,
         array $profil,
-        float $porsiDisarankan
+        float $porsiDisarankan,
+        float $porsi = 1.0
     ): array {
         $tujuan = $profil['tujuan'] ?? 'seimbang';
-        $tujuanLabel = ucfirst($tujuan);
         $targetKalori = (int)($profil['target_kalori'] ?? 2000);
         $kondisi = $profil['kondisi'] ?? [];
-        
-        $adaDiabetes = !empty($kondisi['diabetes']);
-        $adaHipertensi = !empty($kondisi['hipertensi']);
-        $adaKolesterol = !empty($kondisi['kolesterol']);
-        $adaAsamUrat = !empty($kondisi['asam_urat']);
-        $adaKondisi = $adaDiabetes || $adaHipertensi || $adaKolesterol || $adaAsamUrat;
+        $adaKondisi = !empty(array_filter((array)$kondisi));
 
-        $kalori = (int)$totalGizi['energi_kkal'];
-        $persenKalori = ($targetKalori > 0) ? round(($kalori / $targetKalori) * 100) : 0;
-        $natriumPersen = $risiko['natrium']['persen'] ?? 0;
-        $gulaPersen = $risiko['gula']['persen'] ?? 0;
+        $kalori = (int)($totalGizi['energi_kkal'] ?? 0);
+        $persenKalori = ($targetKalori > 0) ? (int)round(($kalori / $targetKalori) * 100) : 0;
 
-        // State 5b: Conflict between goal and active condition (e.g. bulking with diabetes)
-        if ($tujuan === 'bulking' && $adaDiabetes) {
-            return [
-                'state' => '5b',
-                'level' => 'Hati-hati',
-                'badge_class' => 'high',
-                'badge_text' => '▲ Hati-hati untuk profilmu',
-                'judul' => 'Bulking butuh tambahan kalori, tapi karbohidrat dibatasi diabetes.',
-                'deskripsi' => "Porsi penuh membawa {$totalGizi['karbohidrat_g']} g karbohidrat dan gula {$totalGizi['gula_g']} g ({$gulaPersen}% batas harian). Makan {$porsiDisarankan} porsi, lalu tambah kalori dari lauk protein seperti telur atau ayam, bukan dari nasi."
-            ];
+        $belumDinilai = [];
+        foreach ($risiko as $r) {
+            if (!empty($r['kondisi_aktif']) && empty($r['tersedia'])) {
+                $belumDinilai[] = mb_strtolower($r['nama']);
+            }
         }
+        $catatan = !empty($belumDinilai)
+            ? ucfirst(implode(' dan ', $belumDinilai)) . ' belum bisa dinilai: data bahannya belum tersedia.'
+            : '';
 
-        // State 5c: Evaluation for profile with no chronic conditions
         if (!$adaKondisi) {
-            $level = ($natriumPersen > 33 || $gulaPersen > 33) ? 'Cukup cocok' : 'Cocok';
-            $badgeClass = ($level === 'Cocok') ? 'low' : 'med';
-            $badgeSymbol = ($level === 'Cocok') ? '●' : '◆';
-
-            return [
-                'state' => '5c',
-                'level' => $level,
-                'badge_class' => $badgeClass,
-                'badge_text' => "{$badgeSymbol} {$level} untuk targetmu",
-                'judul' => "Cocok untuk target {$tujuanLabel}, perhatikan natriumnya.",
-                'deskripsi' => "Porsi penuh memakai {$persenKalori}% kalori harianmu ({$kalori} dari " . number_format($targetKalori, 0, ',', '.') . " kkal). Natrium sudah {$natriumPersen}% batas umum harian, jadi kurangi kecap manis atau kuah asin. Protein baru {$totalGizi['protein_g']} g, tambahkan lauk protein agar kebutuhan hariannya terpenuhi."
-            ];
+            $tertinggi = null;
+            foreach ($risiko as $r) {
+                if (!empty($r['tersedia']) && !empty($r['dinilai']) && ($tertinggi === null || $r['persen'] > $tertinggi['persen'])) {
+                    $tertinggi = $r;
+                }
+            }
+            if ($tertinggi !== null && $tertinggi['persen'] > 33) {
+                return self::hasil(
+                    'Cukup cocok',
+                    'med',
+                    "{$tertinggi['nama']} {$tertinggi['persen']}% batas harian umum di porsi ini.",
+                    'Cukup tinggi dibanding batas umum. Lihat saran perbaikan di bawah.',
+                    $catatan
+                );
+            }
+            $besar = $persenKalori > 40;
+            return self::hasil(
+                $besar ? 'Cukup cocok' : 'Cocok',
+                $besar ? 'med' : 'low',
+                "Porsi ini {$persenKalori}% dari target kalori harianmu.",
+                $besar ? 'Cukup besar untuk sekali makan, imbangi di waktu makan lain.' : 'Masih wajar untuk sekali makan.',
+                $catatan
+            );
         }
 
-        // State 5: Evaluation against active conditions
-        $pelanggaran = [];
-        if ($adaHipertensi && $natriumPersen > 33) {
-            $pelanggaran[] = 'Natrium tinggi';
-        }
-        if ($adaDiabetes && $gulaPersen > 20) {
-            $pelanggaran[] = ($gulaPersen > 33) ? 'gula tinggi' : 'gula sedang';
-        }
-        if ($adaKolesterol && ($risiko['lemak_jenuh']['persen'] ?? 0) > 33) {
-            $pelanggaran[] = 'lemak jenuh tinggi';
-        }
-        if ($adaAsamUrat && ($risiko['purin']['persen'] ?? 0) > 33) {
-            $pelanggaran[] = 'purin tinggi';
+        $terburuk = RiskEvaluator::terburukAktif($risiko);
+
+        if ($terburuk === null) {
+            return self::hasil(
+                'Belum bisa dinilai',
+                'med',
+                'Data zat untuk kondisimu belum tersedia di bahan ini.',
+                'Angka kalori dan makro tetap bisa dipakai sebagai gambaran.',
+                $catatan
+            );
         }
 
-        if (!empty($pelanggaran)) {
-            $porsiKoma = str_replace('.', ',', (string)$porsiDisarankan);
-            $kaloriPorsi = round($kalori * $porsiDisarankan);
-            $persenPorsi = ($targetKalori > 0) ? round(($kaloriPorsi / $targetKalori) * 100) : 0;
+        $nama = $terburuk['nama'];
+        $persen = (int)$terburuk['persen'];
+        $porsiTeks = PortionSize::formatPorsi($porsiDisarankan);
 
-            return [
-                'state' => '5',
-                'level' => 'Hati-hati',
-                'badge_class' => 'high',
-                'badge_text' => '▲ Hati-hati untuk profilmu',
-                'judul' => implode(' dan ', $pelanggaran) . ' di porsi ini.',
-                'deskripsi' => "Makan sekitar {$porsiKoma} porsi dan kurangi penyumbang utamanya. Dengan {$porsiKoma} porsi, kalorinya sekitar {$kaloriPorsi} kkal ({$persenPorsi}% target {$tujuanLabel} harianmu). Tambahkan lauk protein untuk melengkapi, bukan nasi."
-            ];
+        if ($persen > 33) {
+            $saran = $porsiDisarankan < $porsi
+                ? "Makan sekitar {$porsiTeks} piring agar tidak lebih dari 33%."
+                : 'Kurangi penyumbang terbesarnya agar tidak lebih dari 33%.';
+            if ($tujuan === 'bulking' && !empty($kondisi['diabetes'])) {
+                $saran .= ' Tambah kalori dari lauk protein, bukan nasi.';
+            }
+            return self::hasil(
+                'Hati-hati',
+                'high',
+                "{$nama} {$persen}% batas harian di porsi ini.",
+                $saran,
+                $catatan
+            );
         }
 
+        if ($persen >= 20) {
+            return self::hasil(
+                'Cukup cocok',
+                'med',
+                "{$nama} {$persen}% batas harian, masih di bawah batas sekali makan.",
+                'Jaga waktu makan berikutnya tetap rendah ' . mb_strtolower($nama) . '.',
+                $catatan
+            );
+        }
+
+        return self::hasil(
+            'Cocok',
+            'low',
+            'Aman untuk kondisimu di porsi ini.',
+            "{$nama} hanya {$persen}% batas harian.",
+            $catatan
+        );
+    }
+
+    private static function hasil(string $level, string $badge, string $judul, string $deskripsi, string $catatan): array {
+        $simbol = ['low' => '●', 'med' => '◆', 'high' => '▲'][$badge] ?? '◆';
         return [
-            'state' => '5',
-            'level' => 'Cocok',
-            'badge_class' => 'low',
-            'badge_text' => '● Cocok untuk profilmu',
-            'judul' => "Porsi ini aman untuk kondisi kesehatanmu.",
-            'deskripsi' => "Kandungan natrium dan gula masih dalam batas aman per waktu makan ({$persenKalori}% dari target harian " . number_format($targetKalori, 0, ',', '.') . " kkal)."
+            'level' => $level,
+            'badge_class' => $badge,
+            'badge_text' => "{$simbol} {$level}",
+            'judul' => $judul,
+            'deskripsi' => $deskripsi,
+            'catatan' => $catatan,
         ];
     }
 }

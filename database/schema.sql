@@ -1,12 +1,6 @@
--- =============================================================================
--- Skema Basis Data CekPiring
--- LOGICODIX 2026 Hackathon Competition (Subtema: Inclusive Health & Well-being)
--- =============================================================================
-
 CREATE DATABASE IF NOT EXISTS `cekpiring` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE `cekpiring`;
 
--- 1. Tabel Master Bahan & Nutrisi (Merujuk TKPI 2017 & USDA SR Legacy)
 CREATE TABLE IF NOT EXISTS `nutrition_facts` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `id_asli` INT NULL,
@@ -19,8 +13,26 @@ CREATE TABLE IF NOT EXISTS `nutrition_facts` (
     `serat_g` FLOAT NULL,
     `gula_g` FLOAT NULL,
     `lemak_jenuh_g` FLOAT NULL,
+    `lemak_tak_jenuh_g` FLOAT NULL,
     `kolesterol_mg` FLOAT NULL,
     `natrium_mg` FLOAT NULL,
+    `kalium_mg` FLOAT NULL,
+    `kalsium_mg` FLOAT NULL,
+    `fosfor_mg` FLOAT NULL,
+    `zat_besi_mg` FLOAT NULL,
+    `magnesium_mg` FLOAT NULL,
+    `seng_mg` FLOAT NULL,
+    `vit_a_mcg` FLOAT NULL,
+    `vit_b1_mg` FLOAT NULL,
+    `vit_b2_mg` FLOAT NULL,
+    `vit_b3_mg` FLOAT NULL,
+    `vit_b6_mg` FLOAT NULL,
+    `vit_b12_mcg` FLOAT NULL,
+    `vit_c_mg` FLOAT NULL,
+    `vit_d_mcg` FLOAT NULL,
+    `vit_e_mg` FLOAT NULL,
+    `sumber_data` VARCHAR(150) NULL,
+    `tingkat_kelengkapan` VARCHAR(50) NULL,
     `sumber_natrium` VARCHAR(50) NULL,
     `purin_mg` FLOAT NULL,
     `purin_kategori` VARCHAR(50) NULL,
@@ -33,7 +45,6 @@ CREATE TABLE IF NOT EXISTS `nutrition_facts` (
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 2. Tabel Aturan Kesehatan & Batas Nutrisi (Health Rules WHO/Kemenkes)
 CREATE TABLE IF NOT EXISTS `health_rules` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `kondisi` VARCHAR(50) NOT NULL,
@@ -45,7 +56,6 @@ CREATE TABLE IF NOT EXISTS `health_rules` (
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 3. Tabel Sesi Analisis (Untuk Riwayat atau Cache Sementara)
 CREATE TABLE IF NOT EXISTS `analysis_sessions` (
     `id` VARCHAR(64) PRIMARY KEY,
     `nama_makanan` VARCHAR(150) NOT NULL,

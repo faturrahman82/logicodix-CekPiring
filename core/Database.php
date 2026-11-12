@@ -24,7 +24,6 @@ class Database {
                     PDO::ATTR_EMULATE_PREPARES => false,
                 ]);
             } catch (PDOException $e) {
-                // Return null if MySQL not available yet, allowing fallback to CSV
                 self::$instance = null;
             }
         }

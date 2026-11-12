@@ -1,10 +1,5 @@
 <?php
 
-/**
- * CekPiring - Front Controller
- * LOGICODIX 2026 Hackathon Competition
- */
-
 $sessionDir = __DIR__ . '/../storage/sessions';
 if (!is_dir($sessionDir)) {
     @mkdir($sessionDir, 0777, true);
@@ -15,7 +10,6 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Autoloader
 spl_autoload_register(function ($class) {
     $prefixes = [
         'Core\\' => __DIR__ . '/../core/',
@@ -38,17 +32,17 @@ spl_autoload_register(function ($class) {
     }
 });
 
-// Load helpers
 require_once __DIR__ . '/../core/helpers.php';
 
-// Load .env
 \Core\Env::load(__DIR__ . '/../.env');
 
-// Setup Router
+$debug = filter_var(getenv('APP_DEBUG') ?: 'false', FILTER_VALIDATE_BOOLEAN);
+ini_set('display_errors', $debug ? '1' : '0');
+ini_set('log_errors', '1');
+error_reporting($debug ? E_ALL : (E_ALL & ~E_DEPRECATED & ~E_NOTICE));
+
 $router = new \Core\Router();
 
-// Load Routes
 require_once __DIR__ . '/../config/routes.php';
 
-// Dispatch Request
 $router->dispatch();

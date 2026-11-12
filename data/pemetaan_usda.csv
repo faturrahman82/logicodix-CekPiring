@@ -1,28 +1,66 @@
-id_data,nama_kita,kode_usda,nama_usda
-1214,Telur Ayam,171287,"Egg, whole, raw, fresh"
-1215,Telur Ayam bagian kuning,172184,"Egg, yolk, raw, fresh"
-1216,Telur Ayam bagian putih,172183,"Egg, white, raw, fresh"
-1185,Tahu,172448,"Tofu, firm, prepared with calcium sulfate and magnesium chloride (nigari)"
-1074,Santan murni,170580,"Nuts, coconut cream, raw (liquid expressed from grated meat)"
-1073,Santan (kelapa saja),170580,"Nuts, coconut cream, raw (liquid expressed from grated meat)"
-906,Minyak Kelapa Sawit,171015,"Oil, palm"
-905,Minyak Kelapa,171412,"Oil, coconut"
-904,Minyak kedelai,171411,"Oil, soybean, salad or cooking"
-903,Minyak Kacang Tanah,171410,"Oil, peanut, salad or cooking"
-908,Minyak Zaitun,171413,"Oil, olive, salad or cooking"
-907,Minyak Wijen,171016,"Oil, sesame, salad or cooking"
-392,Gula putih,169655,"Sugars, granulated"
-391,Gula Merah Tebu belum dimurnikan,168833,"Sugars, brown"
-78,Bawang Merah,170000,"Onions, raw"
-77,Bawang Bombay,170000,"Onions, raw"
-195,Cabai merah segar,170106,"Peppers, hot chili, red, raw"
-885,Mentega,173410,"Butter, salted"
-1173,Susu Kental Manis,171275,"Milk, canned, condensed, sweetened"
-997,Pisang Ambon,173944,"Bananas, raw"
-712,Kentang,170026,"Potatoes, flesh and skin, raw"
-915,Nanas,169124,"Pineapple, raw, all varieties"
-578,Jeruk Manis,169097,"Oranges, raw, all commercial varieties"
-646,Kacang tanah kering,172430,"Peanuts, all types, raw"
-1172,Susu Kedelai,172446,"Soymilk, original and vanilla, unfortified"
-1342,Wortel Segar,170393,"Carrots, raw"
-1238,Tempe kedelai murni mentah,174272,Tempeh
+id_data,nama_kita,kode_usda,nama_usda,dasar
+1214,Telur Ayam,171287,"Egg, whole, raw, fresh",
+1215,Telur Ayam bagian kuning,172184,"Egg, yolk, raw, fresh",
+1216,Telur Ayam bagian putih,172183,"Egg, white, raw, fresh",
+1185,Tahu,172448,"Tofu, firm, prepared with calcium sulfate and magnesium chloride (nigari)",
+1074,Santan murni,170580,"Nuts, coconut cream, raw (liquid expressed from grated meat)",
+1073,Santan (kelapa saja),170580,"Nuts, coconut cream, raw (liquid expressed from grated meat)",
+906,Minyak Kelapa Sawit,171015,"Oil, palm",
+905,Minyak Kelapa,171412,"Oil, coconut",
+904,Minyak kedelai,171411,"Oil, soybean, salad or cooking",
+903,Minyak Kacang Tanah,171410,"Oil, peanut, salad or cooking",
+908,Minyak Zaitun,171413,"Oil, olive, salad or cooking",
+907,Minyak Wijen,171016,"Oil, sesame, salad or cooking",
+392,Gula putih,169655,"Sugars, granulated",
+391,Gula Merah Tebu belum dimurnikan,168833,"Sugars, brown",
+78,Bawang Merah,170000,"Onions, raw",
+77,Bawang Bombay,170000,"Onions, raw",
+195,Cabai merah segar,170106,"Peppers, hot chili, red, raw",
+885,Mentega,173410,"Butter, salted",
+1173,Susu Kental Manis,171275,"Milk, canned, condensed, sweetened",
+997,Pisang Ambon,173944,"Bananas, raw",
+712,Kentang,170026,"Potatoes, flesh and skin, raw",
+915,Nanas,169124,"Pineapple, raw, all varieties",
+578,Jeruk Manis,169097,"Oranges, raw, all commercial varieties",
+646,Kacang tanah kering,172430,"Peanuts, all types, raw",
+1172,Susu Kedelai,172446,"Soymilk, original and vanilla, unfortified",
+1342,Wortel Segar,170393,"Carrots, raw",
+1238,Tempe kedelai murni mentah,174272,Tempeh,
+84,Bayam segar,168462,"Spinach, raw",tepat
+136,Bihun,169742,"Rice noodles, dry",padanan
+180,Buncis,169961,"Beans, snap, green, raw",tepat
+222,Cumi-cumi segar,174223,"Mollusks, squid, mixed species, raw",padanan
+228,Daging Kambing,175264,"Lamb, New Zealand, imported, square-cut shoulder, separable lean only, raw",padanan
+231,Daging Sapi,170831,"Beef, chuck eye Country-Style ribs, boneless, separable lean and fat, trimmed to 0"" fat, all grades, raw",padanan
+233,Daun Bawang,170005,"Onions, spring or scallions (includes tops and bulb), raw",padanan
+389,Gula Aren,168833,"Sugars, brown",padanan
+406,Hati Sapi,169451,"Beef, variety meats and by-products, liver, raw",tepat
+566,Jamur tiram segar,168580,"Mushrooms, oyster, raw",tepat
+579,Jeruk Nipis,168155,"Limes, raw",tepat
+626,Kacang Merah,173744,"Beans, kidney, red, mature seeds, raw",tepat
+636,Kacang Panjang,169222,"Yardlong bean, raw",tepat
+644,Kacang tanah goreng,173806,"Peanuts, all types, dry-roasted, without salt",padanan
+672,Kangkung,169301,"Water convolvulus,raw",tepat
+696,Keju,170900,"Cheese, mozzarella, low moisture, part-skim, shredded",padanan
+760,Ketimun,168409,"Cucumber, with peel, raw",tepat
+819,Labu Siam,170402,"Chayote, fruit, raw",tepat
+859,Makaroni,169736,"Pasta, dry, enriched",padanan
+871,Margarin,171040,"Margarine, regular, 80% fat, composite, stick, without salt, with added vitamin D",padanan
+1104,Sawi,169256,"Mustard greens, raw",padanan
+1122,Selada,169249,"Lettuce, green leaf, raw",padanan
+1125,Seledri,169988,"Celery, raw",tepat
+1176,Susu Sapi,172217,"Milk, whole, 3.25% milkfat, without added vitamin A and vitamin D",tepat
+1198,Taoge segar,169957,"Mung beans, mature seeds, sprouted, raw",tepat
+1270,Tepung Terigu,168894,"Wheat flour, white, all-purpose, enriched, bleached",padanan
+1303,Tomat merah segar,170457,"Tomatoes, red, ripe, raw, year round average",tepat
+1325,Udang segar,175179,"Crustaceans, shrimp, raw",tepat
+30,Ayam,172382,"Chicken, broilers or fryers, neck, meat and skin, raw",padanan
+421,Ikan Bandeng,173675,"Fish, milkfish, raw",tepat
+712,Kentang,170026,"Potatoes, flesh and skin, raw",tepat
+1353,Serai,168573,"Lemon grass (citronella), raw",tepat
+1354,Asam jawa,167763,"Tamarinds, raw",tepat
+1355,Saus tiram,174529,"Sauce, oyster, ready-to-serve",tepat
+1356,Kecap ikan,174531,"Sauce, fish, ready-to-serve",tepat
+1357,Kaldu bubuk ayam,171562,"Soup, chicken broth or bouillon, dry",tepat
+1358,Jintan,170923,"Spices, cumin seed",tepat
+1359,Dada ayam tanpa kulit,171077,"Chicken, broiler or fryers, breast, skinless, boneless, meat only, raw",tepat

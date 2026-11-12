@@ -5,7 +5,6 @@ if (!function_exists('base_url')) {
         $scheme = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? 'https' : 'http';
         $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
         
-        // Detect script subfolder if running in subfolder like /logicodix-CekPiring/public
         $scriptName = $_SERVER['SCRIPT_NAME'] ?? '';
         $baseDir = rtrim(str_replace('\\', '/', dirname($scriptName)), '/');
         
@@ -19,7 +18,10 @@ if (!function_exists('base_url')) {
 
 if (!function_exists('asset_url')) {
     function asset_url(string $path = ''): string {
-        return base_url('assets/' . ltrim($path, '/'));
+        $cleanPath = ltrim($path, '/');
+        $fullPath = __DIR__ . '/../public/assets/' . $cleanPath;
+        $version = file_exists($fullPath) ? '?v=' . filemtime($fullPath) : '';
+        return base_url('assets/' . $cleanPath) . $version;
     }
 }
 

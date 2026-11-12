@@ -19,7 +19,7 @@ class Env {
                 [$key, $value] = explode('=', $line, 2);
                 $key = trim($key);
                 $value = trim($value);
-                $value = trim($value, '"\''); // Remove surrounding quotes
+                $value = trim($value, '"\'');
 
                 if (!array_key_exists($key, $_SERVER) && !array_key_exists($key, $_ENV)) {
                     putenv("{$key}={$value}");
