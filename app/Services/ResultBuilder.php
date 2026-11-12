@@ -34,6 +34,7 @@ class ResultBuilder {
         }
 
         $saranList = FoodImprover::buatSemua($bahan, $porsi, $risiko, $totalGizi, $profile);
+        $clinicalAdvice = ClinicalAdvisor::generate($totalGizi, $risiko, $profile, $analysis);
 
         $targetKalori = (int)($profile['target_kalori'] ?? 2000);
         $persenKalori = ($targetKalori > 0) ? (int)round(($totalGizi['energi_kkal'] / $targetKalori) * 100) : 0;
@@ -74,6 +75,7 @@ class ResultBuilder {
             'porsi_disarankan_teks' => PortionSize::formatPorsi($porsiDisarankan),
             'perbandingan' => $perbandingan,
             'verdict' => $verdict,
+            'clinical_advice' => $clinicalAdvice,
             'saran' => $saranList[0] ?? null,
             'saran_list' => $saranList,
             'target_kalori' => $targetKalori,

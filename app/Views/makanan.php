@@ -44,9 +44,6 @@
                         <input type="hidden" name="foto_path" id="input-foto-path" value="<?= e($analysis['foto'] ?? '') ?>">
                         
                         <div class="dropzone-empty" id="dropzone-empty" style="<?= !empty($analysis['foto']) ? 'display: none;' : '' ?>">
-                            <div class="plus-circle">
-                                <span>+</span>
-                            </div>
                             <p class="upload-title">Tambah foto makanan</p>
                             <p class="upload-desc">JPG atau PNG, satu foto yang jelas</p>
                             <button type="button" class="btn-outline" id="btn-pilih-foto">Pilih foto</button>

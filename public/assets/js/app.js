@@ -633,6 +633,23 @@ document.addEventListener('DOMContentLoaded', function () {
                     </tr>`).join('');
             }
 
+            if (res.clinical_advice) {
+                const ca = res.clinical_advice;
+                setTeks('klinis-profil-badge', ca.profil_label || '');
+                const ringkasanEl = document.getElementById('klinis-ringkasan');
+                if (ringkasanEl) ringkasanEl.innerHTML = ca.ringkasan_medis || '';
+                if (ca.cautions) {
+                    setTeks('klinis-cautions-judul', ca.cautions.judul || '');
+                    const cautTeksEl = document.getElementById('klinis-cautions-teks');
+                    if (cautTeksEl) cautTeksEl.innerHTML = ca.cautions.teks || '';
+                }
+                if (ca.swaps && Array.isArray(ca.swaps.tips)) {
+                    setTeks('klinis-swaps-judul', ca.swaps.judul || '');
+                    const tipsEl = document.getElementById('klinis-tips-list');
+                    if (tipsEl) tipsEl.innerHTML = ca.swaps.tips.map(t => `<li>${t}</li>`).join('');
+                }
+            }
+
             tampilkanRingkasan(hasilSebelum, res);
             hasilSebelum = {
                 energi: res.total_gizi.energi_kkal,

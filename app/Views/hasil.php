@@ -18,6 +18,7 @@
 
     $risikoFokus = array_filter($risiko, fn($r) => !empty($r['kondisi_aktif']));
     $risikoLain = array_filter($risiko, fn($r) => empty($r['kondisi_aktif']));
+    $clinical = $clinical_advice ?? [];
 
     $fmt = fn($n, $d = 0) => number_format((float)$n, $d, ',', '.');
     $radius = 76;
@@ -118,6 +119,35 @@
                     <?php endif; ?>
                     <p class="risiko-panduan">Rendah &lt;20%, Sedang 20–33%, Tinggi &gt;33% batas harian.</p>
                 </div>
+
+                <?php if (!empty($clinical)): ?>
+                    <div class="card card-saran-klinis" id="card-saran-klinis">
+                        <div class="klinis-header">
+                            <h3 class="card-title">Saran</h3>
+                            <span class="klinis-profil-badge" id="klinis-profil-badge"><?= e($clinical['profil_label'] ?? '') ?></span>
+                        </div>
+
+                        <p class="klinis-ringkasan" id="klinis-ringkasan"><?= e($clinical['ringkasan_medis'] ?? '') ?></p>
+
+                        <?php if (!empty($clinical['cautions'])): ?>
+                            <div class="klinis-caution-box">
+                                <h4 class="klinis-subjudul" id="klinis-cautions-judul"><?= e($clinical['cautions']['judul'] ?? '') ?></h4>
+                                <p class="klinis-teks" id="klinis-cautions-teks"><?= $clinical['cautions']['teks'] ?? '' ?></p>
+                            </div>
+                        <?php endif; ?>
+
+                        <?php if (!empty($clinical['swaps']['tips'])): ?>
+                            <div class="klinis-section">
+                                <h4 class="klinis-subjudul" id="klinis-swaps-judul"><?= e($clinical['swaps']['judul'] ?? 'Trik Sehat di Meja Makan') ?></h4>
+                                <ul class="klinis-tips-list" id="klinis-tips-list">
+                                    <?php foreach ($clinical['swaps']['tips'] as $tip): ?>
+                                        <li><?= $tip ?></li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                <?php endif; ?>
             </div>
 
             <div class="column-right">

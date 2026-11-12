@@ -64,7 +64,7 @@ class ClinicalAdvisor {
         if ($isKolesterol && ($risiko['lemak_jenuh']['persen'] ?? 0) > 30) {
             $ringkasanMedis = "Porsi ini memiliki beban lemak jenuh sebesar {$totalGizi['lemak_jenuh_g']} g (" . ($risiko['lemak_jenuh']['persen'] ?? 0) . "% batas harian). Untuk profil kolesterol tinggi, fokus utama adalah meminimalkan lemak jenuh dan meningkatkan asupan serat larut pengikat kolesterol.";
         } elseif ($isDiabetes && ($risiko['gula']['persen'] ?? 0) > 25) {
-            $ringkasanMedis = "Porsi ini membawa karbohidrat cepat serap dan gula yang cukup tinggi bagi profil diabetes. Diperlukan strategi urutan makan (*food sequencing*) untuk meredam lonjakan glukosa darah postprandial.";
+            $ringkasanMedis = "Porsi ini membawa karbohidrat cepat serap dan gula yang cukup tinggi bagi profil diabetes. Diperlukan strategi urutan makan (<em>food sequencing</em>) untuk meredam lonjakan glukosa darah postprandial.";
         } elseif ($isHipertensi && ($risiko['natrium']['persen'] ?? 0) > 33) {
             $ringkasanMedis = "Kandungan natrium porsi ini mencapai {$totalGizi['natrium_mg']} mg. Bagi profil hipertensi, asupan natrium tinggi memicu retensi cairan yang secara langsung meningkatkan tekanan darah vaskular.";
         } elseif ($isAsamUrat && ($risiko['purin']['persen'] ?? 0) > 33) {
@@ -88,7 +88,7 @@ class ClinicalAdvisor {
         } elseif ($isHipertensi) {
             $penyumbangNatrium = preg_replace('/^Terbesar dari\s+/i', '', $risiko['natrium']['penyumbang'] ?? 'saus, kecap, atau garam bumbu');
             $cautionsJudul = 'Peringatan Klinis: Muatan Natrium (Hipertensi)';
-            $cautionsTeks = "Natrium tercatat <strong>{$totalGizi['natrium_mg']} mg</strong>, disumbang oleh <em>" . htmlspecialchars(rtrim($penyumbangNatrium, '.')) . "</em>. Menurut pedoman DASH (*Dietary Approaches to Stop Hypertension*), asupan natrium per waktu makan idealnya tidak melebihi 500–600 mg untuk mencegah vasokonstriksi arteriol.";
+            $cautionsTeks = "Natrium tercatat <strong>{$totalGizi['natrium_mg']} mg</strong>, disumbang oleh <em>" . htmlspecialchars(rtrim($penyumbangNatrium, '.')) . "</em>. Menurut pedoman DASH (<em>Dietary Approaches to Stop Hypertension</em>), asupan natrium per waktu makan idealnya tidak melebihi 500–600 mg untuk mencegah vasokonstriksi arteriol.";
         } elseif ($isAsamUrat) {
             $penyumbangPurin = preg_replace('/^Terbesar dari\s+/i', '', $risiko['purin']['penyumbang'] ?? 'protein hewani atau ekstrak kaldu');
             $cautionsJudul = 'Peringatan Klinis: Purin Tinggi (Asam Urat)';
@@ -99,7 +99,7 @@ class ClinicalAdvisor {
                 $cautionsTeks = "Hidangan ini membawa <strong>{$totalGizi['energi_kkal']} kkal</strong> dengan lemak <strong>{$totalGizi['lemak_g']} g</strong>. Waspadai densitas kalori tersembunyi dari minyak penggorengan agar defisit kalori harian Anda tidak terlampaui.";
             } elseif ($tujuan === 'bulking') {
                 $cautionsJudul = 'Evaluasi Target: Kualitas Protein (Bulking)';
-                $cautionsTeks = "Protein tercatat <strong>{$totalGizi['protein_g']} g</strong>. Untuk memaksimalkan hipertrofi otot (*Muscle Protein Synthesis*), pastikan asupan protein bersih bebas dari kelebihan lemak jenuh berlebih.";
+                $cautionsTeks = "Protein tercatat <strong>{$totalGizi['protein_g']} g</strong>. Untuk memaksimalkan hipertrofi otot (<em>Muscle Protein Synthesis</em>), pastikan asupan protein bersih bebas dari kelebihan lemak jenuh berlebih.";
             } else {
                 $cautionsJudul = 'Evaluasi Keseimbangan Gizi';
                 $cautionsTeks = "Energi dari lemak tercatat <strong>{$totalGizi['makro_persen']['lemak']}%</strong> (anjuran seimbang: 20–35%). Pengurangan sedikit porsi gorengan akan membuat rasio energi harian lebih optimal.";
