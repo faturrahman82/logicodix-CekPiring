@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CekPiring - Atur Profil</title>
-    <link rel="stylesheet" href="<?= asset_url('css/app.css') ?>?v=<?= time() ?>">
+    <link rel="stylesheet" href="<?= asset_url('css/app.css') ?>">
 </head>
 <body>
 
@@ -170,6 +170,6 @@
         </form>
     </div>
 
-    <script src="<?= asset_url('js/app.js') ?>?v=<?= time() ?>"></script>
+    <script src="<?= asset_url('js/app.js') ?>"></script>
 </body>
 </html>

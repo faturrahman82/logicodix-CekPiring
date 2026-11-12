@@ -48,7 +48,6 @@
     </div>
 
     <script>
-        // Animasi pergantian langkah persis seperti pada loader cek bahan
         setTimeout(function() {
             var s1 = document.getElementById('step-cocok-bahan');
             var s2 = document.getElementById('step-hitung-makro');

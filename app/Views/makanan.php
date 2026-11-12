@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CekPiring - Makanan</title>
-    <link rel="stylesheet" href="<?= asset_url('css/app.css') ?>?v=<?= time() ?>">
+    <link rel="stylesheet" href="<?= asset_url('css/app.css') ?>">
 </head>
 <body>
 
@@ -79,25 +79,25 @@
             <h2 class="loading-title">Memeriksa bahan makanan</h2>
             <p class="loading-subtitle" id="loading-nama-makanan">Menganalisis foto dan nama makanan...</p>
 
-            <div class="loading-steps-mini">
-                <div class="mini-step-item step-active" id="step-upload">
+            <ol class="loading-steps-mini" id="langkah-cek">
+                <li class="mini-step-item" data-langkah="1">
                     <span class="mini-step-dot"></span>
-                    <span>Mengunggah foto makanan</span>
-                </div>
-                <div class="mini-step-item" id="step-ai">
+                    <span class="mini-step-isi"><span class="mini-step-nama">Mengunggah foto makanan</span><span class="mini-step-detail"></span></span>
+                </li>
+                <li class="mini-step-item" data-langkah="2">
                     <span class="mini-step-dot"></span>
-                    <span>Mendeteksi bahan dari foto dengan AI</span>
-                </div>
-                <div class="mini-step-item" id="step-db">
+                    <span class="mini-step-isi"><span class="mini-step-nama">Mendeteksi bahan dari foto dengan AI</span><span class="mini-step-detail"></span></span>
+                </li>
+                <li class="mini-step-item" data-langkah="3">
                     <span class="mini-step-dot"></span>
-                    <span>Mencocokkan takaran &amp; data gizi</span>
-                </div>
-            </div>
-
-            <p class="loading-desc">Biasanya butuh 2–5 detik. Mohon tunggu...</p>
+                    <span class="mini-step-isi"><span class="mini-step-nama">Mencocokkan bahan dengan data gizi</span><span class="mini-step-detail"></span></span>
+                </li>
+            </ol>
+            <p class="loading-galat" id="loading-galat-cek" role="alert" hidden></p>
+            <button type="button" class="btn-outline" id="btn-tutup-loading-cek" hidden>Kembali</button>
         </div>
     </div>
 
-    <script src="<?= asset_url('js/app.js') ?>?v=<?= time() ?>"></script>
+    <script src="<?= asset_url('js/app.js') ?>"></script>
 </body>
 </html>

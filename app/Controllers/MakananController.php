@@ -33,8 +33,8 @@ class MakananController extends Controller {
         $this->redirect('profil');
     }
 
-    public function process(): void {
-        $namaMakanan = mb_substr(trim($_POST['nama_makanan'] ?? ''), 0, 100);
+    public static function terimaFoto(string $namaMakanan): array {
+        $namaMakanan = mb_substr(trim($namaMakanan), 0, 100);
         $photoUploaded = null;
 
         $ekstensiDiizinkan = [
@@ -50,14 +50,10 @@ class MakananController extends Controller {
             $ukuran = (int)($_FILES['foto']['size'] ?? 0);
 
             if (!isset($ekstensiDiizinkan[$fileType]) || @getimagesize($tmpName) === false) {
-                session_set('flash_error', 'Foto harus berupa gambar JPG, PNG, atau WEBP.');
-                $this->redirect('makanan');
-                return;
+                return ['error' => 'Foto harus berupa gambar JPG, PNG, atau WEBP.'];
             }
             if ($ukuran > $batasUkuran) {
-                session_set('flash_error', 'Ukuran foto maksimal 5 MB.');
-                $this->redirect('makanan');
-                return;
+                return ['error' => 'Ukuran foto maksimal 5 MB.'];
             }
 
             $newFilename = 'makanan_' . time() . '_' . bin2hex(random_bytes(4)) . '.' . $ekstensiDiizinkan[$fileType];
@@ -80,33 +76,49 @@ class MakananController extends Controller {
         }
 
         if (empty($namaMakanan) || empty($photoUploaded)) {
-            session_set('flash_error', 'Isi nama makanan dan tambah foto dulu.');
+            return ['error' => 'Isi nama makanan dan tambah foto dulu.'];
+        }
+
+        $berkas = __DIR__ . '/../../public/' . $photoUploaded;
+        return [
+            'nama' => $namaMakanan,
+            'foto' => $photoUploaded,
+            'ukuran_kb' => is_file($berkas) ? (int)round(filesize($berkas) / 1024) : 0,
+        ];
+    }
+
+    public static function simpanAnalisis(string $namaMakanan, string $foto, array $hasilAi): void {
+        session_set('analysis_data', [
+            'nama_makanan' => $hasilAi['nama'],
+            'nama_input' => $namaMakanan,
+            'foto' => $foto,
+            'deskripsi' => $hasilAi['deskripsi'] ?? '',
+            'bahan' => $hasilAi['bahan'],
+            'porsi' => 1.0,
+            'ukuran_porsi' => $hasilAi['ukuran_porsi'] ?? PortionSize::bawaan(),
+            'sumber_analisis' => $hasilAi['sumber_analisis'] ?? 'contoh',
+            'konflik' => $hasilAi['konflik'] ?? false,
+            'konflik_teks' => $hasilAi['konflik_teks'] ?? '',
+            'nama_foto' => $hasilAi['nama_foto'] ?? ''
+        ]);
+    }
+
+    public function process(): void {
+        $foto = self::terimaFoto($_POST['nama_makanan'] ?? '');
+        if (isset($foto['error'])) {
+            session_set('flash_error', $foto['error']);
             $this->redirect('makanan');
             return;
         }
 
-        $hasilAi = AiClient::identify($namaMakanan, $photoUploaded);
-
+        $hasilAi = AiClient::identify($foto['nama'], $foto['foto']);
         if (!$hasilAi['sukses']) {
             session_set('flash_error', 'Makanan tidak dikenali. Coba ketik nama makanan lain.');
             $this->redirect('makanan');
             return;
         }
 
-        session_set('analysis_data', [
-            'nama_makanan' => $hasilAi['nama'],
-            'nama_input' => $namaMakanan,
-            'foto' => $photoUploaded,
-            'deskripsi' => $hasilAi['deskripsi'] ?? '',
-            'bahan' => $hasilAi['bahan'],
-            'porsi' => 1.0,
-            'ukuran_porsi' => $hasilAi['ukuran_porsi'] ?? \App\Services\PortionSize::bawaan(),
-            'sumber_analisis' => $hasilAi['sumber_analisis'] ?? 'contoh',
-            'konflik' => $hasilAi['konflik'] ?? false,
-            'konflik_teks' => $hasilAi['konflik_teks'] ?? '',
-            'nama_foto' => $hasilAi['nama_foto'] ?? ''
-        ]);
-
+        self::simpanAnalisis($foto['nama'], $foto['foto'], $hasilAi);
         $this->redirect('konfirmasi');
     }
 }

@@ -204,24 +204,22 @@
             <h2 class="loading-title">Menghitung estimasi gizi</h2>
             <p class="loading-subtitle"><?= !empty($analysis['nama_makanan']) ? 'Menganalisis "' . e($analysis['nama_makanan']) . '"...' : 'Menyiapkan rincian kalori &amp; evaluasi gizi...' ?></p>
 
-            <div class="loading-steps-mini">
-                <div class="mini-step-item step-active" id="step-hitung-1">
+<ol class="loading-steps-mini" id="langkah-hitung">
+                <li class="mini-step-item" data-langkah="1">
                     <span class="mini-step-dot"></span>
-                    <span>Mencocokkan <?= count($bahan) ?> bahan dengan data komposisi</span>
-                </div>
-
-                <div class="mini-step-item" id="step-hitung-2">
+                    <span class="mini-step-isi"><span class="mini-step-nama">Mencocokkan bahan dengan data komposisi</span><span class="mini-step-detail"></span></span>
+                </li>
+                <li class="mini-step-item" data-langkah="2">
                     <span class="mini-step-dot"></span>
-                    <span>Menghitung energi dan makro per porsi</span>
-                </div>
-
-                <div class="mini-step-item" id="step-hitung-3">
+                    <span class="mini-step-isi"><span class="mini-step-nama">Menghitung energi dan makro per porsi</span><span class="mini-step-detail"></span></span>
+                </li>
+                <li class="mini-step-item" data-langkah="3">
                     <span class="mini-step-dot"></span>
-                    <span>Menyesuaikan profil kesehatan &amp; batas aman</span>
-                </div>
-            </div>
-
-            <p class="loading-desc">Biasanya butuh 2–5 detik. Mohon tunggu...</p>
+                    <span class="mini-step-isi"><span class="mini-step-nama">Menyesuaikan profil kesehatan dan batas aman</span><span class="mini-step-detail"></span></span>
+                </li>
+            </ol>
+            <p class="loading-galat" id="loading-galat" role="alert" hidden></p>
+            <button type="button" class="btn-outline" id="btn-tutup-loading" hidden>Kembali ke bahan</button>
         </div>
     </div>
 
@@ -248,6 +246,6 @@
       </div>
     </div>
 
-    <script src="<?= asset_url('js/app.js') ?>?v=<?= time() ?>"></script>
+    <script src="<?= asset_url('js/app.js') ?>"></script>
 </body>
 </html>

@@ -7,6 +7,8 @@ use App\Services\ResultBuilder;
 
 class HasilController extends Controller {
     public function menghitung(): void {
+        $this->redirect('hasil');
+        return;
         $profile = session_get('user_profile');
         $analysis = session_get('analysis_data');
 

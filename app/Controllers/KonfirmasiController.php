@@ -63,7 +63,7 @@ class KonfirmasiController extends Controller {
         ]);
     }
 
-    public function save(): void {
+    public static function simpanDariPost(): array {
         $analysis = session_get('analysis_data', []);
         $namaBahan = $_POST['bahan_nama'] ?? [];
         $beratBahan = $_POST['bahan_berat'] ?? [];
@@ -105,6 +105,11 @@ class KonfirmasiController extends Controller {
         $analysis['bahan_sebelum_saran'] = null;
         session_set('analysis_data', $analysis);
 
+        return $analysis;
+    }
+
+    public function save(): void {
+        self::simpanDariPost();
         $this->redirect('hasil');
     }
 

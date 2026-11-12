@@ -1169,7 +1169,6 @@ input:checked + .slider:before {
     box-sizing: border-box;
 }
 
-/* --- Card Loading Cek Bahan Modal --- */
 .card-loading-cek {
     background: #ffffff;
     border-radius: 20px;
@@ -1297,7 +1296,6 @@ input:checked + .slider:before {
     margin: auto;
 }
 
-/* Tombol Submit dengan Spinner */
 .btn-loading {
     display: inline-flex;
     align-items: center;
@@ -1450,7 +1448,6 @@ input:checked + .slider:before {
     margin-top: 8px;
 }
 
-/* --- Layout Langkah 4: Hasil Estimasi Gizi --- */
 .main-content-hasil {
     display: grid;
     grid-template-columns: minmax(0, 1.15fr) minmax(360px, 0.85fr);
@@ -3077,9 +3074,6 @@ input:checked + .slider:before {
     .risiko-item.berubah-turun, .risiko-item.berubah-naik, .toast-hasil.muncul { animation: none; }
 }
 
-/* =========================================================================
-   KOTAK SARAN & PANDUAN MAKAN KLINIS (KOLOM KIRI HALAMAN HASIL)
-   ========================================================================= */
 .card-saran-klinis {
     margin-top: 20px;
     display: flex;
@@ -3186,3 +3180,32 @@ input:checked + .slider:before {
     padding-top: 8px;
     border-top: 1px dashed #86efac;
 }
+
+.saran-satu-kalimat {
+    margin: 12px 0 0;
+    padding: 12px 16px;
+    border-left: 4px solid var(--primary);
+    background: var(--surface);
+    border-radius: 8px;
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--foreground);
+}
+
+.card-loading-cek .loading-steps-mini { list-style: none; padding: 0; margin: 20px 0 0; text-align: left; }
+.mini-step-isi { display: flex; flex-direction: column; gap: 2px; }
+.mini-step-detail { font-size: 13px; color: var(--primary); font-weight: 600; }
+.mini-step-detail:empty { display: none; }
+.mini-step-item.step-gagal { color: var(--hightext); }
+.mini-step-item.step-gagal .mini-step-dot { background: var(--hightext); border-color: var(--hightext); }
+.loading-galat { margin: 16px 0 0; padding: 10px 14px; border-radius: 10px; background: var(--highbg); color: var(--hightext); font-size: 14px; font-weight: 600; }
+#btn-tutup-loading { margin-top: 12px; }
+
+.mini-step-item.step-done .mini-step-dot {
+    width: 18px; height: 18px; background: var(--primary); border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+}
+.mini-step-item.step-done .mini-step-dot::after { content: "\2713"; color: var(--onprimary); font-size: 12px; line-height: 1; }
+.mini-step-item { align-items: flex-start; }
+.mini-step-item .mini-step-dot { margin-top: 5px; }
+.mini-step-item.step-done .mini-step-dot { margin-top: 1px; }

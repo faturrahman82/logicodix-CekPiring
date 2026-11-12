@@ -262,41 +262,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     return false;
                 }
 
-                // Tampilkan loader saat cek bahan
-                const loadingOverlay = document.getElementById('loading-cek-bahan');
-                const labelNama = document.getElementById('loading-nama-makanan');
-
-                if (loadingOverlay) {
-                    if (labelNama && inputNama.value.trim()) {
-                        labelNama.textContent = 'Menganalisis "' + inputNama.value.trim() + '"...';
-                    }
-                    loadingOverlay.style.display = 'flex';
-                    loadingOverlay.classList.add('active');
-                    loadingOverlay.setAttribute('aria-hidden', 'false');
-
-                    // Animasi perpindahan status langkah
-                    setTimeout(() => {
-                        const s1 = document.getElementById('step-upload');
-                        const s2 = document.getElementById('step-ai');
-                        if (s1) { s1.classList.remove('step-active'); s1.classList.add('step-done'); }
-                        if (s2) { s2.classList.add('step-active'); }
-                    }, 1000);
-
-                    setTimeout(() => {
-                        const s2 = document.getElementById('step-ai');
-                        const s3 = document.getElementById('step-db');
-                        if (s2) { s2.classList.remove('step-active'); s2.classList.add('step-done'); }
-                        if (s3) { s3.classList.add('step-active'); }
-                    }, 2400);
-                }
-
-                if (btnSubmitMakanan) {
-                    btnSubmitMakanan.classList.add('btn-loading');
-                    btnSubmitMakanan.innerHTML = '<span class="spinner-sm"></span> Memeriksa bahan...';
-                    setTimeout(() => {
-                        btnSubmitMakanan.disabled = true;
-                    }, 20);
-                }
+                if (!window.fetch) return;
+                e.preventDefault();
+                jalankanCekBahan(formMakanan);
             });
         }
 
@@ -633,21 +601,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     </tr>`).join('');
             }
 
-            if (res.clinical_advice) {
-                const ca = res.clinical_advice;
-                setTeks('klinis-profil-badge', ca.profil_label || '');
-                const ringkasanEl = document.getElementById('klinis-ringkasan');
-                if (ringkasanEl) ringkasanEl.innerHTML = ca.ringkasan_medis || '';
-                if (ca.cautions) {
-                    setTeks('klinis-cautions-judul', ca.cautions.judul || '');
-                    const cautTeksEl = document.getElementById('klinis-cautions-teks');
-                    if (cautTeksEl) cautTeksEl.innerHTML = ca.cautions.teks || '';
-                }
-                if (ca.swaps && Array.isArray(ca.swaps.tips)) {
-                    setTeks('klinis-swaps-judul', ca.swaps.judul || '');
-                    const tipsEl = document.getElementById('klinis-tips-list');
-                    if (tipsEl) tipsEl.innerHTML = ca.swaps.tips.map(t => `<li>${t}</li>`).join('');
-                }
+            if (res.clinical_advice && res.clinical_advice.kalimat) {
+                setTeks('klinis-kalimat', res.clinical_advice.kalimat);
             }
 
             tampilkanRingkasan(hasilSebelum, res);
@@ -963,52 +918,142 @@ document.addEventListener('keydown', function(event) {
     if (event.key === 'Escape') tutupModalEdit();
 });
 
-// Loader hitung estimasi gizi di halaman cek bahan (tanpa pindah halaman)
 document.addEventListener('DOMContentLoaded', function () {
     const formKonfirmasi = document.getElementById('form-konfirmasi');
     const loadingOverlay = document.getElementById('loading-hitung-gizi');
+    if (!formKonfirmasi || !loadingOverlay || !window.fetch) return;
 
-    if (formKonfirmasi && loadingOverlay) {
-        formKonfirmasi.addEventListener('submit', function (e) {
-            if (formKonfirmasi.dataset.submitting === 'true') {
-                return;
-            }
-            e.preventDefault();
-            formKonfirmasi.dataset.submitting = 'true';
+    const langkah = Array.from(loadingOverlay.querySelectorAll('#langkah-hitung .mini-step-item'));
+    const pesanGalat = document.getElementById('loading-galat');
+    const tombolTutup = document.getElementById('btn-tutup-loading');
+    const btnSubmit = document.getElementById('btn-submit-konfirmasi') || formKonfirmasi.querySelector('button[type="submit"]');
+    const teksTombol = btnSubmit ? btnSubmit.textContent : '';
 
-            loadingOverlay.style.display = 'flex';
-            loadingOverlay.classList.add('active');
-            loadingOverlay.setAttribute('aria-hidden', 'false');
-
-            const btnSubmit = document.getElementById('btn-submit-konfirmasi') || formKonfirmasi.querySelector('button[type="submit"]');
-            if (btnSubmit) {
-                btnSubmit.classList.add('btn-loading');
-                btnSubmit.innerHTML = '<span class="spinner-sm"></span> Menghitung gizi...';
-                setTimeout(() => {
-                    btnSubmit.disabled = true;
-                }, 20);
-            }
-
-            // Animasi pergantian langkah hitung gizi
-            setTimeout(() => {
-                const s1 = document.getElementById('step-hitung-1');
-                const s2 = document.getElementById('step-hitung-2');
-                if (s1) { s1.classList.remove('step-active'); s1.classList.add('step-done'); }
-                if (s2) { s2.classList.add('step-active'); }
-            }, 800);
-
-            setTimeout(() => {
-                const s2 = document.getElementById('step-hitung-2');
-                const s3 = document.getElementById('step-hitung-3');
-                if (s2) { s2.classList.remove('step-active'); s2.classList.add('step-done'); }
-                if (s3) { s3.classList.add('step-active'); }
-            }, 1800);
-
-            setTimeout(() => {
-                const s3 = document.getElementById('step-hitung-3');
-                if (s3) { s3.classList.remove('step-active'); s3.classList.add('step-done'); }
-                formKonfirmasi.submit();
-            }, 2500);
-        });
+    function atur(item, status, detail) {
+        item.classList.remove('step-active', 'step-done', 'step-gagal');
+        if (status) item.classList.add(status);
+        const el = item.querySelector('.mini-step-detail');
+        if (el) el.textContent = detail || '';
     }
+
+    function tutupOverlay() {
+        loadingOverlay.style.display = 'none';
+        loadingOverlay.classList.remove('active');
+        loadingOverlay.setAttribute('aria-hidden', 'true');
+        if (btnSubmit) {
+            btnSubmit.disabled = false;
+            btnSubmit.classList.remove('btn-loading');
+            btnSubmit.textContent = teksTombol;
+        }
+    }
+
+    tombolTutup && tombolTutup.addEventListener('click', tutupOverlay);
+
+    formKonfirmasi.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        if (formKonfirmasi.dataset.berjalan === 'true') return;
+        formKonfirmasi.dataset.berjalan = 'true';
+
+        langkah.forEach(item => atur(item, '', ''));
+        pesanGalat.hidden = true;
+        tombolTutup.hidden = true;
+        loadingOverlay.style.display = 'flex';
+        loadingOverlay.classList.add('active');
+        loadingOverlay.setAttribute('aria-hidden', 'false');
+        if (btnSubmit) {
+            btnSubmit.classList.add('btn-loading');
+            btnSubmit.disabled = true;
+            btnSubmit.innerHTML = '<span class="spinner-sm"></span> Menghitung gizi...';
+        }
+
+        let tujuan = null;
+        try {
+            for (let i = 0; i < langkah.length; i++) {
+                atur(langkah[i], 'step-active', '');
+                const res = await fetch('api/hitung/' + (i + 1), { method: 'POST', body: new FormData(formKonfirmasi) });
+                const data = await res.json().catch(() => null);
+                if (!res.ok || !data || !data.sukses) {
+                    atur(langkah[i], 'step-gagal', '');
+                    throw new Error((data && data.pesan) || 'Langkah ini gagal dijalankan.');
+                }
+                atur(langkah[i], 'step-done', data.detail || '');
+                if (data.redirect) tujuan = data.redirect;
+            }
+            window.location.href = tujuan || 'hasil';
+        } catch (err) {
+            pesanGalat.textContent = err.message || 'Perhitungan gagal. Coba lagi.';
+            pesanGalat.hidden = false;
+            tombolTutup.hidden = false;
+            formKonfirmasi.dataset.berjalan = 'false';
+        }
+    });
 });
+
+async function jalankanCekBahan(form) {
+    const overlay = document.getElementById('loading-cek-bahan');
+    const langkah = Array.from(overlay.querySelectorAll('#langkah-cek .mini-step-item'));
+    const pesanGalat = document.getElementById('loading-galat-cek');
+    const tombolTutup = document.getElementById('btn-tutup-loading-cek');
+    const labelNama = document.getElementById('loading-nama-makanan');
+    const namaInput = form.querySelector('input[name="nama_makanan"]');
+    const btn = document.getElementById('btn-submit-makanan');
+    const teksBtn = btn ? btn.textContent : '';
+
+    function atur(item, status, detail) {
+        item.classList.remove('step-active', 'step-done', 'step-gagal');
+        if (status) item.classList.add(status);
+        const el = item.querySelector('.mini-step-detail');
+        if (el) el.textContent = detail || '';
+    }
+
+    function tutup() {
+        overlay.style.display = 'none';
+        overlay.classList.remove('active');
+        overlay.setAttribute('aria-hidden', 'true');
+        if (btn) {
+            btn.disabled = false;
+            btn.classList.remove('btn-loading');
+            btn.textContent = teksBtn;
+        }
+        form.dataset.berjalan = 'false';
+    }
+
+    if (form.dataset.berjalan === 'true') return;
+    form.dataset.berjalan = 'true';
+    tombolTutup.onclick = tutup;
+
+    langkah.forEach(item => atur(item, '', ''));
+    pesanGalat.hidden = true;
+    tombolTutup.hidden = true;
+    if (labelNama && namaInput && namaInput.value.trim()) {
+        labelNama.textContent = 'Menganalisis "' + namaInput.value.trim() + '"...';
+    }
+    overlay.style.display = 'flex';
+    overlay.classList.add('active');
+    overlay.setAttribute('aria-hidden', 'false');
+    if (btn) {
+        btn.classList.add('btn-loading');
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-sm"></span> Memeriksa bahan...';
+    }
+
+    let tujuan = null;
+    try {
+        for (let i = 0; i < langkah.length; i++) {
+            atur(langkah[i], 'step-active', '');
+            const res = await fetch('api/cek/' + (i + 1), { method: 'POST', body: i === 0 ? new FormData(form) : new FormData() });
+            const data = await res.json().catch(() => null);
+            if (!res.ok || !data || !data.sukses) {
+                atur(langkah[i], 'step-gagal', '');
+                throw new Error((data && data.pesan) || 'Langkah ini gagal dijalankan.');
+            }
+            atur(langkah[i], 'step-done', data.detail || '');
+            if (data.redirect) tujuan = data.redirect;
+        }
+        window.location.href = tujuan || 'konfirmasi';
+    } catch (err) {
+        pesanGalat.textContent = err.message || 'Pemeriksaan gagal. Coba lagi.';
+        pesanGalat.hidden = false;
+        tombolTutup.hidden = false;
+    }
+}
