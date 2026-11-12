@@ -71,6 +71,36 @@
         </form>
     </div>
 
+    <div class="modal-overlay" id="loading-cek-bahan" aria-hidden="true" style="display: none;">
+        <div class="card card-loading-cek">
+            <div class="loading-spinner-circle">
+                <svg width="64" height="64" viewBox="0 0 72 72" fill="none" class="animate-spin">
+                    <circle cx="36" cy="36" r="30" stroke="#e2e8f0" stroke-width="6"/>
+                    <path d="M36 6C52.5685 6 66 19.4315 66 36" stroke="#047857" stroke-width="6" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <h2 class="loading-title">Memeriksa bahan makanan</h2>
+            <p class="loading-subtitle" id="loading-nama-makanan">Menganalisis foto dan nama makanan...</p>
+
+            <div class="loading-steps-mini">
+                <div class="mini-step-item step-active" id="step-upload">
+                    <span class="mini-step-dot"></span>
+                    <span>Mengunggah foto makanan</span>
+                </div>
+                <div class="mini-step-item" id="step-ai">
+                    <span class="mini-step-dot"></span>
+                    <span>Mendeteksi bahan dari foto dengan AI</span>
+                </div>
+                <div class="mini-step-item" id="step-db">
+                    <span class="mini-step-dot"></span>
+                    <span>Mencocokkan takaran &amp; data gizi</span>
+                </div>
+            </div>
+
+            <p class="loading-desc">Biasanya butuh 2–5 detik. Mohon tunggu...</p>
+        </div>
+    </div>
+
     <script src="<?= asset_url('js/app.js') ?>?v=<?= time() ?>"></script>
 </body>
 </html>

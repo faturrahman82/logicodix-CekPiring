@@ -261,6 +261,42 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                     return false;
                 }
+
+                // Tampilkan loader saat cek bahan
+                const loadingOverlay = document.getElementById('loading-cek-bahan');
+                const labelNama = document.getElementById('loading-nama-makanan');
+
+                if (loadingOverlay) {
+                    if (labelNama && inputNama.value.trim()) {
+                        labelNama.textContent = 'Menganalisis "' + inputNama.value.trim() + '"...';
+                    }
+                    loadingOverlay.style.display = 'flex';
+                    loadingOverlay.classList.add('active');
+                    loadingOverlay.setAttribute('aria-hidden', 'false');
+
+                    // Animasi perpindahan status langkah
+                    setTimeout(() => {
+                        const s1 = document.getElementById('step-upload');
+                        const s2 = document.getElementById('step-ai');
+                        if (s1) { s1.classList.remove('step-active'); s1.classList.add('step-done'); }
+                        if (s2) { s2.classList.add('step-active'); }
+                    }, 1000);
+
+                    setTimeout(() => {
+                        const s2 = document.getElementById('step-ai');
+                        const s3 = document.getElementById('step-db');
+                        if (s2) { s2.classList.remove('step-active'); s2.classList.add('step-done'); }
+                        if (s3) { s3.classList.add('step-active'); }
+                    }, 2400);
+                }
+
+                if (btnSubmitMakanan) {
+                    btnSubmitMakanan.classList.add('btn-loading');
+                    btnSubmitMakanan.innerHTML = '<span class="spinner-sm"></span> Memeriksa bahan...';
+                    setTimeout(() => {
+                        btnSubmitMakanan.disabled = true;
+                    }, 20);
+                }
             });
         }
 
