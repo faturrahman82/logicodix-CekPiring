@@ -105,7 +105,7 @@ class KonfirmasiController extends Controller {
         $analysis['bahan_sebelum_saran'] = null;
         session_set('analysis_data', $analysis);
 
-        $this->redirect('menghitung');
+        $this->redirect('hasil');
     }
 
     public function resolveConflict(): void {

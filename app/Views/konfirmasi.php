@@ -187,9 +187,42 @@
 
             <div class="bottom-actions">
                 <a href="<?= base_url('makanan') ?>" class="btn-secondary">Ubah makanan</a>
-                <button type="submit" class="btn-primary">Hitung estimasi gizi</button>
+                <button type="submit" class="btn-primary" id="btn-submit-konfirmasi">Hitung estimasi gizi</button>
             </div>
         </form>
+    </div>
+
+    <div class="modal-overlay" id="loading-hitung-gizi" aria-hidden="true" style="display: none;">
+        <div class="card card-loading-cek">
+            <div class="loading-spinner-circle">
+                <svg width="64" height="64" viewBox="0 0 72 72" fill="none" class="animate-spin">
+                    <circle cx="36" cy="36" r="30" stroke="#e2e8f0" stroke-width="6"/>
+                    <path d="M36 6C52.5685 6 66 19.4315 66 36" stroke="#047857" stroke-width="6" stroke-linecap="round"/>
+                </svg>
+            </div>
+
+            <h2 class="loading-title">Menghitung estimasi gizi</h2>
+            <p class="loading-subtitle"><?= !empty($analysis['nama_makanan']) ? 'Menganalisis "' . e($analysis['nama_makanan']) . '"...' : 'Menyiapkan rincian kalori &amp; evaluasi gizi...' ?></p>
+
+            <div class="loading-steps-mini">
+                <div class="mini-step-item step-active" id="step-hitung-1">
+                    <span class="mini-step-dot"></span>
+                    <span>Mencocokkan <?= count($bahan) ?> bahan dengan data komposisi</span>
+                </div>
+
+                <div class="mini-step-item" id="step-hitung-2">
+                    <span class="mini-step-dot"></span>
+                    <span>Menghitung energi dan makro per porsi</span>
+                </div>
+
+                <div class="mini-step-item" id="step-hitung-3">
+                    <span class="mini-step-dot"></span>
+                    <span>Menyesuaikan profil kesehatan &amp; batas aman</span>
+                </div>
+            </div>
+
+            <p class="loading-desc">Biasanya butuh 2–5 detik. Mohon tunggu...</p>
+        </div>
     </div>
 
 
@@ -215,6 +248,6 @@
       </div>
     </div>
 
-    <script src="<?= asset_url('js/app.js') ?>"></script>
+    <script src="<?= asset_url('js/app.js') ?>?v=<?= time() ?>"></script>
 </body>
 </html>

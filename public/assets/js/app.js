@@ -945,3 +945,53 @@ document.addEventListener('click', function(event) {
 document.addEventListener('keydown', function(event) {
     if (event.key === 'Escape') tutupModalEdit();
 });
+
+// Loader hitung estimasi gizi di halaman cek bahan (tanpa pindah halaman)
+document.addEventListener('DOMContentLoaded', function () {
+    const formKonfirmasi = document.getElementById('form-konfirmasi');
+    const loadingOverlay = document.getElementById('loading-hitung-gizi');
+
+    if (formKonfirmasi && loadingOverlay) {
+        formKonfirmasi.addEventListener('submit', function (e) {
+            if (formKonfirmasi.dataset.submitting === 'true') {
+                return;
+            }
+            e.preventDefault();
+            formKonfirmasi.dataset.submitting = 'true';
+
+            loadingOverlay.style.display = 'flex';
+            loadingOverlay.classList.add('active');
+            loadingOverlay.setAttribute('aria-hidden', 'false');
+
+            const btnSubmit = document.getElementById('btn-submit-konfirmasi') || formKonfirmasi.querySelector('button[type="submit"]');
+            if (btnSubmit) {
+                btnSubmit.classList.add('btn-loading');
+                btnSubmit.innerHTML = '<span class="spinner-sm"></span> Menghitung gizi...';
+                setTimeout(() => {
+                    btnSubmit.disabled = true;
+                }, 20);
+            }
+
+            // Animasi pergantian langkah hitung gizi
+            setTimeout(() => {
+                const s1 = document.getElementById('step-hitung-1');
+                const s2 = document.getElementById('step-hitung-2');
+                if (s1) { s1.classList.remove('step-active'); s1.classList.add('step-done'); }
+                if (s2) { s2.classList.add('step-active'); }
+            }, 800);
+
+            setTimeout(() => {
+                const s2 = document.getElementById('step-hitung-2');
+                const s3 = document.getElementById('step-hitung-3');
+                if (s2) { s2.classList.remove('step-active'); s2.classList.add('step-done'); }
+                if (s3) { s3.classList.add('step-active'); }
+            }, 1800);
+
+            setTimeout(() => {
+                const s3 = document.getElementById('step-hitung-3');
+                if (s3) { s3.classList.remove('step-active'); s3.classList.add('step-done'); }
+                formKonfirmasi.submit();
+            }, 2500);
+        });
+    }
+});

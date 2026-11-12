@@ -1231,7 +1231,9 @@ input:checked + .slider:before {
     gap: 10px;
     font-size: 13.5px;
     color: var(--muted);
-    transition: color 0.3s ease;
+    padding: 6px 10px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
 }
 
 .mini-step-dot {
@@ -1257,6 +1259,7 @@ input:checked + .slider:before {
 .mini-step-item.step-done {
     color: var(--primary);
     font-weight: 500;
+    background: var(--lowbg);
 }
 
 .mini-step-item.step-done .mini-step-dot {
@@ -1272,6 +1275,26 @@ input:checked + .slider:before {
     font-size: 13px;
     color: var(--muted);
     margin: 0;
+}
+
+.card-loading-cek .btn-cancel-loading {
+    color: var(--primary);
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    margin-top: 6px;
+    padding: 6px 14px;
+    border-radius: 8px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    display: inline-block;
+}
+
+.card-loading-cek .btn-cancel-loading:hover {
+    background-color: var(--lowbg);
+}
+
+.container-center .card-loading-cek {
+    margin: auto;
 }
 
 /* Tombol Submit dengan Spinner */
@@ -2068,6 +2091,11 @@ input:checked + .slider:before {
         width: 24px;
         height: 24px;
         font-size: 12px;
+    }
+
+    .container-center .card-loading-cek {
+        padding: 26px 20px;
+        margin: auto;
     }
 
     .header {
