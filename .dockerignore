@@ -1,0 +1,11 @@
+.git
+.gitignore
+.env
+.env.local
+*.log
+storage/sessions/*
+storage/uploads/*
+public/assets/uploads/*
+!public/assets/uploads/.htaccess
+docs
+README.md
