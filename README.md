@@ -56,11 +56,13 @@ Rincian kontribusi per orang ada di [Kontribusi tim](#kontribusi-tim).
 10. [Peran AI dan kode](#peran-ai-dan-kode)
 11. [Data dan sumber](#data-dan-sumber)
 12. [Teknologi, arsitektur, dan struktur proyek](#teknologi-yang-digunakan)
-13. [Cara menjalankan](#cara-menjalankan)
-14. [Keamanan dan privasi](#keamanan-dan-privasi)
-15. [Keterbatasan yang diketahui](#keterbatasan-yang-diketahui)
-16. [Kontribusi tim](#kontribusi-tim)
-17. [Sumber dan atribusi](#sumber-dan-atribusi)
+13. [Dokumentasi frontend](#dokumentasi-frontend)
+14. [Dokumentasi backend](#dokumentasi-backend)
+15. [Cara menjalankan](#cara-menjalankan)
+16. [Keamanan dan privasi](#keamanan-dan-privasi)
+17. [Keterbatasan yang diketahui](#keterbatasan-yang-diketahui)
+18. [Kontribusi tim](#kontribusi-tim)
+19. [Sumber dan atribusi](#sumber-dan-atribusi)
 
 ## Fitur utama
 
@@ -406,6 +408,65 @@ storage/         sesi dan unggahan
 | POST | `/api/recalculate` | Hitung ulang saat porsi diubah |
 | POST | `/api/terapkan-saran`, `/api/batalkan-saran` | Terapkan atau batalkan saran perbaikan |
 | GET | `/api/search-ingredient` | Pencarian bahan |
+
+## Dokumentasi frontend
+
+**Framework:** tidak ada. Tampilan dirender di server dengan templat PHP (HTML5), gaya dengan satu berkas CSS, dan interaksi dengan JavaScript murni (`fetch`, tanpa library dan tanpa `npm`).
+
+**Struktur komponen UI**
+
+| Berkas | Isi |
+|---|---|
+| `app/Views/layouts/main.php` | Kerangka halaman: `<head>`, pemuatan CSS dan JS, tempat isi halaman |
+| `app/Views/partials/header.php` | Kepala halaman dengan nama aplikasi |
+| `app/Views/partials/stepper.php` | Penunjuk langkah 1 sampai 4 |
+| `app/Views/profil.php` | Langkah 1: tujuan, data fisik, kondisi kesehatan, pratinjau target kalori |
+| `app/Views/makanan.php` | Langkah 2: nama makanan dan unggah foto, dengan daftar langkah cek bahan |
+| `app/Views/konfirmasi.php` | Langkah 3: daftar bahan dan gram, pilihan ukuran piring, tambah bahan, porsi, daftar langkah hitung |
+| `app/Views/hasil.php` | Langkah 4: verdict, zat untuk kondisi pengguna, porsi disarankan, kalori, "Perbaiki piringmu", rincian bahan |
+| `app/Views/galat.php` | Halaman galat |
+
+**Skrip dan gaya (`public/assets/`)**
+
+| Berkas | Fungsi |
+|---|---|
+| `js/app.js` | `jalankanCekBahan` dan runner hitung (memanggil `/api/cek/1..3` dan `/api/hitung/1..3` berurutan, centang muncul setelah server menjawab), `hitungUlangKonfirmasi`, `gantiUkuranPiring`, `tambahBahanItem`, `editBahan`, `simpanEditBahan`, `hapusBahan`, `konversiKeGram` (sendok, butir, dan sebagainya ke gram), pembaruan halaman hasil dari `/api/recalculate` dan `/api/terapkan-saran` |
+| `css/app.css` | Seluruh gaya, termasuk tampilan ponsel (media query) dan animasi. Huruf **Inter** dimuat lewat `@import` Google Fonts |
+| `img/Isi.png` | Aset gambar bawaan proyek (belum dipakai halaman mana pun) |
+| `uploads/` | Foto yang diunggah saat aplikasi berjalan (tidak masuk repositori) |
+
+## Dokumentasi backend
+
+**Pola:** MVC buatan tim. `core/Router.php` memetakan rute di `config/routes.php` ke metode pada `app/Controllers/`. Logika hitung ada di `app/Services/`, akses data di `app/Models/`.
+
+**Format respons API:** JSON dengan kolom `sukses` (true atau false). Bila gagal berisi `pesan`, bila berhasil berisi `detail` dan pada langkah terakhir `redirect`. Sesi PHP menyimpan profil dan hasil analisis, sehingga tidak ada token atau akun.
+
+**Endpoint API**
+
+| Metode | Rute | Masukan | Keluaran |
+|---|---|---|---|
+| POST | `/api/cek/1` | `multipart/form-data`: `nama_makanan`, `foto` (JPG, PNG, atau WebP, maks. 5 MB) | `sukses`, `detail` (foto diterima) |
+| POST | `/api/cek/2` | (memakai foto di sesi) | Hasil pengenalan Gemini atau resep contoh: nama, bahan, gram, ukuran piring |
+| POST | `/api/cek/3` | (memakai bahan di sesi) | Jumlah bahan yang punya data gizi, `redirect` ke `/konfirmasi` |
+| POST | `/api/hitung/1` | Form dari halaman konfirmasi: `bahan_nama[]`, `bahan_berat[]`, `bahan_ket[]`, `ukuran_porsi`, `porsi` | Jumlah bahan yang cocok, daftar `tanpa_data` |
+| POST | `/api/hitung/2` | (memakai sesi) | Ringkasan kalori dan makro |
+| POST | `/api/hitung/3` | (memakai sesi) | Verdict singkat dan `redirect` ke `/hasil` |
+| POST | `/api/recalculate` | `porsi` (0,3 sampai 2) | Hasil lengkap: verdict, risiko, porsi disarankan, perbandingan, saran, rincian |
+| POST | `/api/terapkan-saran` | `zat` (mis. `lemak_jenuh`, `natrium`) | Hasil lengkap setelah saran diterapkan. Bila saran sudah usang, status **409** |
+| POST | `/api/batalkan-saran` | (tanpa) | Hasil lengkap dengan bahan awal |
+| GET | `/api/search-ingredient` | `q` (maks. 60 karakter) | Daftar bahan yang cocok untuk pelengkap otomatis |
+
+**Skema database (`database/schema.sql`, MySQL, opsional)**
+
+| Tabel | Isi | Dipakai aplikasi |
+|---|---|---|
+| `nutrition_facts` | Kolom untuk 1.359 bahan: `nama`, `nama_kunci` (unik), energi, protein, lemak, karbo, serat, gula, lemak jenuh, kolesterol, natrium, kalium, mineral, vitamin, `purin_mg`, `sumber_data`, `tingkat_kelengkapan`, kode TKPI dan USDA | Dibaca lebih dulu bila MySQL terhubung dan terisi. Bila tidak, data dibaca dari `data/nutrition_bersih.csv` |
+| `health_rules` | `kondisi`, `zat_gizi`, `batas_harian`, `satuan`, `sumber_acuan` | Disiapkan, belum dipakai (batas dibaca dari `app/Models/HealthRule.php`) |
+| `analysis_sessions` | Profil, `nama_makanan`, `foto_path`, `porsi`, `target_kalori`, `hasil_json` | Disiapkan, belum dipakai (sesi PHP dipakai) |
+
+`database/seed_dasar.sql` hanya berisi data awal `health_rules` dan nilainya belum disamakan dengan batas yang dipakai aplikasi sekarang. Belum ada skrip yang mengimpor CSV ke `nutrition_facts`. Karena itu aplikasi berjalan penuh dari CSV dan tidak memerlukan MySQL.
+
+**Variabel lingkungan:** lihat [Variabel lingkungan (`.env.example`)](#variabel-lingkungan-envexample).
 
 ## Cara menjalankan
 
